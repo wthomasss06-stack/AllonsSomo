@@ -682,7 +682,12 @@ function SettingsTab() {
   const save = async () => {
     setSav(true); setMsg(''); setErr('')
     try {
-      const r=await fetch('/api/map-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)})
+      const adminKey = sessionStorage.getItem('as-admin') || ''
+      const r=await fetch('/api/map-settings',{
+        method:'POST',
+        headers:{'Content-Type':'application/json','X-Admin-Key':adminKey},
+        body:JSON.stringify(settings)
+      })
       const d=await r.json()
       if(d.ok) setMsg('Paramètres enregistrés avec succès.')
       else setErr(d.error||'Erreur.')
