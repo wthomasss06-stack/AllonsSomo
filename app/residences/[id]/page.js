@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getResidence, getResidences, getWAReservation, formatPrix, EQUIPEMENTS_ICONS, SITE } from '@/lib/config'
+import { getResidence, getResidences, getWAReservation, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
 // ── Gallery ───────────────────────────────────────────────────
@@ -86,6 +86,8 @@ function BookingCard({ residence }) {
   const [typeKey, setTypeKey] = useState('')
   const [date, setDate] = useState('')
   const [nb, setNb] = useState(1)
+  const [wa, setWa] = useState(SITE.whatsapp)
+  useEffect(() => { fetchWhatsApp().then(n => setWa(n)) }, [])
 
   const tarifs = {}
   if (residence.prix_nuit)    tarifs.nuit    = { label: 'Par nuit',    prix: residence.prix_nuit }
@@ -100,14 +102,14 @@ function BookingCard({ residence }) {
 
   const buildWA = () => {
     const msg = `Bonjour ! Je souhaite réserver "${residence.titre}" à ${residence.ville}.\n\n📅 Arrivée : ${date ? new Date(date).toLocaleDateString('fr-FR') : 'à définir'}\n⏱ Durée : ${nb} ${typeKey || firstKey || ''}\n💰 ${selected ? formatPrix(selected.prix) : ''}\n\nPuis-vous confirmer la disponibilité ?`
-    return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(msg)}`
+    return `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`
   }
 
   if (!firstKey) return (
     <div className="booking-card" style={{ textAlign: 'center', color: 'var(--muted)' }}>
       <span className="material-icons" style={{ fontSize: 36, display: 'block', marginBottom: 10, color: 'var(--subtle)' }}>payments</span>
       <p style={{ fontSize: 14 }}>Tarifs sur demande WhatsApp</p>
-      <a href={getWAReservation(residence)} target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
+      <a href={`https://wa.me/${wa}?text=${encodeURIComponent("Bonjour ! Je souhaite des informations sur la résidence \""+residence.titre+"\"")}` } target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
         <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
         Contacter par WhatsApp
       </a>

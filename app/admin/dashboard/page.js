@@ -1,13 +1,13 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Logo, WordMark } from '@/app/layout'
+import { Logo } from '@/app/layout'
 import { API_URL } from '@/lib/config'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
 
-// ─── Tokens light — identiques au site ───────────────────────
+// ─── Design tokens ────────────────────────────────────────────
 const T = {
   bg:      '#FAFAF8',
   surface: '#FFFFFF',
@@ -24,94 +24,14 @@ const T = {
   r:       14,
 }
 
-// ─── Sidebar ──────────────────────────────────────────────────
-function Sidebar({ active, set, onLogout }) {
-  const items = [
-    { id:'residences', icon:'apartment',  label:'Résidences', badge: null },
-    { id:'ajouter',    icon:'add_home',   label:'Publier',    badge: 'Nouveau' },
-    { id:'parametres', icon:'settings',   label:'Paramètres', badge: null },
-  ]
-  return (
-    <aside style={{
-      width:240, flexShrink:0,
-      background: T.surface,
-      borderRight:`1px solid ${T.border}`,
-      display:'flex', flexDirection:'column', minHeight:'100vh',
-      position:'relative', overflow:'hidden',
-    }}>
-      {/* Gold top accent */}
-      <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(90deg, ${T.gold}, ${T.goldL})`,opacity:.6}}/>
-
-      {/* Logo */}
-      <div style={{padding:'24px 20px 20px',borderBottom:`1px solid ${T.border}`,position:'relative'}}>
-        <a href="/" style={{display:'flex',alignItems:'center',gap:11,textDecoration:'none',padding:'10px 12px',borderRadius:14,transition:'background .2s',background:'transparent'}}
-          onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.06)'}
-          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
-          <Logo size={34}/>
-          <div>
-            <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',lineHeight:1.1}}>Allons Somo</div>
-            <div style={{fontSize:9,color:T.muted,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:3,display:'flex',alignItems:'center',gap:4}}>
-              <span className="material-icons" style={{fontSize:9}}>arrow_back</span>Retour au site
-            </div>
-          </div>
-        </a>
-      </div>
-
-      {/* Nav */}
-      <nav style={{flex:1,padding:'20px 14px'}}>
-        <div style={{fontSize:9,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:T.dim,padding:'0 10px 12px'}}>
-          Administration
-        </div>
-        {items.map(item => {
-          const on = active===item.id
-          return (
-            <button key={item.id} onClick={()=>set(item.id)} style={{
-              width:'100%', display:'flex', alignItems:'center', gap:11,
-              padding:'11px 13px', borderRadius:12, border:'none', cursor:'pointer',
-              background: on ? `linear-gradient(135deg, rgba(201,150,58,.12), rgba(201,150,58,.06))` : 'transparent',
-              color: on ? T.gold : T.muted,
-              fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600, textAlign:'left',
-              marginBottom:3, transition:'all .18s',
-              boxShadow: on ? `inset 0 0 0 1px rgba(201,150,58,.22)` : 'none',
-              position:'relative',
-            }}
-            onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(15,14,12,.04)';e.currentTarget.style.color=T.ink2}}}
-            onMouseLeave={e=>{if(!on){e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.muted}}}>
-              <span className="material-icons" style={{fontSize:18, opacity: on ? 1 : .6}}>{item.icon}</span>
-              <span style={{flex:1}}>{item.label}</span>
-              {item.badge && (
-                <span style={{fontSize:8,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',padding:'2px 6px',borderRadius:99,background:`rgba(201,150,58,.12)`,color:T.gold,border:`1px solid rgba(201,150,58,.25)`}}>
-                  {item.badge}
-                </span>
-              )}
-              {on && <div style={{position:'absolute',right:0,top:'50%',transform:'translateY(-50%)',width:3,height:24,borderRadius:2,background:T.gold}}/>}
-            </button>
-          )
-        })}
-      </nav>
-
-      {/* Bottom section */}
-      <div style={{padding:'14px',borderTop:`1px solid ${T.border}`}}>
-        {/* Status */}
-        <div style={{padding:'9px 13px',borderRadius:10,background:'rgba(22,163,74,.05)',border:'1px solid rgba(22,163,74,.15)',display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
-          <span style={{width:7,height:7,borderRadius:'50%',background:T.green,flexShrink:0,boxShadow:`0 0 6px rgba(22,163,74,.4)`}}/>
-          <span style={{fontSize:11,color:T.green,fontFamily:"'DM Sans',sans-serif",fontWeight:600,letterSpacing:'.03em',flex:1}}>Connecté</span>
-          <span style={{fontSize:9,color:'rgba(22,163,74,.6)'}}>Admin</span>
-        </div>
-        <button onClick={onLogout} style={{
-          width:'100%', display:'flex', alignItems:'center', gap:9,
-          padding:'9px 12px', borderRadius:10, border:'none',
-          background:'rgba(220,38,38,.05)', color:'rgba(220,38,38,.6)',
-          fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, cursor:'pointer', transition:'all .16s',
-        }}
-        onMouseEnter={e=>{e.currentTarget.style.background='rgba(220,38,38,.1)';e.currentTarget.style.color=T.red}}
-        onMouseLeave={e=>{e.currentTarget.style.background='rgba(220,38,38,.05)';e.currentTarget.style.color='rgba(220,38,38,.6)'}}>
-          <span className="material-icons" style={{fontSize:15}}>logout</span>Déconnexion
-        </button>
-      </div>
-    </aside>
-  )
+// ─── Input helpers ────────────────────────────────────────────
+const IS = {
+  width:'100%', padding:'10px 13px', borderRadius:10,
+  background:'#FAFAF8', border:'1px solid #E8E6E3',
+  color:'#0F0E0C', fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:'none', transition:'border-color .18s',
 }
+function onF(e){ e.target.style.borderColor = 'rgba(201,150,58,.5)' }
+function onB(e){ e.target.style.borderColor = '#E8E6E3' }
 
 // ─── Stat card ────────────────────────────────────────────────
 function Stat({ icon, value, label, accent = T.gold }) {
@@ -123,7 +43,7 @@ function Stat({ icon, value, label, accent = T.gold }) {
     }}>
       <div style={{
         width:44, height:44, borderRadius:T.r, flexShrink:0,
-        background:`rgba(201,150,58,.08)`, border:`1px solid rgba(201,150,58,.18)`,
+        background:'rgba(201,150,58,.08)', border:'1px solid rgba(201,150,58,.18)',
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
         <span className="material-icons" style={{fontSize:20,color:accent}}>{icon}</span>
@@ -141,7 +61,7 @@ function Section({ title, icon, children, style={} }) {
   return (
     <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, boxShadow:'0 1px 4px rgba(15,14,12,.04)', ...style}}>
       <div style={{display:'flex',alignItems:'center',gap:10,paddingBottom:16,marginBottom:18,borderBottom:`1px solid ${T.border}`}}>
-        <div style={{width:34,height:34,borderRadius:T.r,background:`rgba(201,150,58,.08)`,border:`1px solid rgba(201,150,58,.2)`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+        <div style={{width:34,height:34,borderRadius:T.r,background:'rgba(201,150,58,.08)',border:'1px solid rgba(201,150,58,.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
           <span className="material-icons" style={{fontSize:16,color:T.gold}}>{icon}</span>
         </div>
         <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>{title}</h3>
@@ -150,15 +70,6 @@ function Section({ title, icon, children, style={} }) {
     </div>
   )
 }
-
-// ─── Input helpers ────────────────────────────────────────────
-const IS = {
-  width:'100%', padding:'10px 13px', borderRadius:10,
-  background:'#FAFAF8', border:'1px solid #E8E6E3',
-  color:'#0F0E0C', fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:'none', transition:'border-color .18s',
-}
-function onF(e){ e.target.style.borderColor = 'rgba(201,150,58,.5)' }
-function onB(e){ e.target.style.borderColor = '#E8E6E3' }
 
 // ─── Edit modal ───────────────────────────────────────────────
 const VILLES = ['Abidjan']
@@ -186,8 +97,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
         capacite_personnes:data.capacite_personnes||2,
         prix_nuit:data.prix_nuit||'', prix_journee:data.prix_journee||'',
         prix_semaine:data.prix_semaine||'', prix_mois:data.prix_mois||'',
-        montant_caution:data.montant_caution||'',
-        featured:data.featured||false, disponible:data.disponible!==false,
+        featured:true, disponible:data.disponible!==false,
         equipements:data.equipements||[],
       })
     })
@@ -205,7 +115,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
       fd.append('admin_key',adminKey)
       Object.entries(form).forEach(([k,v])=>{
         if(k==='equipements') v.forEach(eq=>fd.append('equipements',eq))
-        else if(k==='featured') fd.append(k,v?'on':'')
+        else if(k==='featured') fd.append(k,'on')
         else if(k==='disponible') fd.append(k,v?'on':'')
         else fd.append(k,v)
       })
@@ -227,7 +137,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(15,14,12,.55)',zIndex:9000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
       onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
-      <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'var(--sh-xl)'}}>
+      <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'0 24px 80px rgba(15,14,12,.2)'}}>
         <div style={{padding:'18px 24px',borderBottom:`1px solid ${T.border}`,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',display:'flex',alignItems:'center',gap:8}}>
             <span className="material-icons" style={{fontSize:16,color:T.gold}}>edit</span>
@@ -289,20 +199,21 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
                 return (
                   <button key={eq.value} type="button" onClick={()=>toggleEq(eq.value)} style={{
                     padding:'5px 11px',borderRadius:8,cursor:'pointer',fontSize:11,fontFamily:"'DM Sans',sans-serif",fontWeight:600,
-                    background:on?`rgba(201,150,58,.1)`:'var(--surface)',
-                    border:`1px solid ${on?'rgba(201,150,58,.4)':'var(--border)'}`,
+                    background:on?'rgba(201,150,58,.1)':T.surface,
+                    border:`1px solid ${on?'rgba(201,150,58,.4)':T.border}`,
                     color:on?T.gold:T.muted, transition:'all .13s',
                   }}>{eq.label}</button>
                 )
               })}
             </div>
           </div>
-          <div style={{display:'flex',gap:14}}>
-            {[['featured','En vedette ⭐'],['disponible','Disponible ✓']].map(([k,l])=>(
-              <label key={k} style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:13,color:T.muted}}>
-                <input type="checkbox" checked={form[k]} onChange={e=>set(k,e.target.checked)} style={{accentColor:T.gold,width:14,height:14}}/>{l}
-              </label>
-            ))}
+          <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
+            <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 11px',borderRadius:99,background:`${T.gold}10`,border:`1px solid ${T.gold}25`,color:T.gold,fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase'}}>
+              <span className="material-icons" style={{fontSize:12}}>star</span>Prioritaire (auto)
+            </div>
+            <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:13,color:T.muted}}>
+              <input type="checkbox" checked={form.disponible} onChange={e=>set('disponible',e.target.checked)} style={{accentColor:T.gold,width:14,height:14}}/>Disponible ✓
+            </label>
           </div>
           <div>
             <label style={{display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:5}}>Nouvelles photos</label>
@@ -345,16 +256,6 @@ function ResidencesList({ adminKey, onAdd }) {
     setDel(null)
   }
 
-  const toggleF = async (id) => {
-    setTog(id+'-f')
-    try {
-      const fd=new FormData(); fd.append('admin_key',adminKey)
-      const r=await fetch(`${API_URL}/api/residences/${id}/toggle-featured`,{method:'POST',body:fd})
-      const d=await r.json(); setList(p=>p.map(x=>x.id===id?{...x,featured:d.featured}:x))
-    } catch {}
-    setTog(null)
-  }
-
   const toggleD = async (id) => {
     setTog(id+'-d')
     try {
@@ -371,14 +272,12 @@ function ResidencesList({ adminKey, onAdd }) {
 
   return (
     <>
-      {/* Stats */}
       <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:12,marginBottom:28}}>
         <Stat icon="apartment" value={total}    label="Résidences publiées" accent={T.gold}/>
         <Stat icon="star"      value={featured} label="En vedette"          accent={T.goldL}/>
         <Stat icon="place"     value={villes}   label="Villes couvertes"    accent={T.green}/>
       </div>
 
-      {/* Toolbar */}
       <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:18,flexWrap:'wrap',gap:12}}>
         <h2 style={{fontFamily:"'DM Serif Display',serif",fontSize:18,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>
           Toutes les résidences
@@ -396,7 +295,6 @@ function ResidencesList({ adminKey, onAdd }) {
         </button>
       </div>
 
-      {/* Table */}
       <div style={{background:T.surface,border:`1px solid ${T.border}`,borderRadius:T.r+2,overflow:'hidden'}}>
         {loading?(
           <div style={{padding:56,textAlign:'center'}}>
@@ -447,16 +345,13 @@ function ResidencesList({ adminKey, onAdd }) {
                     </td>
                     <td style={{padding:'12px 15px'}}>
                       <div style={{display:'flex',flexDirection:'column',gap:4}}>
-                        <button onClick={()=>toggleF(r.id)} disabled={toggling===r.id+'-f'} style={{
+                        <div style={{
                           display:'inline-flex',alignItems:'center',gap:3,padding:'3px 9px',borderRadius:999,
-                          background:r.featured?`${T.goldL}18`:`${T.goldL}06`,
-                          border:`1px solid ${r.featured?`${T.goldL}40`:`${T.goldL}18`}`,
-                          color:r.featured?T.goldL:`${T.goldL}50`,
-                          fontSize:9,fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',cursor:'pointer',transition:'all .18s',
+                          background:`${T.goldL}18`,border:`1px solid ${T.goldL}40`,
+                          color:T.goldL,fontSize:9,fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',
                         }}>
-                          <span className="material-icons" style={{fontSize:10}}>{r.featured?'star':'star_border'}</span>
-                          {r.featured?'Vedette':'Non vedette'}
-                        </button>
+                          <span className="material-icons" style={{fontSize:10}}>star</span>Prioritaire
+                        </div>
                         <button onClick={()=>toggleD(r.id)} disabled={toggling===r.id+'-d'} style={{
                           display:'inline-flex',alignItems:'center',gap:3,padding:'3px 9px',borderRadius:999,
                           background:r.disponible?'rgba(22,163,74,.08)':'rgba(220,38,38,.06)',
@@ -515,7 +410,12 @@ function AddForm({ adminKey, onSuccess }) {
     {value:'machine_a_laver',label:'Lave-linge',icon:'local_laundry_service'},{value:'balcon',label:'Balcon',icon:'balcony'},
     {value:'gardien',label:'Gardien',icon:'security'},{value:'groupe_electrogene',label:'Groupe élec.',icon:'bolt'},
   ]
-  const [form, setForm] = useState({titre:'',type_bien:'appartement',description:'',ville:'Abidjan',commune:'',quartier:'',nb_chambres:1,nb_salles_de_bain:1,capacite_personnes:2,prix_nuit:'',prix_journee:'',prix_semaine:'',prix_mois:'',featured:false,equipements:[]})
+  const [form, setForm] = useState({
+    titre:'', type_bien:'appartement', description:'', ville:'Abidjan',
+    commune:'', quartier:'', nb_chambres:1, nb_salles_de_bain:1,
+    capacite_personnes:2, prix_nuit:'', prix_journee:'', prix_semaine:'', prix_mois:'',
+    featured:true, equipements:[]
+  })
   const [photos, setPhotos] = useState([])
   const [previews, setPreviews] = useState([])
   const [saving, setSaving] = useState(false)
@@ -539,7 +439,7 @@ function AddForm({ adminKey, onSuccess }) {
       const fd=new FormData(); fd.append('admin_key',adminKey)
       Object.entries(form).forEach(([k,v])=>{
         if(k==='equipements') v.forEach(eq=>fd.append('equipements',eq))
-        else if(k==='featured') fd.append(k,v?'on':'')
+        else if(k==='featured') fd.append(k,'on')
         else fd.append(k,v)
       })
       photos.forEach(p=>fd.append('photos',p))
@@ -604,14 +504,10 @@ function AddForm({ adminKey, onSuccess }) {
             placeholder="Décrivez la résidence, ses atouts, son accès…"
             style={{...IS,resize:'vertical',minHeight:90}} onFocus={onF} onBlur={onB}/>
         </div>
-        <label style={{display:'flex',alignItems:'center',gap:10,cursor:'pointer',userSelect:'none'}}>
-          <div onClick={()=>set('featured',!form.featured)} style={{width:38,height:21,borderRadius:11,background:form.featured?T.gold:`${T.gold}22`,border:`1px solid ${form.featured?T.gold:`${T.gold}30`}`,position:'relative',transition:'all .18s',flexShrink:0}}>
-            <div style={{position:'absolute',top:2,left:form.featured?'calc(100% - 19px)':2,width:15,height:15,borderRadius:'50%',background:'#fff',transition:'left .18s'}}/>
-          </div>
-          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,color:T.muted}}>
-            Mettre en vedette <span style={{color:T.dim,fontWeight:400}}>— Apparaît en priorité</span>
-          </span>
-        </label>
+        <div style={{display:'flex',alignItems:'center',gap:8,padding:'10px 12px',borderRadius:10,background:`${T.gold}08`,border:`1px solid ${T.gold}20`}}>
+          <span className="material-icons" style={{fontSize:15,color:T.gold}}>star</span>
+          <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,color:T.gold}}>Prioritaire automatiquement — toutes les résidences sont mises en avant.</span>
+        </div>
       </Section>
 
       <Section title="Capacité & pièces" icon="king_bed">
@@ -622,6 +518,7 @@ function AddForm({ adminKey, onSuccess }) {
         </div>
       </Section>
 
+      {/* Tarifs sans caution */}
       <Section title="Tarifs (XOF)" icon="payments">
         <p style={{fontSize:11,color:T.dim,marginBottom:14}}>Au moins un tarif est requis.</p>
         <div style={{display:'grid',gridTemplateColumns:'repeat(2,1fr)',gap:12}}>
@@ -693,105 +590,236 @@ function AddForm({ adminKey, onSuccess }) {
   )
 }
 
+
+// ─── MapPicker — carte cliquable Leaflet ──────────────────────
+function MapPicker({ lat, lon, onMove }) {
+  const mapRef = useRef(null)
+  const instanceRef = useRef(null)
+  const markerRef = useRef(null)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    if (instanceRef.current) return // déjà initialisé
+
+    // Charger Leaflet dynamiquement
+    const loadLeaflet = async () => {
+      if (!window.L) {
+        // CSS
+        if (!document.getElementById('leaflet-css')) {
+          const link = document.createElement('link')
+          link.id = 'leaflet-css'
+          link.rel = 'stylesheet'
+          link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css'
+          document.head.appendChild(link)
+        }
+        // JS
+        await new Promise(resolve => {
+          const s = document.createElement('script')
+          s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js'
+          s.onload = resolve
+          document.head.appendChild(s)
+        })
+      }
+      const L = window.L
+      const map = L.map(mapRef.current, { zoomControl: true }).setView([lat, lon], 15)
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap',
+        maxZoom: 19,
+      }).addTo(map)
+
+      const goldIcon = L.divIcon({
+        className: '',
+        html: `<div style="width:22px;height:22px;border-radius:50%;background:#C9963A;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`,
+        iconSize: [22,22], iconAnchor: [11,11],
+      })
+
+      const marker = L.marker([lat, lon], { icon: goldIcon, draggable: true }).addTo(map)
+      marker.on('dragend', e => {
+        const { lat: la, lng: ln } = e.target.getLatLng()
+        onMove(parseFloat(la.toFixed(6)), parseFloat(ln.toFixed(6)))
+      })
+      map.on('click', e => {
+        const { lat: la, lng: ln } = e.latlng
+        marker.setLatLng([la, ln])
+        onMove(parseFloat(la.toFixed(6)), parseFloat(ln.toFixed(6)))
+      })
+
+      instanceRef.current = map
+      markerRef.current = marker
+    }
+    loadLeaflet()
+  }, [])
+
+  // Sync quand lat/lon changent depuis l'extérieur (géoloc ou champ texte)
+  useEffect(() => {
+    if (!markerRef.current || !instanceRef.current) return
+    markerRef.current.setLatLng([lat, lon])
+    instanceRef.current.setView([lat, lon], instanceRef.current.getZoom())
+  }, [lat, lon])
+
+  return <div ref={mapRef} style={{height:'100%',width:'100%'}}/>
+}
+
 // ─── Settings tab ─────────────────────────────────────────────
 function SettingsTab() {
-  const [map, setMap]     = useState({ lat:5.3364, lon:-4.0267, label:"Abidjan, Côte d'Ivoire", zoom:14 })
-  const [saving, setSav]  = useState(false)
-  const [msg, setMsg]     = useState('')
-  const [err, setErr]     = useState('')
-  const [preview, setPrev]= useState(false)
+  const [settings, setSettings] = useState({
+    lat: 5.3364, lon: -4.0267,
+    label: "Abidjan, Côte d'Ivoire",
+    zoom: 14,
+    ville: 'Abidjan',
+    whatsapp: '2250789851090',
+  })
+  const [saving, setSav]   = useState(false)
+  const [msg, setMsg]      = useState('')
+  const [err, setErr]      = useState('')
+  const [preview, setPrev] = useState(false)
+  const [locating, setLoc] = useState(false)
 
   useEffect(()=>{
-    fetch('/api/map-settings').then(r=>r.json()).then(d=>setMap(d)).catch(()=>{})
+    fetch('/api/map-settings').then(r=>r.json()).then(d=>setSettings(s=>({...s,...d}))).catch(()=>{})
   },[])
 
   const save = async () => {
     setSav(true); setMsg(''); setErr('')
     try {
-      const r=await fetch('/api/map-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(map)})
+      const r=await fetch('/api/map-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(settings)})
       const d=await r.json()
-      if(d.ok) setMsg('Coordonnées enregistrées avec succès.')
+      if(d.ok) setMsg('Paramètres enregistrés avec succès.')
       else setErr(d.error||'Erreur.')
     } catch { setErr('Erreur réseau.') }
     setSav(false)
   }
 
-  const setM = (k,v) => setMap(m=>({...m,[k]:v}))
+  const setS = (k,v) => setSettings(s=>({...s,[k]:v}))
+
+  // Géolocalisation du navigateur
+  const geolocate = () => {
+    if (!navigator.geolocation) { setErr('Géolocalisation non supportée par ce navigateur.'); return }
+    setLoc(true); setErr('')
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        setS('lat', parseFloat(pos.coords.latitude.toFixed(6)))
+        setS('lon', parseFloat(pos.coords.longitude.toFixed(6)))
+        setLoc(false)
+        setMsg('Position récupérée ! Vérifiez sur la carte puis enregistrez.')
+      },
+      err => {
+        setErr('Impossible de récupérer la position : ' + err.message)
+        setLoc(false)
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    )
+  }
 
   const mapSrc = (() => {
-    const d=0.018; const {lat,lon}=map
+    const d=0.018; const {lat,lon}=settings
     return `https://www.openstreetmap.org/export/embed.html?bbox=${lon-d},${lat-d*.65},${lon+d},${lat+d*.65}&layer=mapnik&marker=${lat},${lon}`
   })()
+
+  const LBL = {display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:6}
 
   return (
     <div>
       <h2 style={{fontFamily:"'DM Serif Display',serif",fontSize:22,fontWeight:400,color:T.ink,marginBottom:24,fontStyle:'italic'}}>Paramètres du site</h2>
 
-      <Section title="Localisation de la résidence" icon="location_on">
-        <p style={{fontSize:13,color:T.muted,marginBottom:20,lineHeight:1.6}}>
-          Ces coordonnées définissent l'emplacement affiché sur la carte dans le pied de page du site.
-          Entrez la latitude et la longitude exactes de votre résidence.
+      {/* ── WhatsApp global ── */}
+      <Section title="Contact WhatsApp" icon="whatsapp">
+        <p style={{fontSize:13,color:T.muted,marginBottom:16,lineHeight:1.6}}>
+          Ce numéro est utilisé sur tout le site pour les réservations et le contact. Format international sans <code style={{background:T.bg,padding:'1px 5px',borderRadius:5}}>+</code> ni espaces.
+        </p>
+        <div>
+          <label style={LBL}>Numéro WhatsApp *</label>
+          <div style={{display:'flex',gap:8,alignItems:'center'}}>
+            <div style={{position:'relative',flex:1}}>
+              <span className="material-icons" style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',fontSize:16,color:'#25D366',pointerEvents:'none'}}>whatsapp</span>
+              <input
+                value={settings.whatsapp}
+                onChange={e=>setS('whatsapp',e.target.value.replace(/\D/g,''))}
+                style={{...IS,paddingLeft:34}}
+                onFocus={onF} onBlur={onB}
+                placeholder="2250789851090"
+              />
+            </div>
+            {settings.whatsapp && (
+              <a
+                href={`https://wa.me/${settings.whatsapp}`}
+                target="_blank" rel="noopener"
+                style={{display:'inline-flex',alignItems:'center',gap:5,padding:'10px 14px',borderRadius:10,border:'1px solid rgba(37,211,102,.25)',background:'rgba(37,211,102,.06)',color:'#25D366',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,textDecoration:'none',whiteSpace:'nowrap',flexShrink:0}}>
+                <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Tester
+              </a>
+            )}
+          </div>
+          <p style={{fontSize:11,color:T.dim,marginTop:6}}>Exemple : <strong style={{color:T.ink}}>2250789851090</strong> pour +225 07 89 85 10 90</p>
+        </div>
+      </Section>
+
+      {/* ── Localisation ── */}
+      <Section title="Localisation de la résidence principale" icon="location_on">
+        <p style={{fontSize:13,color:T.muted,marginBottom:16,lineHeight:1.6}}>
+          Ces informations définissent la carte affichée dans le pied de page du site.
         </p>
 
-        {/* Tips */}
-        <div style={{padding:'12px 16px',borderRadius:10,background:`${T.gold}0a`,border:`1px solid ${T.gold}20`,marginBottom:20,display:'flex',gap:10,alignItems:'flex-start'}}>
-          <span className="material-icons" style={{fontSize:16,color:T.gold,flexShrink:0,marginTop:1}}>info</span>
-          <p style={{fontSize:12,color:T.muted,lineHeight:1.6}}>
-            Astuce : Ouvrez <a href="https://www.openstreetmap.org" target="_blank" rel="noopener" style={{color:T.gold}}>OpenStreetMap</a> ou Google Maps, cliquez sur l'emplacement et copiez les coordonnées. Format : <strong style={{color:T.ink}}>5.3364, -4.0267</strong>
-          </p>
-        </div>
-
+        {/* Ville + Libellé */}
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:12,marginBottom:14}}>
           <div>
-            <label style={{display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:6}}>Latitude *</label>
-            <input type="number" step="any" value={map.lat} onChange={e=>setM('lat',parseFloat(e.target.value)||0)}
-              style={IS} onFocus={onF} onBlur={onB} placeholder="Ex: 5.3364"/>
+            <label style={LBL}>Ville *</label>
+            <input value={settings.ville} onChange={e=>setS('ville',e.target.value)} style={IS} onFocus={onF} onBlur={onB} placeholder="Ex: Abidjan"/>
           </div>
           <div>
-            <label style={{display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:6}}>Longitude *</label>
-            <input type="number" step="any" value={map.lon} onChange={e=>setM('lon',parseFloat(e.target.value)||0)}
-              style={IS} onFocus={onF} onBlur={onB} placeholder="Ex: -4.0267"/>
+            <label style={LBL}>Libellé affiché</label>
+            <input value={settings.label} onChange={e=>setS('label',e.target.value)} style={IS} onFocus={onF} onBlur={onB} placeholder="Ex: Cocody, Riviera 3 — Abidjan"/>
           </div>
         </div>
 
+        {/* Carte interactive cliquable */}
         <div style={{marginBottom:14}}>
-          <label style={{display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:6}}>Libellé de l'adresse</label>
-          <input value={map.label} onChange={e=>setM('label',e.target.value)}
-            style={IS} onFocus={onF} onBlur={onB} placeholder="Ex: Cocody, Riviera 3 — Abidjan, CI"/>
-        </div>
-
-        <div style={{marginBottom:20}}>
-          <label style={{display:'block',fontSize:10,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,marginBottom:6}}>Niveau de zoom (1–18)</label>
-          <div style={{display:'flex',alignItems:'center',gap:12}}>
-            <input type="range" min={10} max={18} value={map.zoom} onChange={e=>setM('zoom',Number(e.target.value))}
-              style={{flex:1,accentColor:T.gold}}/>
-            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,color:T.gold,minWidth:28,textAlign:'right'}}>{map.zoom}</span>
+          <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:8}}>
+            <label style={{...LBL,marginBottom:0}}>Localisation — cliquez sur la carte pour pointer</label>
+            <button type="button" onClick={geolocate} disabled={locating} style={{
+              display:'inline-flex',alignItems:'center',gap:5,padding:'6px 12px',borderRadius:9,
+              border:`1px solid ${T.borderG}`,background:`${T.gold}08`,
+              color:locating?T.dim:T.gold,
+              fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,cursor:locating?'wait':'pointer',
+              transition:'all .15s',
+            }}>
+              {locating?(
+                <span style={{width:12,height:12,border:`1.5px solid ${T.borderG}`,borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>
+              ):(
+                <span className="material-icons" style={{fontSize:14}}>my_location</span>
+              )}
+              {locating?'Localisation…':'Ma position'}
+            </button>
           </div>
-        </div>
-
-        {/* Preview toggle */}
-        <button type="button" onClick={()=>setPrev(p=>!p)} style={{
-          display:'inline-flex',alignItems:'center',gap:6,padding:'8px 14px',borderRadius:9,
-          border:`1px solid ${T.borderG}`,background:`${T.gold}08`,color:T.gold,
-          fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,cursor:'pointer',
-          marginBottom:preview?14:0,transition:'all .15s',
-        }}>
-          <span className="material-icons" style={{fontSize:14}}>{preview?'visibility_off':'visibility'}</span>
-          {preview?'Masquer la prévisualisation':'Prévisualiser la carte'}
-        </button>
-
-        {preview&&(
-          <div style={{borderRadius:12,overflow:'hidden',border:`1px solid ${T.borderG}`,marginBottom:0}}>
-            <iframe src={mapSrc} width="100%" height="220" title="Prévisualisation carte" loading="lazy"
-              style={{display:'block',border:'none',filter:'grayscale(15%) brightness(.87)'}}/>
-            <div style={{padding:'8px 12px',background:T.bg,display:'flex',alignItems:'center',gap:6,borderTop:`1px solid ${T.border}`}}>
-              <span className="material-icons" style={{fontSize:13,color:T.gold}}>place</span>
-              <span style={{fontSize:11,color:T.muted}}>{map.label}</span>
+          <div style={{padding:'9px 12px',borderRadius:9,background:`${T.gold}08`,border:`1px solid ${T.gold}18`,marginBottom:10,fontSize:12,color:T.muted,display:'flex',gap:7,alignItems:'center'}}>
+            <span className="material-icons" style={{fontSize:14,color:T.gold,flexShrink:0}}>info</span>
+            <span>Cliquez n'importe où sur la carte pour déplacer le marqueur, ou utilisez <strong style={{color:T.ink}}>Ma position</strong> si vous êtes sur place.</span>
+          </div>
+          {/* Carte cliquable — Leaflet via CDN */}
+          <div id="admin-map" style={{height:280,borderRadius:12,overflow:'hidden',border:`1px solid ${T.borderG}`,marginBottom:10,position:'relative'}}>
+            <MapPicker lat={settings.lat} lon={settings.lon} onMove={(lat,lon)=>{setS('lat',lat);setS('lon',lon)}}/>
+          </div>
+          <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10}}>
+            <div>
+              <label style={LBL}>Latitude</label>
+              <input type="number" step="any" value={settings.lat} onChange={e=>setS('lat',parseFloat(e.target.value)||0)} style={IS} onFocus={onF} onBlur={onB}/>
+            </div>
+            <div>
+              <label style={LBL}>Longitude</label>
+              <input type="number" step="any" value={settings.lon} onChange={e=>setS('lon',parseFloat(e.target.value)||0)} style={IS} onFocus={onF} onBlur={onB}/>
             </div>
           </div>
-        )}
+        </div>
 
-        {/* Feedback */}
+        {/* Zoom */}
+        <div style={{marginBottom:18}}>
+          <label style={LBL}>Niveau de zoom (1–18)</label>
+          <div style={{display:'flex',alignItems:'center',gap:12}}>
+            <input type="range" min={10} max={18} value={settings.zoom} onChange={e=>setS('zoom',Number(e.target.value))} style={{flex:1,accentColor:T.gold}}/>
+            <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,color:T.gold,minWidth:28,textAlign:'right'}}>{settings.zoom}</span>
+          </div>
+        </div>
+
+        {/* Messages */}
         {msg&&<div style={{padding:'10px 14px',borderRadius:9,background:'rgba(74,222,128,.08)',border:'1px solid rgba(74,222,128,.2)',color:T.green,fontSize:13,display:'flex',alignItems:'center',gap:7,marginTop:14}}>
           <span className="material-icons" style={{fontSize:14}}>check_circle</span>{msg}
         </div>}
@@ -817,13 +845,163 @@ function SettingsTab() {
   )
 }
 
+// ─── TOP HEADER NAV ───────────────────────────────────────────
+function AdminTopBar({ active, setActive, onLogout }) {
+  const NAV = [
+    { id:'residences', icon:'apartment',  label:'Résidences' },
+    { id:'ajouter',    icon:'add_home',   label:'Publier'    },
+    { id:'parametres', icon:'settings',   label:'Paramètres' },
+  ]
+  const [mobileMenuOpen, setMobMenu] = useState(false)
+
+  return (
+    <>
+      <header style={{
+        position:'fixed', top:0, left:0, right:0, zIndex:200,
+        background:'rgba(255,255,255,.97)',
+        borderBottom:`1px solid ${T.border}`,
+        backdropFilter:'blur(20px)',
+        WebkitBackdropFilter:'blur(20px)',
+        boxShadow:'0 1px 0 rgba(15,14,12,.04)',
+      }}>
+        <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(90deg,${T.gold},${T.goldL})`,opacity:.6}}/>
+        <div style={{
+          maxWidth:1400, margin:'0 auto',
+          display:'flex', alignItems:'center', gap:0,
+          height:60, padding:'0 clamp(16px,3vw,32px)',
+        }}>
+          <a href="/" style={{
+            display:'flex', alignItems:'center', gap:10,
+            textDecoration:'none', padding:'8px 12px', borderRadius:12,
+            transition:'background .18s', flexShrink:0,
+          }}
+          onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.06)'}
+          onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+            <Logo size={30}/>
+            <div style={{lineHeight:1}}>
+              <div style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,fontStyle:'italic'}}>Allons Somo</div>
+              <div style={{fontSize:9,color:T.muted,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:2,display:'flex',alignItems:'center',gap:3}}>
+                <span className="material-icons" style={{fontSize:9}}>arrow_back</span>Retour au site
+              </div>
+            </div>
+          </a>
+          <div style={{width:1,height:28,background:T.border,margin:'0 16px',flexShrink:0}}/>
+          <div style={{
+            padding:'4px 10px', borderRadius:8,
+            background:'rgba(201,150,58,.08)', border:`1px solid rgba(201,150,58,.2)`,
+            fontSize:10, fontWeight:700, letterSpacing:'.1em', textTransform:'uppercase',
+            color:T.gold, flexShrink:0, fontFamily:"'DM Sans',sans-serif",
+          }}>Administration</div>
+          <div style={{flex:1}}/>
+          <nav className="admin-top-nav" style={{display:'flex',alignItems:'center',gap:2}}>
+            {NAV.map(tab => {
+              const on = active === tab.id
+              return (
+                <button key={tab.id} onClick={()=>setActive(tab.id)} style={{
+                  display:'flex', alignItems:'center', gap:7,
+                  padding:'8px 14px', borderRadius:10,
+                  border:`1px solid ${on ? T.borderG : 'transparent'}`,
+                  background: on ? `rgba(201,150,58,.08)` : 'transparent',
+                  color: on ? T.gold : T.muted,
+                  fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600,
+                  cursor:'pointer', transition:'all .16s',
+                }}
+                onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(15,14,12,.04)';e.currentTarget.style.color=T.ink2}}}
+                onMouseLeave={e=>{if(!on){e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.muted}}}>
+                  <span className="material-icons" style={{fontSize:15,opacity:on?1:.65}}>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              )
+            })}
+          </nav>
+          <div className="admin-top-nav" style={{width:1,height:28,background:T.border,margin:'0 12px'}}/>
+          <div className="admin-top-nav" style={{display:'flex',alignItems:'center',gap:8}}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:7,
+              padding:'6px 12px', borderRadius:9,
+              background:'rgba(22,163,74,.06)', border:'1px solid rgba(22,163,74,.15)',
+            }}>
+              <span style={{width:6,height:6,borderRadius:'50%',background:T.green,flexShrink:0,boxShadow:`0 0 5px rgba(22,163,74,.4)`}}/>
+              <span style={{fontSize:11,color:T.green,fontFamily:"'DM Sans',sans-serif",fontWeight:600,letterSpacing:'.03em'}}>Connecté</span>
+              <span style={{fontSize:9,color:'rgba(22,163,74,.5)',fontFamily:"'DM Sans',sans-serif"}}>Admin</span>
+            </div>
+            <button onClick={onLogout} style={{
+              display:'flex', alignItems:'center', gap:6,
+              padding:'7px 12px', borderRadius:9,
+              border:'none', cursor:'pointer',
+              background:'rgba(220,38,38,.06)', color:'rgba(220,38,38,.55)',
+              fontFamily:"'DM Sans',sans-serif", fontSize:11, fontWeight:600,
+              transition:'all .16s',
+            }}
+            onMouseEnter={e=>{e.currentTarget.style.background='rgba(220,38,38,.12)';e.currentTarget.style.color=T.red}}
+            onMouseLeave={e=>{e.currentTarget.style.background='rgba(220,38,38,.06)';e.currentTarget.style.color='rgba(220,38,38,.55)'}}>
+              <span className="material-icons" style={{fontSize:14}}>logout</span>
+              Déconnexion
+            </button>
+          </div>
+          <button className="admin-hamburger" onClick={()=>setMobMenu(o=>!o)} style={{
+            display:'none', padding:8,
+            background:'rgba(201,150,58,.08)', border:`1px solid rgba(201,150,58,.2)`,
+            borderRadius:10, color:T.gold, cursor:'pointer',
+          }}>
+            <span className="material-icons">{mobileMenuOpen?'close':'menu'}</span>
+          </button>
+        </div>
+      </header>
+
+      {mobileMenuOpen && (
+        <div style={{
+          position:'fixed', top:60, left:0, right:0, zIndex:190,
+          background:'rgba(255,255,255,.98)', borderBottom:`1px solid ${T.border}`,
+          backdropFilter:'blur(20px)', padding:'12px 16px 16px',
+          boxShadow:'0 8px 32px rgba(15,14,12,.1)',
+        }}>
+          <div style={{display:'flex',flexDirection:'column',gap:4,marginBottom:14}}>
+            {NAV.map(tab => {
+              const on = active === tab.id
+              return (
+                <button key={tab.id} onClick={()=>{setActive(tab.id);setMobMenu(false)}} style={{
+                  display:'flex', alignItems:'center', gap:11,
+                  padding:'12px 14px', borderRadius:12,
+                  border:`1px solid ${on ? T.borderG : 'transparent'}`,
+                  background: on ? 'rgba(201,150,58,.08)' : 'transparent',
+                  color: on ? T.gold : T.muted,
+                  fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600,
+                  cursor:'pointer', textAlign:'left', width:'100%',
+                }}>
+                  <span className="material-icons" style={{fontSize:17,opacity:on?1:.6}}>{tab.icon}</span>
+                  {tab.label}
+                </button>
+              )
+            })}
+          </div>
+          <div style={{display:'flex',alignItems:'center',gap:8,paddingTop:12,borderTop:`1px solid ${T.border}`}}>
+            <div style={{flex:1,display:'flex',alignItems:'center',gap:7,padding:'8px 12px',borderRadius:9,background:'rgba(22,163,74,.06)',border:'1px solid rgba(22,163,74,.15)'}}>
+              <span style={{width:7,height:7,borderRadius:'50%',background:T.green,boxShadow:`0 0 5px rgba(22,163,74,.4)`}}/>
+              <span style={{fontSize:12,color:T.green,fontWeight:600}}>Connecté</span>
+              <span style={{fontSize:10,color:'rgba(22,163,74,.5)'}}>Admin</span>
+            </div>
+            <button onClick={onLogout} style={{
+              display:'flex',alignItems:'center',gap:6,padding:'9px 14px',borderRadius:9,
+              border:'none',cursor:'pointer',background:'rgba(220,38,38,.07)',
+              color:'rgba(220,38,38,.7)',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,
+            }}>
+              <span className="material-icons" style={{fontSize:15}}>logout</span>
+              Déconnexion
+            </button>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 // ─── Dashboard ────────────────────────────────────────────────
 export default function AdminDashboard() {
   const router = useRouter()
-  const [adminKey, setAdminKey]   = useState('')
-  const [active, setActive]       = useState('residences')
-  const [mounted, setMounted]     = useState(false)
-  const [mobileOpen, setMobOpen]  = useState(false)
+  const [adminKey, setAdminKey] = useState('')
+  const [active, setActive]     = useState('residences')
+  const [mounted, setMounted]   = useState(false)
 
   useEffect(()=>{
     setMounted(true)
@@ -835,9 +1013,9 @@ export default function AdminDashboard() {
   const logout = () => { sessionStorage.removeItem('as-admin'); router.push('/admin') }
 
   const PAGES = {
-    residences: { label:'Gestion des résidences', eyebrow:'Tableau de bord', icon:'apartment', desc:'Gérez, publiez et mettez en avant vos résidences.' },
-    ajouter:    { label:'Publier une résidence',  eyebrow:'Nouvelle résidence', icon:'add_home', desc:'Ajoutez un nouveau bien à votre catalogue.' },
-    parametres: { label:'Paramètres du site',     eyebrow:'Configuration', icon:'settings', desc:'Localisation et réglages généraux du site.' },
+    residences: { label:'Gestion des résidences', eyebrow:'Tableau de bord',  icon:'apartment', desc:'Gérez, publiez et mettez en avant vos résidences.' },
+    ajouter:    { label:'Publier une résidence',  eyebrow:'Nouvelle résidence',icon:'add_home',  desc:'Ajoutez un nouveau bien à votre catalogue.' },
+    parametres: { label:'Paramètres du site',     eyebrow:'Configuration',    icon:'settings',  desc:'WhatsApp, localisation et réglages généraux.' },
   }
 
   if (!mounted||!adminKey) return null
@@ -845,152 +1023,76 @@ export default function AdminDashboard() {
   const page = PAGES[active]
 
   return (
-    <div style={{display:'flex',minHeight:'100vh',background:T.bg,fontFamily:"'DM Sans',sans-serif"}}>
+    <div style={{
+      minHeight:'100vh', background:T.bg,
+      fontFamily:"'DM Sans',sans-serif",
+      paddingTop:60,
+    }}>
+      <AdminTopBar active={active} setActive={setActive} onLogout={logout}/>
 
-      {/* Desktop sidebar */}
-      <div className="admin-sidebar-desktop">
-        <Sidebar active={active} set={setActive} onLogout={logout}/>
-      </div>
-
-      {/* Mobile top bar */}
-      <div className="admin-mobile-bar" style={{
-        position:'fixed',top:0,left:0,right:0,height:58,zIndex:200,
-        background:'rgba(250,250,248,.97)',borderBottom:`1px solid ${T.border}`,
-        backdropFilter:'blur(16px)',
-        display:'none',alignItems:'center',justifyContent:'space-between',padding:'0 16px',
+      <div style={{
+        background: T.surface,
+        padding:'clamp(20px,3vw,32px) clamp(20px,4vw,40px) 0',
+        borderBottom:`1px solid ${T.border}`,
+        position:'relative', overflow:'hidden',
       }}>
-        <a href="/" style={{display:'flex',alignItems:'center',gap:8,textDecoration:'none'}}>
-          <Logo size={28}/>
-          <span style={{fontFamily:"'DM Serif Display',serif",fontSize:14,fontWeight:400,color:T.ink,fontStyle:'italic'}}>Allons Somo</span>
-          <span style={{fontSize:9,color:T.gold,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.08em',textTransform:'uppercase',marginLeft:2,padding:'2px 6px',borderRadius:99,background:'rgba(201,150,58,.1)',border:'1px solid rgba(201,150,58,.2)'}}>Admin</span>
-        </a>
-        <button onClick={()=>setMobOpen(o=>!o)} style={{padding:8,background:'rgba(201,150,58,.08)',border:'1px solid rgba(201,150,58,.2)',borderRadius:10,color:T.gold,cursor:'pointer',display:'flex'}}>
-          <span className="material-icons">{mobileOpen?'close':'menu'}</span>
-        </button>
+        <div style={{position:'relative',zIndex:1}}>
+          <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:12}}>
+            <span className="material-icons" style={{fontSize:13,color:T.gold}}>{page.icon}</span>
+            <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:T.gold}}>{page.eyebrow}</span>
+          </div>
+          <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',flexWrap:'wrap',gap:14,paddingBottom:20}}>
+            <div>
+              <h1 style={{fontFamily:"'DM Serif Display',serif",fontSize:'clamp(20px,3vw,28px)',fontWeight:400,color:T.ink,margin:0,fontStyle:'italic',letterSpacing:'-.02em',lineHeight:1.15}}>
+                {page.label}
+              </h1>
+              <p style={{fontSize:13,color:T.muted,marginTop:5}}>{page.desc}</p>
+            </div>
+            <div style={{display:'flex',alignItems:'center',gap:8}}>
+              {active==='residences' && (
+                <button onClick={()=>setActive('ajouter')} style={{
+                  display:'inline-flex',alignItems:'center',gap:7,padding:'9px 18px',borderRadius:10,border:'none',
+                  background:`linear-gradient(135deg,${T.gold},${T.goldL})`,
+                  color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
+                  letterSpacing:'.05em',textTransform:'uppercase',cursor:'pointer',
+                  boxShadow:`0 4px 18px rgba(201,150,58,.3)`,transition:'all .2s',
+                }}
+                onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
+                onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+                  <span className="material-icons" style={{fontSize:15}}>add_home</span>Publier
+                </button>
+              )}
+              <a href="/" target="_blank" rel="noopener" style={{
+                display:'inline-flex',alignItems:'center',gap:6,padding:'9px 14px',borderRadius:10,
+                border:`1px solid ${T.border}`,background:T.bg,color:T.muted,
+                fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,textDecoration:'none',transition:'all .15s',
+              }}
+              onMouseEnter={e=>{e.currentTarget.style.background=T.surface;e.currentTarget.style.color=T.ink}}
+              onMouseLeave={e=>{e.currentTarget.style.background=T.bg;e.currentTarget.style.color=T.muted}}>
+                <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Voir le site
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {mobileOpen&&(
-        <div style={{position:'fixed',inset:0,zIndex:150,display:'flex'}}>
-          <div style={{flex:1,background:'rgba(15,14,12,.25)',backdropFilter:'blur(4px)'}} onClick={()=>setMobOpen(false)}/>
-          <div style={{width:240,background:T.surface,paddingTop:58,borderLeft:`1px solid ${T.border}`}}>
-            <Sidebar active={active} set={k=>{setActive(k);setMobOpen(false)}} onLogout={logout}/>
-          </div>
-        </div>
-      )}
-
-      {/* Main content */}
-      <div style={{flex:1,minWidth:0,overflow:'auto',display:'flex',flexDirection:'column',background:T.bg}}>
-
-        {/* ── Page header ── */}
-        <div style={{
-          background: T.surface,
-          padding:'clamp(24px,4vw,40px) clamp(20px,4vw,40px) 0',
-          borderBottom:`1px solid ${T.border}`,
-          position:'relative', overflow:'hidden',
-          boxShadow:'0 1px 0 var(--border)',
-        }} className="admin-header">
-          {/* Subtle gold line top */}
-          <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(90deg, ${T.gold}, ${T.goldL})`,opacity:.5}}/>
-
-          <div style={{position:'relative',zIndex:1}}>
-            {/* Breadcrumb */}
-            <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:16}}>
-              <span className="material-icons" style={{fontSize:13,color:T.gold}}>{page.icon}</span>
-              <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:T.gold}}>{page.eyebrow}</span>
-            </div>
-
-            {/* Title + description */}
-            <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',flexWrap:'wrap',gap:16,paddingBottom:24}}>
-              <div>
-                <h1 style={{fontFamily:"'DM Serif Display',serif",fontSize:'clamp(22px,3vw,30px)',fontWeight:400,color:T.ink,margin:0,fontStyle:'italic',letterSpacing:'-.02em',lineHeight:1.1}}>
-                  {page.label}
-                </h1>
-                <p style={{fontSize:13,color:T.muted,marginTop:6,fontFamily:"'DM Sans',sans-serif"}}>{page.desc}</p>
-              </div>
-
-              {/* Quick actions */}
-              <div style={{display:'flex',alignItems:'center',gap:8}}>
-                {active==='residences' && (
-                  <button onClick={()=>setActive('ajouter')} style={{
-                    display:'inline-flex',alignItems:'center',gap:7,padding:'9px 18px',borderRadius:10,border:'none',
-                    background:`linear-gradient(135deg,${T.gold},${T.goldL})`,
-                    color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
-                    letterSpacing:'.05em',textTransform:'uppercase',cursor:'pointer',
-                    boxShadow:`0 4px 18px rgba(201,150,58,.3)`,transition:'all .2s',
-                  }}
-                  onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
-                  onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
-                    <span className="material-icons" style={{fontSize:15}}>add_home</span>Publier
-                  </button>
-                )}
-                <a href="/" target="_blank" rel="noopener" style={{
-                  display:'inline-flex',alignItems:'center',gap:6,padding:'9px 14px',borderRadius:10,
-                  border:`1px solid ${T.border}`,background:T.bg,color:T.muted,
-                  fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,textDecoration:'none',transition:'all .15s',
-                }}
-                onMouseEnter={e=>{e.currentTarget.style.background=T.surface;e.currentTarget.style.color=T.ink}}
-                onMouseLeave={e=>{e.currentTarget.style.background=T.bg;e.currentTarget.style.color=T.muted}}>
-                  <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Voir le site
-                </a>
-              </div>
-            </div>
-
-            {/* Tab bar */}
-            <div style={{display:'flex',gap:0,borderTop:`1px solid ${T.border}`,marginLeft:-40,marginRight:-40,paddingLeft:40}} className="admin-tabs">
-              {[
-                {id:'residences',label:'Résidences',icon:'apartment'},
-                {id:'ajouter',label:'Publier',icon:'add_home'},
-                {id:'parametres',label:'Paramètres',icon:'settings'},
-              ].map(tab=>{
-                const on=active===tab.id
-                return (
-                  <button key={tab.id} onClick={()=>setActive(tab.id)} style={{
-                    display:'flex',alignItems:'center',gap:7,
-                    padding:'12px 18px',border:'none',cursor:'pointer',
-                    background:'transparent',color:on?T.gold:T.muted,
-                    fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,
-                    letterSpacing:'.02em',transition:'all .15s',position:'relative',
-                    borderBottom: on?`2px solid ${T.gold}`:'2px solid transparent',
-                    marginBottom:'-1px',
-                  }}
-                  onMouseEnter={e=>{if(!on)e.currentTarget.style.color=T.ink}}
-                  onMouseLeave={e=>{if(!on)e.currentTarget.style.color=T.muted}}>
-                    <span className="material-icons" style={{fontSize:14}}>{tab.icon}</span>
-                    {tab.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div style={{padding:'clamp(20px,3vw,36px) clamp(20px,4vw,40px)',flex:1}} className="admin-content">
-          {active==='residences' && <ResidencesList adminKey={adminKey} onAdd={()=>setActive('ajouter')}/>}
-          {active==='ajouter'    && <AddForm adminKey={adminKey} onSuccess={()=>setActive('residences')}/>}
-          {active==='parametres' && <SettingsTab/>}
-        </div>
+      <div style={{padding:'clamp(20px,3vw,36px) clamp(20px,4vw,40px)'}}>
+        {active==='residences' && <ResidencesList adminKey={adminKey} onAdd={()=>setActive('ajouter')}/>}
+        {active==='ajouter'    && <AddForm adminKey={adminKey} onSuccess={()=>setActive('residences')}/>}
+        {active==='parametres' && <SettingsTab/>}
       </div>
 
       <style>{`
         @keyframes spin    { to{transform:rotate(360deg)} }
         @keyframes fadeUp  { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-        @keyframes pulse   { 0%,100%{opacity:1} 50%{opacity:.4} }
+        @keyframes fadeIn  { from{opacity:0} to{opacity:1} }
         * { box-sizing:border-box; }
-
-        .admin-sidebar-desktop { display:flex; }
-        .admin-mobile-bar      { display:none !important; }
-        .admin-tabs { overflow-x:auto; -webkit-overflow-scrolling:touch; }
-        .admin-tabs::-webkit-scrollbar { display:none; }
-
+        .admin-top-nav     { display:flex !important; }
+        .admin-hamburger   { display:none !important; }
         @media(max-width:768px){
-          .admin-sidebar-desktop { display:none !important; }
-          .admin-mobile-bar      { display:flex !important; }
-          .admin-header  { padding:70px 16px 0 !important; }
-          .admin-tabs    { margin-left:-16px !important; padding-left:16px !important; margin-right:-16px !important; }
-          .admin-content { padding:16px !important; }
+          .admin-top-nav   { display:none !important; }
+          .admin-hamburger { display:flex !important; }
         }
-
         select option { background:${T.surface}; color:${T.ink}; }
         input[type=number]::-webkit-inner-spin-button,
         input[type=number]::-webkit-outer-spin-button { opacity:1; }

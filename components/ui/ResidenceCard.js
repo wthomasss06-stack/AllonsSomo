@@ -35,12 +35,10 @@ export default function ResidenceCard({ residence, index = 0 }) {
             <span className="badge badge-dark" style={{ textTransform: 'capitalize' }}>
               {residence.type_bien}
             </span>
-            {residence.featured && (
-              <span className="badge badge-gold">
-                <span className="material-icons" style={{ fontSize: 11 }}>star</span>
-                À la une
-              </span>
-            )}
+            <span className="badge badge-gold badge-priority">
+              <span className="material-icons" style={{ fontSize: 11 }}>star</span>
+              Prioritaire
+            </span>
           </div>
 
           {/* Price overlay */}

@@ -6,10 +6,12 @@ const DATA_DIR   = join(process.cwd(), 'data')
 const SETTINGS_F = join(DATA_DIR, 'map-settings.json')
 
 const DEFAULT = {
-  lat:   5.3364,
-  lon:  -4.0267,
-  label: 'Abidjan, Côte d\'Ivoire',
-  zoom:  14,
+  lat:       5.3364,
+  lon:      -4.0267,
+  label:    "Abidjan, Côte d'Ivoire",
+  zoom:      14,
+  ville:    'Abidjan',
+  whatsapp: '2250789851090',
 }
 
 function read() {
@@ -26,16 +28,18 @@ export async function GET() {
 export async function POST(req) {
   try {
     const body = await req.json()
-    const { lat, lon, label, zoom } = body
+    const { lat, lon, label, zoom, ville, whatsapp } = body
     if (lat == null || lon == null) {
       return NextResponse.json({ error: 'lat et lon sont requis.' }, { status: 400 })
     }
     if (!existsSync(DATA_DIR)) mkdirSync(DATA_DIR, { recursive: true })
     const settings = {
-      lat:   parseFloat(lat),
-      lon:   parseFloat(lon),
-      label: String(label || '').trim() || DEFAULT.label,
-      zoom:  Number(zoom) || 14,
+      lat:      parseFloat(lat),
+      lon:      parseFloat(lon),
+      label:    String(label || '').trim() || DEFAULT.label,
+      zoom:     Number(zoom) || 14,
+      ville:    String(ville || '').trim() || DEFAULT.ville,
+      whatsapp: String(whatsapp || '').replace(/\D/g, '') || DEFAULT.whatsapp,
     }
     writeFileSync(SETTINGS_F, JSON.stringify(settings, null, 2))
     return NextResponse.json({ ok: true, ...settings })
