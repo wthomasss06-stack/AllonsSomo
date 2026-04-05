@@ -7,19 +7,20 @@ import { API_URL } from '@/lib/config'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
 
-// ─── Tokens identiques au site ────────────────────────────────
+// ─── Tokens light — identiques au site ───────────────────────
 const T = {
-  bg:      '#0F0E0C',
-  surface: '#181714',
-  border:  'rgba(255,255,255,.08)',
-  borderG: 'rgba(201,150,58,.18)',
+  bg:      '#FAFAF8',
+  surface: '#FFFFFF',
+  border:  '#E8E6E3',
+  borderG: 'rgba(201,150,58,.25)',
   gold:    '#C9963A',
   goldL:   '#E8B458',
-  ink:     '#F5F0E8',
-  muted:   'rgba(245,240,232,.45)',
-  dim:     'rgba(245,240,232,.25)',
-  green:   '#4ADE80',
-  red:     '#F87171',
+  ink:     '#0F0E0C',
+  ink2:    '#2A2823',
+  muted:   '#8A8784',
+  dim:     '#C4C2BF',
+  green:   '#16A34A',
+  red:     '#DC2626',
   r:       14,
 }
 
@@ -33,23 +34,23 @@ function Sidebar({ active, set, onLogout }) {
   return (
     <aside style={{
       width:240, flexShrink:0,
-      background:`linear-gradient(180deg, #141210 0%, #0F0E0C 100%)`,
+      background: T.surface,
       borderRight:`1px solid ${T.border}`,
       display:'flex', flexDirection:'column', minHeight:'100vh',
       position:'relative', overflow:'hidden',
     }}>
-      {/* Subtle gold gradient glow top-left */}
-      <div style={{position:'absolute',top:-60,left:-60,width:200,height:200,borderRadius:'50%',background:`radial-gradient(circle, ${T.gold}18 0%, transparent 70%)`,pointerEvents:'none'}}/>
+      {/* Gold top accent */}
+      <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(90deg, ${T.gold}, ${T.goldL})`,opacity:.6}}/>
 
       {/* Logo */}
       <div style={{padding:'24px 20px 20px',borderBottom:`1px solid ${T.border}`,position:'relative'}}>
         <a href="/" style={{display:'flex',alignItems:'center',gap:11,textDecoration:'none',padding:'10px 12px',borderRadius:14,transition:'background .2s',background:'transparent'}}
-          onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.07)'}
+          onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.06)'}
           onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
           <Logo size={34}/>
           <div>
             <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',lineHeight:1.1}}>Allons Somo</div>
-            <div style={{fontSize:9,color:`${T.gold}80`,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:3,display:'flex',alignItems:'center',gap:4}}>
+            <div style={{fontSize:9,color:T.muted,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:3,display:'flex',alignItems:'center',gap:4}}>
               <span className="material-icons" style={{fontSize:9}}>arrow_back</span>Retour au site
             </div>
           </div>
@@ -67,19 +68,19 @@ function Sidebar({ active, set, onLogout }) {
             <button key={item.id} onClick={()=>set(item.id)} style={{
               width:'100%', display:'flex', alignItems:'center', gap:11,
               padding:'11px 13px', borderRadius:12, border:'none', cursor:'pointer',
-              background: on ? `linear-gradient(135deg, ${T.gold}18, ${T.gold}0c)` : 'transparent',
+              background: on ? `linear-gradient(135deg, rgba(201,150,58,.12), rgba(201,150,58,.06))` : 'transparent',
               color: on ? T.gold : T.muted,
               fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600, textAlign:'left',
               marginBottom:3, transition:'all .18s',
-              boxShadow: on ? `inset 0 0 0 1px ${T.gold}28` : 'none',
+              boxShadow: on ? `inset 0 0 0 1px rgba(201,150,58,.22)` : 'none',
               position:'relative',
             }}
-            onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(255,255,255,.04)';e.currentTarget.style.color=T.ink}}}
+            onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(15,14,12,.04)';e.currentTarget.style.color=T.ink2}}}
             onMouseLeave={e=>{if(!on){e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.muted}}}>
-              <span className="material-icons" style={{fontSize:18, opacity: on ? 1 : .7}}>{item.icon}</span>
+              <span className="material-icons" style={{fontSize:18, opacity: on ? 1 : .6}}>{item.icon}</span>
               <span style={{flex:1}}>{item.label}</span>
               {item.badge && (
-                <span style={{fontSize:8,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',padding:'2px 6px',borderRadius:99,background:`${T.gold}22`,color:T.gold,border:`1px solid ${T.gold}30`}}>
+                <span style={{fontSize:8,fontWeight:700,letterSpacing:'.08em',textTransform:'uppercase',padding:'2px 6px',borderRadius:99,background:`rgba(201,150,58,.12)`,color:T.gold,border:`1px solid rgba(201,150,58,.25)`}}>
                   {item.badge}
                 </span>
               )}
@@ -92,19 +93,19 @@ function Sidebar({ active, set, onLogout }) {
       {/* Bottom section */}
       <div style={{padding:'14px',borderTop:`1px solid ${T.border}`}}>
         {/* Status */}
-        <div style={{padding:'9px 13px',borderRadius:10,background:'rgba(74,222,128,.05)',border:'1px solid rgba(74,222,128,.12)',display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
-          <span style={{width:7,height:7,borderRadius:'50%',background:T.green,flexShrink:0,boxShadow:`0 0 6px ${T.green}80`}}/>
+        <div style={{padding:'9px 13px',borderRadius:10,background:'rgba(22,163,74,.05)',border:'1px solid rgba(22,163,74,.15)',display:'flex',alignItems:'center',gap:8,marginBottom:10}}>
+          <span style={{width:7,height:7,borderRadius:'50%',background:T.green,flexShrink:0,boxShadow:`0 0 6px rgba(22,163,74,.4)`}}/>
           <span style={{fontSize:11,color:T.green,fontFamily:"'DM Sans',sans-serif",fontWeight:600,letterSpacing:'.03em',flex:1}}>Connecté</span>
-          <span style={{fontSize:9,color:`${T.green}60`}}>Admin</span>
+          <span style={{fontSize:9,color:'rgba(22,163,74,.6)'}}>Admin</span>
         </div>
         <button onClick={onLogout} style={{
           width:'100%', display:'flex', alignItems:'center', gap:9,
           padding:'9px 12px', borderRadius:10, border:'none',
-          background:'rgba(248,113,113,.06)', color:'rgba(248,113,113,.6)',
+          background:'rgba(220,38,38,.05)', color:'rgba(220,38,38,.6)',
           fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600, cursor:'pointer', transition:'all .16s',
         }}
-        onMouseEnter={e=>{e.currentTarget.style.background='rgba(248,113,113,.12)';e.currentTarget.style.color=T.red}}
-        onMouseLeave={e=>{e.currentTarget.style.background='rgba(248,113,113,.06)';e.currentTarget.style.color='rgba(248,113,113,.6)'}}>
+        onMouseEnter={e=>{e.currentTarget.style.background='rgba(220,38,38,.1)';e.currentTarget.style.color=T.red}}
+        onMouseLeave={e=>{e.currentTarget.style.background='rgba(220,38,38,.05)';e.currentTarget.style.color='rgba(220,38,38,.6)'}}>
           <span className="material-icons" style={{fontSize:15}}>logout</span>Déconnexion
         </button>
       </div>
@@ -118,10 +119,11 @@ function Stat({ icon, value, label, accent = T.gold }) {
     <div style={{
       background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2,
       padding:'20px 24px', display:'flex', alignItems:'center', gap:16,
+      boxShadow:'0 1px 4px rgba(15,14,12,.04)',
     }}>
       <div style={{
         width:44, height:44, borderRadius:T.r, flexShrink:0,
-        background:`${accent}14`, border:`1px solid ${accent}28`,
+        background:`rgba(201,150,58,.08)`, border:`1px solid rgba(201,150,58,.18)`,
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
         <span className="material-icons" style={{fontSize:20,color:accent}}>{icon}</span>
@@ -137,9 +139,9 @@ function Stat({ icon, value, label, accent = T.gold }) {
 // ─── Section wrapper ──────────────────────────────────────────
 function Section({ title, icon, children, style={} }) {
   return (
-    <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, ...style}}>
+    <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, boxShadow:'0 1px 4px rgba(15,14,12,.04)', ...style}}>
       <div style={{display:'flex',alignItems:'center',gap:10,paddingBottom:16,marginBottom:18,borderBottom:`1px solid ${T.border}`}}>
-        <div style={{width:34,height:34,borderRadius:T.r,background:`${T.gold}12`,border:`1px solid ${T.gold}28`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+        <div style={{width:34,height:34,borderRadius:T.r,background:`rgba(201,150,58,.08)`,border:`1px solid rgba(201,150,58,.2)`,display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
           <span className="material-icons" style={{fontSize:16,color:T.gold}}>{icon}</span>
         </div>
         <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>{title}</h3>
@@ -152,11 +154,11 @@ function Section({ title, icon, children, style={} }) {
 // ─── Input helpers ────────────────────────────────────────────
 const IS = {
   width:'100%', padding:'10px 13px', borderRadius:10,
-  background:'rgba(0,0,0,.4)', border:`1px solid ${T.border}`,
-  color:T.ink, fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:'none', transition:'border-color .18s',
+  background:'#FAFAF8', border:'1px solid #E8E6E3',
+  color:'#0F0E0C', fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:'none', transition:'border-color .18s',
 }
-function onF(e){ e.target.style.borderColor = `${T.gold}66` }
-function onB(e){ e.target.style.borderColor = T.border }
+function onF(e){ e.target.style.borderColor = 'rgba(201,150,58,.5)' }
+function onB(e){ e.target.style.borderColor = '#E8E6E3' }
 
 // ─── Edit modal ───────────────────────────────────────────────
 const VILLES = ['Abidjan']
@@ -217,15 +219,15 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
   }
 
   if (!form) return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.8)',zIndex:9000,display:'flex',alignItems:'center',justifyContent:'center'}}>
+    <div style={{position:'fixed',inset:0,background:'rgba(15,14,12,.5)',zIndex:9000,display:'flex',alignItems:'center',justifyContent:'center'}}>
       <div style={{width:32,height:32,border:`2px solid ${T.borderG}`,borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite'}}/>
     </div>
   )
 
   return (
-    <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,.82)',zIndex:9000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
+    <div style={{position:'fixed',inset:0,background:'rgba(15,14,12,.55)',zIndex:9000,display:'flex',alignItems:'center',justifyContent:'center',padding:20}}
       onClick={e=>{if(e.target===e.currentTarget)onClose()}}>
-      <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'0 24px 80px rgba(0,0,0,.85)'}}>
+      <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'var(--sh-xl)'}}>
         <div style={{padding:'18px 24px',borderBottom:`1px solid ${T.border}`,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',display:'flex',alignItems:'center',gap:8}}>
             <span className="material-icons" style={{fontSize:16,color:T.gold}}>edit</span>
@@ -287,8 +289,8 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
                 return (
                   <button key={eq.value} type="button" onClick={()=>toggleEq(eq.value)} style={{
                     padding:'5px 11px',borderRadius:8,cursor:'pointer',fontSize:11,fontFamily:"'DM Sans',sans-serif",fontWeight:600,
-                    background:on?`${T.gold}18`:'rgba(255,255,255,.04)',
-                    border:`1px solid ${on?`${T.gold}50`:'rgba(255,255,255,.1)'}`,
+                    background:on?`rgba(201,150,58,.1)`:'var(--surface)',
+                    border:`1px solid ${on?'rgba(201,150,58,.4)':'var(--border)'}`,
                     color:on?T.gold:T.muted, transition:'all .13s',
                   }}>{eq.label}</button>
                 )
@@ -307,8 +309,8 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
             <input type="file" accept="image/*" multiple onChange={e=>setPhotos(Array.from(e.target.files).slice(0,10))} style={{fontSize:12,color:T.muted}}/>
           </div>
           <div style={{display:'flex',gap:8,paddingTop:6}}>
-            <button type="button" onClick={onClose} style={{flex:1,padding:'11px',borderRadius:10,border:`1px solid ${T.border}`,background:'rgba(255,255,255,.04)',color:T.muted,fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,cursor:'pointer'}}>Annuler</button>
-            <button type="submit" disabled={saving} style={{flex:2,padding:'11px',borderRadius:10,border:'none',background:saving?`${T.gold}60`:`linear-gradient(135deg,${T.gold},${T.goldL})`,color:'#180E00',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase',cursor:saving?'not-allowed':'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:7}}>
+            <button type="button" onClick={onClose} style={{flex:1,padding:'11px',borderRadius:10,border:`1px solid ${T.border}`,background:T.bg,color:T.muted,fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,cursor:'pointer'}}>Annuler</button>
+            <button type="submit" disabled={saving} style={{flex:2,padding:'11px',borderRadius:10,border:'none',background:saving?`${T.gold}60`:`linear-gradient(135deg,${T.gold},${T.goldL})`,color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase',cursor:saving?'not-allowed':'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:7}}>
               {saving?'Enregistrement…':<><span className="material-icons" style={{fontSize:14}}>save</span>Enregistrer</>}
             </button>
           </div>
@@ -384,7 +386,7 @@ function ResidencesList({ adminKey, onAdd }) {
         <button onClick={onAdd} style={{
           display:'inline-flex',alignItems:'center',gap:7,padding:'9px 18px',borderRadius:10,border:'none',
           background:`linear-gradient(135deg,${T.gold},${T.goldL})`,
-          color:'#160E00',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
+          color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
           letterSpacing:'.05em',textTransform:'uppercase',cursor:'pointer',
           boxShadow:`0 4px 18px ${T.gold}30`,transition:'all .2s',
         }}
@@ -413,7 +415,7 @@ function ResidencesList({ adminKey, onAdd }) {
           <div style={{overflowX:'auto'}}>
             <table style={{width:'100%',borderCollapse:'collapse'}}>
               <thead>
-                <tr style={{background:'rgba(0,0,0,.2)'}}>
+                <tr style={{background:T.bg}}>
                   {['Photo','Résidence','Prix min.','Statut','Actions'].map(h=>(
                     <th key={h} style={{padding:'11px 15px',textAlign:'left',fontFamily:"'DM Sans',sans-serif",fontSize:9,fontWeight:700,letterSpacing:'.1em',textTransform:'uppercase',color:T.dim,borderBottom:`1px solid ${T.border}`,whiteSpace:'nowrap'}}>{h}</th>
                   ))}
@@ -457,8 +459,8 @@ function ResidencesList({ adminKey, onAdd }) {
                         </button>
                         <button onClick={()=>toggleD(r.id)} disabled={toggling===r.id+'-d'} style={{
                           display:'inline-flex',alignItems:'center',gap:3,padding:'3px 9px',borderRadius:999,
-                          background:r.disponible?'rgba(74,222,128,.1)':'rgba(248,113,113,.08)',
-                          border:`1px solid ${r.disponible?'rgba(74,222,128,.25)':'rgba(248,113,113,.2)'}`,
+                          background:r.disponible?'rgba(22,163,74,.08)':'rgba(220,38,38,.06)',
+                          border:`1px solid ${r.disponible?'rgba(22,163,74,.22)':'rgba(220,38,38,.18)'}`,
                           color:r.disponible?T.green:T.red,
                           fontSize:9,fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',cursor:'pointer',transition:'all .18s',
                         }}>
@@ -551,8 +553,8 @@ function AddForm({ adminKey, onSuccess }) {
 
   if(ok) return (
     <div style={{textAlign:'center',padding:'80px 28px',animation:'fadeUp .35s ease'}}>
-      <div style={{width:68,height:68,borderRadius:'50%',background:'rgba(74,222,128,.1)',border:'2px solid rgba(74,222,128,.28)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 18px'}}>
-        <span className="material-icons" style={{fontSize:36,color:T.green}}>check_circle</span>
+      <div style={{width:68,height:68,borderRadius:'50%',background:'rgba(22,163,74,.08)',border:'2px solid rgba(22,163,74,.2)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 18px'}}>
+        <span className="material-icons" style={{fontSize:36,color:'#16A34A'}}>check_circle</span>
       </div>
       <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:22,fontWeight:400,color:T.ink,marginBottom:8,fontStyle:'italic'}}>Résidence publiée !</h3>
       <p style={{fontSize:13,color:T.muted,marginBottom:24}}>Elle est maintenant visible sur le site.</p>
@@ -676,13 +678,13 @@ function AddForm({ adminKey, onSuccess }) {
       <button type="submit" disabled={saving} style={{
         width:'100%',padding:'14px',borderRadius:12,border:'none',
         background:saving?`${T.gold}50`:`linear-gradient(135deg,${T.gold},${T.goldL})`,
-        color:'#160E00',fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,
+        color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:700,
         letterSpacing:'.05em',textTransform:'uppercase',cursor:saving?'not-allowed':'pointer',
         display:'flex',alignItems:'center',justifyContent:'center',gap:8,
         boxShadow:saving?'none':`0 6px 24px ${T.gold}30`,transition:'all .18s',
       }}>
         {saving?(
-          <><span style={{width:16,height:16,border:'2px solid rgba(0,0,0,.2)',borderTopColor:'rgba(0,0,0,.5)',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Publication…</>
+          <><span style={{width:16,height:16,border:'2px solid rgba(201,150,58,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Publication…</>
         ):(
           <><span className="material-icons" style={{fontSize:17}}>publish</span>Publier la résidence</>
         )}
@@ -782,7 +784,7 @@ function SettingsTab() {
           <div style={{borderRadius:12,overflow:'hidden',border:`1px solid ${T.borderG}`,marginBottom:0}}>
             <iframe src={mapSrc} width="100%" height="220" title="Prévisualisation carte" loading="lazy"
               style={{display:'block',border:'none',filter:'grayscale(15%) brightness(.87)'}}/>
-            <div style={{padding:'8px 12px',background:'rgba(0,0,0,.4)',display:'flex',alignItems:'center',gap:6,borderTop:`1px solid ${T.border}`}}>
+            <div style={{padding:'8px 12px',background:T.bg,display:'flex',alignItems:'center',gap:6,borderTop:`1px solid ${T.border}`}}>
               <span className="material-icons" style={{fontSize:13,color:T.gold}}>place</span>
               <span style={{fontSize:11,color:T.muted}}>{map.label}</span>
             </div>
@@ -800,12 +802,12 @@ function SettingsTab() {
         <button onClick={save} disabled={saving} style={{
           marginTop:16,display:'inline-flex',alignItems:'center',gap:7,padding:'11px 24px',borderRadius:10,border:'none',
           background:saving?`${T.gold}50`:`linear-gradient(135deg,${T.gold},${T.goldL})`,
-          color:'#160E00',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:700,
+          color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:700,
           letterSpacing:'.05em',textTransform:'uppercase',cursor:saving?'not-allowed':'pointer',
           boxShadow:saving?'none':`0 4px 16px ${T.gold}28`,transition:'all .18s',
         }}>
           {saving?(
-            <><span style={{width:14,height:14,border:'2px solid rgba(0,0,0,.2)',borderTopColor:'rgba(0,0,0,.5)',borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Enregistrement…</>
+            <><span style={{width:14,height:14,border:'2px solid rgba(201,150,58,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Enregistrement…</>
           ):(
             <><span className="material-icons" style={{fontSize:15}}>save</span>Enregistrer</>
           )}
@@ -853,47 +855,48 @@ export default function AdminDashboard() {
       {/* Mobile top bar */}
       <div className="admin-mobile-bar" style={{
         position:'fixed',top:0,left:0,right:0,height:58,zIndex:200,
-        background:'rgba(15,14,12,.97)',borderBottom:`1px solid ${T.border}`,
+        background:'rgba(250,250,248,.97)',borderBottom:`1px solid ${T.border}`,
         backdropFilter:'blur(16px)',
         display:'none',alignItems:'center',justifyContent:'space-between',padding:'0 16px',
       }}>
         <a href="/" style={{display:'flex',alignItems:'center',gap:8,textDecoration:'none'}}>
           <Logo size={28}/>
           <span style={{fontFamily:"'DM Serif Display',serif",fontSize:14,fontWeight:400,color:T.ink,fontStyle:'italic'}}>Allons Somo</span>
-          <span style={{fontSize:9,color:T.dim,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.08em',textTransform:'uppercase',marginLeft:2,padding:'2px 6px',borderRadius:99,background:`${T.gold}18`,border:`1px solid ${T.gold}28`,color:T.gold}}>Admin</span>
+          <span style={{fontSize:9,color:T.gold,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.08em',textTransform:'uppercase',marginLeft:2,padding:'2px 6px',borderRadius:99,background:'rgba(201,150,58,.1)',border:'1px solid rgba(201,150,58,.2)'}}>Admin</span>
         </a>
-        <button onClick={()=>setMobOpen(o=>!o)} style={{padding:8,background:`${T.gold}12`,border:`1px solid ${T.borderG}`,borderRadius:10,color:T.gold,cursor:'pointer',display:'flex'}}>
+        <button onClick={()=>setMobOpen(o=>!o)} style={{padding:8,background:'rgba(201,150,58,.08)',border:'1px solid rgba(201,150,58,.2)',borderRadius:10,color:T.gold,cursor:'pointer',display:'flex'}}>
           <span className="material-icons">{mobileOpen?'close':'menu'}</span>
         </button>
       </div>
 
       {mobileOpen&&(
         <div style={{position:'fixed',inset:0,zIndex:150,display:'flex'}}>
-          <div style={{flex:1,background:'rgba(0,0,0,.55)',backdropFilter:'blur(4px)'}} onClick={()=>setMobOpen(false)}/>
-          <div style={{width:240,background:T.surface,paddingTop:58}}>
+          <div style={{flex:1,background:'rgba(15,14,12,.25)',backdropFilter:'blur(4px)'}} onClick={()=>setMobOpen(false)}/>
+          <div style={{width:240,background:T.surface,paddingTop:58,borderLeft:`1px solid ${T.border}`}}>
             <Sidebar active={active} set={k=>{setActive(k);setMobOpen(false)}} onLogout={logout}/>
           </div>
         </div>
       )}
 
       {/* Main content */}
-      <div style={{flex:1,minWidth:0,overflow:'auto',display:'flex',flexDirection:'column'}}>
+      <div style={{flex:1,minWidth:0,overflow:'auto',display:'flex',flexDirection:'column',background:T.bg}}>
 
-        {/* ── Immersive page header ── */}
+        {/* ── Page header ── */}
         <div style={{
-          background:`linear-gradient(135deg, #181410 0%, #141210 50%, #0F0E0C 100%)`,
+          background: T.surface,
           padding:'clamp(24px,4vw,40px) clamp(20px,4vw,40px) 0',
           borderBottom:`1px solid ${T.border}`,
           position:'relative', overflow:'hidden',
+          boxShadow:'0 1px 0 var(--border)',
         }} className="admin-header">
-          {/* Decorative glow */}
-          <div style={{position:'absolute',top:-40,right:60,width:280,height:280,borderRadius:'50%',background:`radial-gradient(circle, ${T.gold}0c 0%, transparent 70%)`,pointerEvents:'none'}}/>
+          {/* Subtle gold line top */}
+          <div style={{position:'absolute',top:0,left:0,right:0,height:2,background:`linear-gradient(90deg, ${T.gold}, ${T.goldL})`,opacity:.5}}/>
 
           <div style={{position:'relative',zIndex:1}}>
             {/* Breadcrumb */}
             <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:16}}>
-              <span className="material-icons" style={{fontSize:13,color:`${T.gold}70`}}>{page.icon}</span>
-              <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:`${T.gold}70`}}>{page.eyebrow}</span>
+              <span className="material-icons" style={{fontSize:13,color:T.gold}}>{page.icon}</span>
+              <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:T.gold}}>{page.eyebrow}</span>
             </div>
 
             {/* Title + description */}
@@ -911,9 +914,9 @@ export default function AdminDashboard() {
                   <button onClick={()=>setActive('ajouter')} style={{
                     display:'inline-flex',alignItems:'center',gap:7,padding:'9px 18px',borderRadius:10,border:'none',
                     background:`linear-gradient(135deg,${T.gold},${T.goldL})`,
-                    color:'#160E00',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
+                    color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
                     letterSpacing:'.05em',textTransform:'uppercase',cursor:'pointer',
-                    boxShadow:`0 4px 18px ${T.gold}35`,transition:'all .2s',
+                    boxShadow:`0 4px 18px rgba(201,150,58,.3)`,transition:'all .2s',
                   }}
                   onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
                   onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
@@ -922,11 +925,11 @@ export default function AdminDashboard() {
                 )}
                 <a href="/" target="_blank" rel="noopener" style={{
                   display:'inline-flex',alignItems:'center',gap:6,padding:'9px 14px',borderRadius:10,
-                  border:`1px solid ${T.border}`,background:'rgba(255,255,255,.04)',color:T.muted,
+                  border:`1px solid ${T.border}`,background:T.bg,color:T.muted,
                   fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,textDecoration:'none',transition:'all .15s',
                 }}
-                onMouseEnter={e=>{e.currentTarget.style.background='rgba(255,255,255,.08)';e.currentTarget.style.color=T.ink}}
-                onMouseLeave={e=>{e.currentTarget.style.background='rgba(255,255,255,.04)';e.currentTarget.style.color=T.muted}}>
+                onMouseEnter={e=>{e.currentTarget.style.background=T.surface;e.currentTarget.style.color=T.ink}}
+                onMouseLeave={e=>{e.currentTarget.style.background=T.bg;e.currentTarget.style.color=T.muted}}>
                   <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Voir le site
                 </a>
               </div>

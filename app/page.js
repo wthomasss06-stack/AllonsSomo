@@ -287,7 +287,7 @@ export default function HomePage() {
 
       {/* ── Value Props ── */}
       <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 'clamp(48px,7vw,80px)', alignItems: 'center' }}>
+        <div className="value-props-grid">
           <div>
             <div className="section-label">Pourquoi nous</div>
             <h2 className="section-title" style={{ marginBottom: 20 }}>

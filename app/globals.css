@@ -387,6 +387,14 @@ h1, h2, h3, h4, h5 {
 .filter-chip:hover { border-color: var(--ink); }
 .filter-chip.active { border-color: var(--ink); background: var(--ink); color: var(--white); }
 
+/* VALUE PROPS GRID */
+.value-props-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(48px, 7vw, 80px);
+  align-items: center;
+}
+
 /* FEATURE STRIP */
 .feature-strip {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -484,6 +492,10 @@ h1, h2, h3, h4, h5 {
   .gallery-thumb:nth-child(2) { border-radius: 0; }
   .gallery-thumb:nth-child(3) { border-radius: 0 0 var(--r-lg) var(--r-lg); }
   .filter-bar-inner { gap: 8px; }
+  .value-props-grid {
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 5vw, 48px);
+  }
 }
 @media (max-width: 480px) {
   .hero-actions { flex-direction: column; align-items: flex-start; }

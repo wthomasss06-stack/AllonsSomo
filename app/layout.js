@@ -166,24 +166,24 @@ function FooterMap() {
 
   return (
     <div style={{marginTop:24}}>
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:'rgba(255,255,255,.3)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
-        <span className="material-icons" style={{fontSize:12}}>location_on</span>Nous trouver
+      <div style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--muted)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
+        <span className="material-icons" style={{fontSize:12,color:'var(--gold)'}}>location_on</span>Nous trouver
       </div>
-      <div style={{borderRadius:12,overflow:'hidden',border:'1px solid rgba(255,255,255,.1)',background:'rgba(255,255,255,.03)',opacity:ready?1:.5,transition:'opacity .4s'}}>
+      <div style={{borderRadius:12,overflow:'hidden',border:'1px solid var(--border)',background:'var(--bg)',opacity:ready?1:.5,transition:'opacity .4s'}}>
         <iframe
           src={mapSrc}
           width="100%" height="176"
           title="Localisation Allons Somo"
           loading="lazy"
-          style={{display:'block',border:'none',filter:'grayscale(15%) brightness(.87) contrast(1.04)'}}
+          style={{display:'block',border:'none',filter:'grayscale(10%) contrast(1.02)'}}
         />
-        <div style={{padding:'8px 12px',background:'rgba(0,0,0,.4)',display:'flex',alignItems:'center',gap:6,borderTop:'1px solid rgba(255,255,255,.06)'}}>
-          <span className="material-icons" style={{fontSize:13,color:'#C9963A',flexShrink:0}}>place</span>
-          <span style={{fontSize:11,color:'rgba(255,255,255,.45)',lineHeight:1.4,flex:1}}>{label}</span>
+        <div style={{padding:'8px 12px',background:'var(--white)',display:'flex',alignItems:'center',gap:6,borderTop:'1px solid var(--border)'}}>
+          <span className="material-icons" style={{fontSize:13,color:'var(--gold)',flexShrink:0}}>place</span>
+          <span style={{fontSize:11,color:'var(--muted)',lineHeight:1.4,flex:1}}>{label}</span>
           <a href={osmLink} target="_blank" rel="noopener"
-            style={{fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'rgba(255,255,255,.28)',textDecoration:'none',flexShrink:0,transition:'color .15s'}}
-            onMouseEnter={e=>e.currentTarget.style.color='rgba(255,255,255,.7)'}
-            onMouseLeave={e=>e.currentTarget.style.color='rgba(255,255,255,.28)'}>
+            style={{fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'var(--subtle)',textDecoration:'none',flexShrink:0,transition:'color .15s'}}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
+            onMouseLeave={e=>e.currentTarget.style.color='var(--subtle)'}>
             Agrandir ↗
           </a>
         </div>
@@ -197,27 +197,19 @@ function Footer() {
   const year = new Date().getFullYear()
   return (
     <footer style={{
-      background: 'var(--ink)',
-      color: '#fff',
+      background: 'var(--surface)',
+      borderTop: '1px solid var(--border)',
       paddingTop: 'clamp(56px,8vw,96px)',
       position: 'relative',
       overflow: 'hidden',
     }}>
-      {/* Subtle grain texture overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
-        backgroundImage: 'url("data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.75\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'0.03\'/%3E%3C/svg%3E")',
-        backgroundSize: '200px 200px',
-      }}/>
-
       {/* Gold accent line top */}
       <div style={{
         position: 'absolute', top: 0, left: 'var(--pad)', right: 'var(--pad)',
-        height: '1px', background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.4) 30%, rgba(201,150,58,.4) 70%, transparent)',
-        zIndex: 1,
+        height: '1px', background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.35) 30%, rgba(201,150,58,.35) 70%, transparent)',
       }}/>
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)', position: 'relative' }}>
 
         {/* ── Main grid ── */}
         <div style={{
@@ -230,11 +222,11 @@ function Footer() {
           {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <LogoWhite size={36}/><WordMarkWhite/>
+              <Logo size={36}/><WordMark/>
             </div>
             <p style={{
               fontSize: 14, lineHeight: 1.7,
-              color: 'rgba(255,255,255,.45)',
+              color: 'var(--muted)',
               marginBottom: 24, maxWidth: 260,
             }}>{SITE.tagline}</p>
 
@@ -242,12 +234,12 @@ function Footer() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '6px 12px', borderRadius: 99,
-              background: 'rgba(255,255,255,.06)',
-              border: '1px solid rgba(255,255,255,.1)',
+              background: 'var(--bg)',
+              border: '1px solid var(--border)',
               marginBottom: 24,
             }}>
               <span style={{ fontSize: 14 }}>🇨🇮</span>
-              <span style={{ fontSize: 11, color: 'rgba(255,255,255,.5)', fontWeight: 600, letterSpacing: '.04em' }}>
+              <span style={{ fontSize: 11, color: 'var(--ink-3)', fontWeight: 600, letterSpacing: '.04em' }}>
                 Abidjan, Côte d'Ivoire
               </span>
             </div>
@@ -263,20 +255,20 @@ function Footer() {
                   style={{
                     width: 40, height: 40, borderRadius: 12,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: s.green ? 'rgba(37,211,102,.12)' : 'rgba(255,255,255,.07)',
-                    border: `1px solid ${s.green ? 'rgba(37,211,102,.25)' : 'rgba(255,255,255,.1)'}`,
-                    color: s.green ? '#4ADE80' : 'rgba(255,255,255,.5)',
+                    background: s.green ? 'rgba(37,211,102,.08)' : 'var(--bg)',
+                    border: `1px solid ${s.green ? 'rgba(37,211,102,.2)' : 'var(--border)'}`,
+                    color: s.green ? '#16A34A' : 'var(--ink-3)',
                     transition: 'all .18s',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background = s.green ? 'rgba(37,211,102,.2)' : 'rgba(255,255,255,.14)'
-                    e.currentTarget.style.color = s.green ? '#4ADE80' : '#fff'
+                    e.currentTarget.style.background = s.green ? 'rgba(37,211,102,.14)' : 'var(--white)'
                     e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = 'var(--sh-sm)'
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.background = s.green ? 'rgba(37,211,102,.12)' : 'rgba(255,255,255,.07)'
-                    e.currentTarget.style.color = s.green ? '#4ADE80' : 'rgba(255,255,255,.5)'
+                    e.currentTarget.style.background = s.green ? 'rgba(37,211,102,.08)' : 'var(--bg)'
                     e.currentTarget.style.transform = 'none'
+                    e.currentTarget.style.boxShadow = 'none'
                   }}>
                   <span className="material-icons" style={{ fontSize: 17 }}>{s.icon}</span>
                 </a>
@@ -290,11 +282,11 @@ function Footer() {
                 padding: '10px 18px', borderRadius: 99,
                 background: '#25D366', color: '#fff',
                 fontSize: 13, fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
-                boxShadow: '0 4px 20px rgba(37,211,102,.3)',
+                boxShadow: '0 4px 20px rgba(37,211,102,.25)',
                 transition: 'all .18s', textDecoration: 'none',
               }}
-              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(37,211,102,.4)' }}
-              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(37,211,102,.3)' }}>
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(37,211,102,.35)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(37,211,102,.25)' }}>
               <span className="material-icons" style={{ fontSize: 16 }}>chat</span>
               Réserver via WhatsApp
             </a>
@@ -317,13 +309,13 @@ function Footer() {
                 <li key={href}>
                   <Link href={href} style={{
                     display: 'flex', alignItems: 'center', gap: 9,
-                    padding: '8px 0', color: 'rgba(255,255,255,.45)',
+                    padding: '8px 0', color: 'var(--muted)',
                     fontSize: 14, transition: 'color .15s',
-                    borderBottom: '1px solid rgba(255,255,255,.04)',
+                    borderBottom: '1px solid var(--border)',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.9)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.45)'}>
-                    <span className="material-icons" style={{ fontSize: 14, color: 'rgba(201,150,58,.5)' }}>{icon}</span>
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}>
+                    <span className="material-icons" style={{ fontSize: 14, color: 'rgba(201,150,58,.6)' }}>{icon}</span>
                     {label}
                   </Link>
                 </li>
@@ -345,13 +337,13 @@ function Footer() {
                 <li key={q}>
                   <Link href={`/residences?ville=Abidjan&q=${q}`} style={{
                     display: 'flex', alignItems: 'center', gap: 9,
-                    padding: '8px 0', color: 'rgba(255,255,255,.45)',
+                    padding: '8px 0', color: 'var(--muted)',
                     fontSize: 14, transition: 'color .15s',
-                    borderBottom: '1px solid rgba(255,255,255,.04)',
+                    borderBottom: '1px solid var(--border)',
                   }}
-                  onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.9)'}
-                  onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.45)'}>
-                    <span className="material-icons" style={{ fontSize: 13, color: 'rgba(201,150,58,.4)' }}>place</span>
+                  onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                  onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}>
+                    <span className="material-icons" style={{ fontSize: 13, color: 'rgba(201,150,58,.5)' }}>place</span>
                     {q}
                   </Link>
                 </li>
@@ -368,18 +360,18 @@ function Footer() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
               <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener"
-                style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'rgba(255,255,255,.55)', fontSize: 13, textDecoration: 'none', transition: 'color .15s' }}
-                onMouseEnter={e => e.currentTarget.style.color = '#4ADE80'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.55)'}>
-                <span className="material-icons" style={{ fontSize: 15, marginTop: 1, color: '#4ADE80' }}>chat</span>
-                <span>WhatsApp<br/><span style={{ fontSize: 11, color: 'rgba(255,255,255,.3)' }}>Réponse rapide</span></span>
+                style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--muted)', fontSize: 13, textDecoration: 'none', transition: 'color .15s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#16A34A'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}>
+                <span className="material-icons" style={{ fontSize: 15, marginTop: 1, color: '#16A34A' }}>chat</span>
+                <span>WhatsApp<br/><span style={{ fontSize: 11, color: 'var(--subtle)' }}>Réponse rapide</span></span>
               </a>
               <a href={`mailto:${SITE.email}`}
-                style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'rgba(255,255,255,.55)', fontSize: 13, textDecoration: 'none', transition: 'color .15s' }}
-                onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.9)'}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.55)'}>
-                <span className="material-icons" style={{ fontSize: 15, marginTop: 1, color: 'rgba(201,150,58,.7)' }}>mail</span>
-                <span>{SITE.email}<br/><span style={{ fontSize: 11, color: 'rgba(255,255,255,.3)' }}>Support 24h/7j</span></span>
+                style={{ display: 'flex', alignItems: 'flex-start', gap: 10, color: 'var(--muted)', fontSize: 13, textDecoration: 'none', transition: 'color .15s' }}
+                onMouseEnter={e => e.currentTarget.style.color = 'var(--ink)'}
+                onMouseLeave={e => e.currentTarget.style.color = 'var(--muted)'}>
+                <span className="material-icons" style={{ fontSize: 15, marginTop: 1, color: 'var(--gold)' }}>mail</span>
+                <span>{SITE.email}<br/><span style={{ fontSize: 11, color: 'var(--subtle)' }}>Support 24h/7j</span></span>
               </a>
             </div>
 
@@ -389,7 +381,7 @@ function Footer() {
         </div>
 
         {/* ── Divider ── */}
-        <div style={{ height: 1, background: 'rgba(255,255,255,.07)', margin: '0 0 24px' }}/>
+        <div style={{ height: 1, background: 'var(--border)', margin: '0 0 24px' }}/>
 
         {/* ── Bottom bar ── */}
         <div style={{
@@ -398,28 +390,28 @@ function Footer() {
           paddingBottom: 28,
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,.2)' }}>
+            <span style={{ fontSize: 12, color: 'var(--subtle)' }}>
               © {year} Allons Somo · Tous droits réservés
             </span>
-            <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(255,255,255,.15)', display: 'inline-block' }}/>
-            <span style={{ fontSize: 12, color: 'rgba(255,255,255,.15)' }}>
+            <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--border)', display: 'inline-block' }}/>
+            <span style={{ fontSize: 12, color: 'var(--subtle)' }}>
               Résidences premium en Côte d'Ivoire 🇨🇮
             </span>
           </div>
-          <div style={{ display: 'flex', align: 'center', gap: 20 }}>
-            <Link href="/cookies" style={{ fontSize: 12, color: 'rgba(255,255,255,.2)', transition: 'color .15s' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.2)'}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <Link href="/cookies" style={{ fontSize: 12, color: 'var(--subtle)', transition: 'color .15s' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--ink-2)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'var(--subtle)'}>
               Cookies
             </Link>
-            <Link href="/aide" style={{ fontSize: 12, color: 'rgba(255,255,255,.2)', transition: 'color .15s' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.5)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.2)'}>
+            <Link href="/aide" style={{ fontSize: 12, color: 'var(--subtle)', transition: 'color .15s' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--ink-2)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'var(--subtle)'}>
               Aide
             </Link>
-            <Link href="/admin" style={{ fontSize: 12, color: 'rgba(255,255,255,.04)', transition: 'color .4s' }}
-              onMouseEnter={e => e.currentTarget.style.color = 'rgba(255,255,255,.2)'}
-              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,.04)'}>
+            <Link href="/admin" style={{ fontSize: 12, color: 'rgba(15,14,12,.06)', transition: 'color .4s' }}
+              onMouseEnter={e => e.currentTarget.style.color = 'var(--subtle)'}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(15,14,12,.06)'}>
               ·
             </Link>
           </div>
@@ -442,6 +434,7 @@ function Footer() {
   )
 }
 
+
 // ── Cookie Banner ─────────────────────────────────────────────
 function CookieBanner() {
   const [visible, setVisible] = useState(false)
@@ -450,17 +443,50 @@ function CookieBanner() {
   const accept = () => { localStorage.setItem('as-cookies','accepted'); setVisible(false) }
   const refuse = () => { localStorage.setItem('as-cookies','refused');  setVisible(false) }
   return (
-    <div style={{position:'fixed',bottom:24,left:'50%',transform:'translateX(-50%)',background:'var(--white)',border:'1px solid var(--border)',borderRadius:'var(--r-xl)',padding:'16px 20px',display:'flex',alignItems:'center',gap:14,flexWrap:'wrap',boxShadow:'var(--sh-xl)',zIndex:8000,maxWidth:'calc(100vw - 32px)',width:520,animation:'fadeUp .35s var(--ease) both'}}>
-      <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0}}>cookie</span>
-      <p style={{flex:1,fontSize:13,color:'var(--ink-2)',lineHeight:1.5}}>
-        Nous utilisons des cookies.{' '}
-        <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>
-      </p>
-      <div style={{display:'flex',gap:8,flexShrink:0}}>
-        <button className="btn btn-outline" onClick={refuse} style={{padding:'8px 16px',fontSize:13}}>Refuser</button>
-        <button className="btn btn-dark" onClick={accept} style={{padding:'8px 16px',fontSize:13}}>Accepter</button>
+    <>
+      <style>{`
+        .cookie-banner {
+          position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+          background: var(--white); border: 1px solid var(--border);
+          border-radius: var(--r-xl); padding: 16px 20px;
+          display: flex; align-items: center; gap: 12;
+          box-shadow: var(--sh-xl); z-index: 8000;
+          width: calc(100vw - 32px); max-width: 540px;
+          animation: fadeUp .35s var(--ease) both;
+          flex-wrap: wrap;
+        }
+        .cookie-banner-text {
+          display: flex; align-items: center; gap: 10px;
+          flex: 1 1 240px; min-width: 0;
+        }
+        .cookie-banner-actions {
+          display: flex; gap: 8px; flex-shrink: 0;
+          width: 100%;
+        }
+        @media (min-width: 480px) {
+          .cookie-banner-actions { width: auto; }
+        }
+        .cookie-banner-actions .btn {
+          flex: 1;
+        }
+        @media (min-width: 480px) {
+          .cookie-banner-actions .btn { flex: none; }
+        }
+      `}</style>
+      <div className="cookie-banner">
+        <div className="cookie-banner-text">
+          <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0}}>cookie</span>
+          <p style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.5,margin:0}}>
+            Nous utilisons des cookies.{' '}
+            <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>
+          </p>
+        </div>
+        <div className="cookie-banner-actions">
+          <button className="btn btn-outline" onClick={refuse} style={{padding:'9px 16px',fontSize:13}}>Refuser</button>
+          <button className="btn btn-dark" onClick={accept} style={{padding:'9px 16px',fontSize:13}}>Accepter</button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
