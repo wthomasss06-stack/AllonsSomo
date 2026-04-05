@@ -1,4 +1,5 @@
 'use client'
+import { Cookie, RotateCcw } from 'lucide-react'
 
 const SECTIONS = [
   { titre: "1. Qu'est-ce qu'un cookie ?", contenu: "Un cookie est un petit fichier texte déposé sur votre appareil (ordinateur, smartphone, tablette) lors de votre visite sur notre site. Il permet de mémoriser des informations sur votre navigation et d'améliorer votre expérience utilisateur." },
@@ -11,62 +12,50 @@ const SECTIONS = [
 
 export default function CookiesPage() {
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg-body)', paddingTop: 66 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 66 }}>
 
       {/* Header */}
       <div style={{
-        padding: '60px clamp(20px,4%,52px) 50px',
-        background: 'linear-gradient(160deg, var(--bg-surface-2) 0%, var(--bg-deep) 100%)',
-        borderBottom: '1px solid rgba(201,168,76,.12)',
+        padding: 'clamp(72px,10vw,120px) var(--pad) clamp(48px,6vw,72px)',
+        background: 'var(--white)',
+        borderBottom: '1px solid var(--border)',
         position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(201,168,76,.4) 30%, rgba(245,224,152,.55) 50%, rgba(201,168,76,.4) 70%, transparent)', boxShadow: '0 0 12px rgba(201,168,76,.25)' }}/>
-        <div className="grid-bg" style={{ position: 'absolute', inset: 0, opacity: .5 }}/>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.35) 30%, rgba(201,150,58,.35) 70%, transparent)' }}/>
         <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div className="section-label">Légal</div>
-          <h1 style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(2rem,4vw,3.4rem)', fontWeight: 700, fontStyle: 'italic', color: 'var(--text)', lineHeight: 1.1, marginBottom: 12 }}>
-            Politique de <span style={{ background: 'linear-gradient(135deg, #F5E098, #C9A84C)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>cookies</span>
+          <h1 style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3.4rem)', fontWeight: 400, fontStyle: 'italic', color: 'var(--ink)', lineHeight: 1.1, marginBottom: 12 }}>
+            Politique de <em style={{ color: 'var(--gold)' }}>cookies</em>
           </h1>
-          <p style={{ fontSize: 13, color: 'var(--text-dim)' }}>
-            Dernière mise à jour : {'3 avril 2025'}
-          </p>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>Dernière mise à jour : 3 avril 2025</p>
         </div>
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 820, margin: '0 auto', padding: '52px clamp(16px,4%,40px) 88px' }}>
-
+      <div style={{ maxWidth: 820, margin: '0 auto', padding: 'clamp(40px,6vw,72px) var(--pad) 88px' }}>
         {SECTIONS.map((section, i) => (
           <div key={i} style={{
-            marginBottom: 32,
-            padding: '28px 30px',
+            marginBottom: 24,
+            padding: 'clamp(20px,3vw,30px)',
             borderRadius: 20,
-            background: 'linear-gradient(160deg, var(--bg-surface-2) 0%, var(--bg-surface) 100%)',
+            background: 'var(--white)',
             border: '1px solid var(--border)',
-            borderTopColor: 'rgba(255,255,255,.09)',
-            borderBottomColor: 'rgba(0,0,0,.35)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 4px 20px rgba(0,0,0,.4)',
+            boxShadow: '0 2px 12px rgba(15,14,12,.04)',
             position: 'relative', overflow: 'hidden',
           }}>
-            {/* Number badge */}
             <div style={{
-              position: 'absolute', top: 20, right: 20,
-              fontFamily: "'Cormorant Garamond', serif", fontSize: 48, fontWeight: 700, fontStyle: 'italic',
-              color: 'rgba(201,168,76,.06)', lineHeight: 1, userSelect: 'none', pointerEvents: 'none',
+              position: 'absolute', top: 16, right: 20,
+              fontFamily: 'var(--font-display)', fontSize: 48, fontWeight: 400, fontStyle: 'italic',
+              color: 'var(--border)', lineHeight: 1, userSelect: 'none', pointerEvents: 'none',
             }}>{i + 1}</div>
-
             <h2 style={{
-              fontFamily: "'Cormorant Garamond', serif", fontSize: 19, fontWeight: 700, fontStyle: 'italic',
-              color: 'var(--text)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10,
+              fontFamily: 'var(--font-display)', fontSize: 19, fontWeight: 400, fontStyle: 'italic',
+              color: 'var(--ink)', marginBottom: 14, display: 'flex', alignItems: 'center', gap: 10,
             }}>
-              <span style={{
-                width: 8, height: 8, background: 'linear-gradient(135deg, var(--gold-light), var(--gold-dark))',
-                borderRadius: '50%', display: 'inline-block', flexShrink: 0,
-                boxShadow: '0 0 8px rgba(201,168,76,.55)',
-              }}/>
+              <span style={{ width: 7, height: 7, background: 'var(--gold)', borderRadius: '50%', display: 'inline-block', flexShrink: 0 }}/>
               {section.titre}
             </h2>
-            <div style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.85 }}>
+            <div style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85 }}>
               {section.contenu.split('\n').map((line, li) => (
                 <p key={li} style={{ marginBottom: line === '' ? 8 : 4 }}>{line || '\u00A0'}</p>
               ))}
@@ -74,43 +63,28 @@ export default function CookiesPage() {
           </div>
         ))}
 
-        {/* Preferences reset CTA */}
+        {/* Preferences reset */}
         <div style={{
-          padding: '30px', borderRadius: 22,
-          background: 'linear-gradient(160deg, var(--bg-surface-2) 0%, var(--bg-surface) 100%)',
-          border: '1px solid rgba(201,168,76,.2)',
-          borderTopColor: 'rgba(255,255,255,.09)',
-          boxShadow: 'inset 0 1px 0 rgba(255,255,255,.07), 0 8px 28px rgba(0,0,0,.45)',
+          padding: 'clamp(20px,3vw,30px)', borderRadius: 22,
+          background: 'var(--white)',
+          border: '1px solid rgba(201,150,58,.25)',
           display: 'flex', alignItems: 'center', gap: 18, flexWrap: 'wrap',
         }}>
-          {/* Cookie icon — skeuo button */}
           <div style={{
-            width: 52, height: 52, borderRadius: 15, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            background: 'linear-gradient(160deg, rgba(201,168,76,.16), rgba(154,120,48,.07))',
-            border: '1px solid rgba(201,168,76,.25)', borderTopColor: 'rgba(255,255,255,.1)',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 5px 18px rgba(0,0,0,.45)',
+            width: 52, height: 52, borderRadius: 15, flexShrink: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            background: 'rgba(201,150,58,.08)', border: '1px solid rgba(201,150,58,.2)',
           }}>
-            <span className="material-icons" style={{ fontSize: 26, color: 'var(--gold)' }}>cookie</span>
+            <Cookie size={26} style={{ color: 'var(--gold)' }} />
           </div>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 16, fontWeight: 700, fontStyle: 'italic', color: 'var(--text)', marginBottom: 5 }}>Gérer vos préférences</div>
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', lineHeight: 1.7 }}>
+          <div style={{ flex: 1, minWidth: 200 }}>
+            <div style={{ fontFamily: 'var(--font-display)', fontSize: 16, fontWeight: 400, fontStyle: 'italic', color: 'var(--ink)', marginBottom: 5 }}>Gérer vos préférences</div>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               Vous pouvez modifier vos préférences de cookies à tout moment en effaçant le localStorage de votre navigateur.
             </p>
           </div>
-          <button onClick={() => { localStorage.removeItem('as-cookies'); window.location.reload() }} style={{
-            display: 'inline-flex', alignItems: 'center', gap: 6,
-            padding: '10px 20px', borderRadius: 12, cursor: 'pointer',
-            background: 'linear-gradient(160deg, rgba(201,168,76,.14), rgba(154,120,48,.06))',
-            border: '1px solid rgba(201,168,76,.28)', borderTopColor: 'rgba(255,255,255,.1)',
-            color: 'var(--gold-light)', fontFamily: 'var(--font-ui)', fontSize: 11, fontWeight: 700,
-            letterSpacing: '.06em', textTransform: 'uppercase',
-            boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 3px 12px rgba(0,0,0,.4)',
-            transition: 'all .2s', whiteSpace: 'nowrap',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.5)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.22), rgba(154,120,48,.1))' }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.28)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.14), rgba(154,120,48,.06))' }}>
-            <span className="material-icons" style={{ fontSize: 14 }}>restart_alt</span>
+          <button onClick={() => { localStorage.removeItem('as-cookies'); window.location.reload() }} className="btn btn-outline" style={{ fontSize: 12, whiteSpace: 'nowrap', gap: 6 }}>
+            <RotateCcw size={14} />
             Réinitialiser
           </button>
         </div>

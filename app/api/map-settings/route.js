@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://AlllonsSomo.pythonanywhere.com'
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5050'
 
 const DEFAULT = {
   lat:      5.3364,

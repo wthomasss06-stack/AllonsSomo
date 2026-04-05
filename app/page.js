@@ -1,6 +1,11 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import {
+  Building2, MessageCircle, Search, Shield, ShieldCheck, Lock,
+  CheckCircle2, ArrowRight, Headphones, Flame, AlertTriangle,
+  Star, Smartphone,
+} from 'lucide-react'
 import { getResidences, SITE, VILLES, TYPES_BIEN, formatPrix } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
@@ -92,9 +97,7 @@ function Hero() {
 
   return (
     <div className="hero">
-      {SLIDES.map((sl, i) => (
-        <HeroSlide key={i} slide={sl} active={i === active} />
-      ))}
+      {SLIDES.map((sl, i) => <HeroSlide key={i} slide={sl} active={i === active} />)}
       <div className="hero-overlay"/>
 
       {/* Urgency badge */}
@@ -107,7 +110,8 @@ function Hero() {
         animation: 'pulseUrgency 2.5s ease-in-out infinite',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', display: 'inline-block', animation: 'blink 1.2s ease-in-out infinite' }}/>
-        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.04em' }}>🔥 Très demandé cette semaine</span>
+        <Flame size={13} style={{ color: '#fff', flexShrink: 0 }} />
+        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.04em' }}>Très demandé cette semaine</span>
       </div>
 
       {/* Content */}
@@ -124,27 +128,27 @@ function Hero() {
           </p>
           <div className="hero-actions" style={{ opacity: fading ? 0 : 1, transition: 'opacity .55s .18s' }}>
             <Link href="/residences" className="btn btn-white">
-              <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
+              <Building2 size={17} />
               Voir les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
-              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
-              🔥 Réserver maintenant (réponse en 2 min)
+              <MessageCircle size={17} />
+              Réserver maintenant · réponse en 2 min
             </a>
           </div>
 
-          {/* Trust bar sous les CTA */}
+          {/* Trust bar */}
           <div style={{
             display: 'flex', gap: 20, marginTop: 24, flexWrap: 'wrap',
             opacity: fading ? 0 : 1, transition: 'opacity .55s .22s',
           }}>
             {[
-              { icon: 'shield', text: 'Aucun paiement avant validation' },
-              { icon: 'verified', text: 'Visite réelle avant publication' },
-              { icon: 'lock', text: 'Zéro arnaque garantie' },
+              { Icon: Shield,      text: 'Aucun paiement avant validation' },
+              { Icon: ShieldCheck, text: 'Visite réelle avant publication' },
+              { Icon: Lock,        text: 'Zéro arnaque garantie' },
             ].map((t, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="material-icons" style={{ fontSize: 14, color: 'rgba(255,255,255,.7)' }}>{t.icon}</span>
+                <t.Icon size={14} style={{ color: 'rgba(255,255,255,.7)', flexShrink: 0 }} />
                 <span style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', fontWeight: 500 }}>{t.text}</span>
               </div>
             ))}
@@ -162,7 +166,7 @@ function Hero() {
   )
 }
 
-// ── Search quick filter ───────────────────────────────────────
+// ── Quick Search ──────────────────────────────────────────────
 function QuickSearch() {
   const [ville, setVille] = useState('')
   const [type, setType]   = useState('')
@@ -212,7 +216,7 @@ function QuickSearch() {
 
         <div style={{ padding: '4px 4px 4px 8px', flexShrink: 0 }}>
           <button className="btn btn-dark" onClick={handleSearch} style={{ borderRadius: 'var(--r-lg)', padding: '13px 24px' }}>
-            <span className="material-icons" style={{ fontSize: 18 }}>search</span>
+            <Search size={18} />
             Explorer
           </button>
         </div>
@@ -237,7 +241,7 @@ function QuickSearch() {
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.background = 'var(--surface)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--white)' }}>
-            <span className="material-icons" style={{ fontSize: 12 }}>search</span>
+            <Search size={12} />
             {s.label}
           </button>
         ))}
@@ -249,9 +253,9 @@ function QuickSearch() {
 // ── How it works ──────────────────────────────────────────────
 function HowItWorks() {
   const STEPS = [
-    { icon: 'apartment', num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
-    { icon: 'chat',      num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'agence.' },
-    { icon: 'check_circle', num: '3', title: 'Confirmez en 2 minutes', desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
+    { Icon: Building2,    num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
+    { Icon: MessageCircle,num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'agence.' },
+    { Icon: CheckCircle2, num: '3', title: 'Confirmez en 2 minutes',    desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
   ]
   return (
     <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
@@ -270,7 +274,7 @@ function HowItWorks() {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#fff', boxShadow: '0 8px 24px rgba(201,150,58,.3)',
                 }}>
-                  <span className="material-icons" style={{ fontSize: 28 }}>{s.icon}</span>
+                  <s.Icon size={28} />
                 </div>
                 <div style={{
                   position: 'absolute', top: -8, right: -8,
@@ -286,8 +290,8 @@ function HowItWorks() {
         </div>
         <div style={{ textAlign: 'center', marginTop: 'clamp(32px,4vw,48px)' }}>
           <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse" style={{ fontSize: 15, padding: '14px 32px' }}>
-            <span className="material-icons" style={{ fontSize: 19 }}>chat</span>
-            🔥 Démarrer ma recherche sur WhatsApp
+            <MessageCircle size={19} />
+            Démarrer ma recherche sur WhatsApp
           </a>
         </div>
       </div>
@@ -307,9 +311,10 @@ function Testimonials() {
       <div style={{ textAlign: 'center', marginBottom: 'clamp(32px,5vw,48px)' }}>
         <div className="section-label">Avis clients vérifiés</div>
         <h2 className="section-title">Ils nous font<br/><em>confiance</em></h2>
-        <p style={{ fontSize: 14, color: 'var(--muted)', marginTop: 10 }}>
-          ⭐⭐⭐⭐⭐ — 4.9/5 sur 120+ réservations ce mois
-        </p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4, marginTop: 10 }}>
+          {[...Array(5)].map((_, i) => <Star key={i} size={16} fill="#F59E0B" style={{ color: '#F59E0B' }} />)}
+          <span style={{ fontSize: 14, color: 'var(--muted)', marginLeft: 6 }}>4.9/5 sur 120+ réservations ce mois</span>
+        </div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
         {REVIEWS.map((r, i) => (
@@ -322,7 +327,7 @@ function Testimonials() {
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sh-md)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none' }}>
             <div style={{ display: 'flex', gap: 2 }}>
-              {'★★★★★'.split('').map((s, j) => <span key={j} style={{ color: '#F59E0B', fontSize: 17 }}>{s}</span>)}
+              {[...Array(5)].map((_, j) => <Star key={j} size={17} fill="#F59E0B" style={{ color: '#F59E0B' }} />)}
             </div>
             <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.7, flex: 1, fontStyle: 'italic' }}>"{r.text}"</p>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -334,7 +339,11 @@ function Testimonials() {
               }}>{r.avatar}</div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{r.zone} · ✅ Client vérifié</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {r.zone}
+                  <CheckCircle2 size={10} style={{ color: '#16A34A' }} />
+                  Client vérifié
+                </div>
               </div>
             </div>
           </div>
@@ -365,17 +374,16 @@ export default function HomePage() {
         .btn-wa-pulse { animation: waPulse 2.4s ease-in-out infinite; }
       `}</style>
 
-      {/* ── Hero ── */}
       <Hero/>
 
-      {/* ── Quick Search ── */}
+      {/* Quick Search */}
       <div style={{ background: 'var(--bg)', padding: '0 var(--pad)' }}>
         <div style={{ maxWidth: 860, margin: '0 auto', transform: 'translateY(-32px)' }}>
           <QuickSearch/>
         </div>
       </div>
 
-      {/* ── Stats (crédibles) ── */}
+      {/* Stats */}
       <div style={{ background: 'var(--bg)', padding: '0 var(--pad) clamp(56px,9vw,96px)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{
@@ -387,8 +395,8 @@ export default function HomePage() {
             {[
               { n: residences.length > 0 ? residences.length : 0, suf: '', label: 'Résidences actives', loading },
               { n: 120, suf: '+', label: 'Réservations ce mois', loading: false },
-              { n: 5, suf: ' min', label: 'Réponse WhatsApp', loading: false },
-              { n: 50, suf: '+', label: 'Clients actifs', loading: false },
+              { n: 5,   suf: ' min', label: 'Réponse WhatsApp', loading: false },
+              { n: 50,  suf: '+', label: 'Clients actifs', loading: false },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--white)', padding: 'clamp(24px,4vw,40px) clamp(20px,3vw,36px)' }}>
                 <div className="stat-number">
@@ -401,19 +409,23 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── Featured Residences ── */}
+      {/* Featured Residences */}
       <div style={{ background: 'var(--surface)' }}>
         <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
             <div>
               <div className="section-label">
-                Sélection · <span style={{ color: '#EF4444' }}>⚠️ Dernières disponibilités</span>
+                Sélection ·{' '}
+                <span style={{ color: '#EF4444', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                  <AlertTriangle size={13} />
+                  Dernières disponibilités
+                </span>
               </div>
               <h2 className="section-title">Résidences<br/><em>à la une</em></h2>
             </div>
             <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
               Voir tout
-              <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
+              <ArrowRight size={18} />
             </Link>
           </div>
 
@@ -440,17 +452,16 @@ export default function HomePage() {
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
-              <span className="material-icons" style={{ fontSize: 48, display: 'block', marginBottom: 12, color: 'var(--subtle)' }}>apartment</span>
+              <Building2 size={48} style={{ color: 'var(--subtle)', display: 'block', margin: '0 auto 12px' }} />
               <p>Aucune résidence disponible pour le moment.</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* ── How It Works ── */}
       <HowItWorks/>
 
-      {/* ── Value Props ── */}
+      {/* Value Props */}
       <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div className="value-props-grid">
           <div>
@@ -468,14 +479,14 @@ export default function HomePage() {
 
           <div className="feature-strip">
             {[
-              { icon: 'verified',      title: 'Visite réelle avant publication', desc: 'Chaque bien est inspecté physiquement. Zéro arnaque possible.' },
-              { icon: 'chat',          title: 'Réponse WhatsApp en < 5 min',     desc: 'Aucun formulaire compliqué. Un clic et on vous répond directement.' },
-              { icon: 'shield',        title: 'Aucun paiement avant validation',  desc: 'On confirme d\'abord la disponibilité. Vous payez après accord.' },
-              { icon: 'support_agent', title: 'Support 24h/7j',                   desc: 'On répond toujours, même le weekend et les jours fériés.' },
+              { Icon: ShieldCheck,   title: 'Visite réelle avant publication', desc: 'Chaque bien est inspecté physiquement. Zéro arnaque possible.' },
+              { Icon: MessageCircle, title: 'Réponse WhatsApp en < 5 min',     desc: 'Aucun formulaire compliqué. Un clic et on vous répond directement.' },
+              { Icon: Shield,        title: 'Aucun paiement avant validation',  desc: 'On confirme d\'abord la disponibilité. Vous payez après accord.' },
+              { Icon: Headphones,    title: 'Support 24h/7j',                   desc: 'On répond toujours, même le weekend et les jours fériés.' },
             ].map((f, i) => (
               <div key={i} className="feature-item">
                 <div className="feature-icon">
-                  <span className="material-icons">{f.icon}</span>
+                  <f.Icon size={20} />
                 </div>
                 <div className="feature-title">{f.title}</div>
                 <div className="feature-desc">{f.desc}</div>
@@ -485,12 +496,12 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ── Testimonials ── */}
+      {/* Testimonials */}
       <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
         <Testimonials/>
       </div>
 
-      {/* ── All residences preview ── */}
+      {/* All residences preview */}
       {recent.length > 3 && (
         <div style={{ background: 'var(--bg)' }}>
           <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -501,7 +512,7 @@ export default function HomePage() {
               </div>
               <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
                 Voir tout · {residences.length}
-                <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
+                <ArrowRight size={18} />
               </Link>
             </div>
             <div className="grid-auto">
@@ -511,22 +522,24 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* ── CTA Banner ── */}
+      {/* ── CTA Banner — fond toujours sombre (fix dark mode) ── */}
       <div style={{ padding: 'clamp(56px,9vw,100px) var(--pad)' }}>
         <div style={{
           maxWidth: 1280, margin: '0 auto',
-          background: 'var(--ink)', borderRadius: 'var(--r-2xl)',
+          background: 'var(--cta-bg)', borderRadius: 'var(--r-2xl)',
           padding: 'clamp(48px,7vw,80px) var(--pad)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           gap: 32, flexWrap: 'wrap', position: 'relative', overflow: 'hidden',
         }}>
           <div style={{ position: 'absolute', top: -40, right: 60, width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,211,102,.1) 0%, transparent 70%)', pointerEvents: 'none' }}/>
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff', letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12 }}>
-              🔥 Trouvez votre résidence<br/><em style={{ color: 'rgba(255,255,255,.45)' }}>avant ce soir</em>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff', letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <Flame size={32} style={{ color: '#F97316', flexShrink: 0 }} />
+              Trouvez votre résidence<br/><em style={{ color: 'rgba(255,255,255,.45)' }}>avant ce soir</em>
             </h2>
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.45)', maxWidth: 400 }}>
-              📲 Cliquez et discutez directement avec un agent — réponse garantie en 2 min.
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.45)', maxWidth: 400, display: 'flex', alignItems: 'center', gap: 8 }}>
+              <Smartphone size={15} style={{ flexShrink: 0 }} />
+              Discutez directement avec un agent — réponse garantie en 2 min.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
@@ -534,14 +547,14 @@ export default function HomePage() {
               Explorer les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
-              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
+              <MessageCircle size={17} />
               Réserver sur WhatsApp
             </a>
           </div>
         </div>
       </div>
 
-      {/* ── Sticky WhatsApp CTA ── */}
+      {/* Sticky WhatsApp CTA */}
       <a
         href={`https://wa.me/${SITE.whatsapp}`}
         target="_blank" rel="noopener"
@@ -559,7 +572,7 @@ export default function HomePage() {
         onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.animation = 'none' }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.animation = 'waPulse 2.4s ease-in-out infinite' }}
       >
-        <span className="material-icons" style={{ fontSize: 20 }}>chat</span>
+        <MessageCircle size={20} />
         Réserver · 2 min
       </a>
     </>
