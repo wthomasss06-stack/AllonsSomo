@@ -1,13 +1,9 @@
 'use client'
 import Link from 'next/link'
-import {
-  Info, Building2, MessageCircle, HelpCircle,
-  Check, X, MapPin, Clock, Globe,
-  ShieldCheck, Users2, CheckCircle2, Handshake,
-} from 'lucide-react'
 import { SITE } from '@/lib/config'
 
-function Pillar({ Icon, title, desc, delay = 0 }) {
+// ── Value pillar card ─────────────────────────────────────────
+function Pillar({ icon, title, desc, delay = 0 }) {
   return (
     <div style={{
       background: 'var(--white)',
@@ -26,7 +22,7 @@ function Pillar({ Icon, title, desc, delay = 0 }) {
         border: '1px solid rgba(201,150,58,.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <Icon size={22} style={{ color: 'var(--gold)' }} />
+        <span className="material-icons" style={{ fontSize: 22, color: 'var(--gold)' }}>{icon}</span>
       </div>
       <div>
         <h3 style={{
@@ -40,6 +36,7 @@ function Pillar({ Icon, title, desc, delay = 0 }) {
   )
 }
 
+// ── How-it-works step ─────────────────────────────────────────
 function HowStep({ num, title, desc, last = false }) {
   return (
     <div style={{ display: 'flex', gap: 20, marginBottom: last ? 0 : 28 }}>
@@ -59,6 +56,7 @@ function HowStep({ num, title, desc, last = false }) {
   )
 }
 
+// ── Main Page ─────────────────────────────────────────────────
 export default function AProposPage() {
   return (
     <>
@@ -93,7 +91,7 @@ export default function AProposPage() {
               background: 'rgba(201,150,58,.07)', border: '1px solid rgba(201,150,58,.2)',
               marginBottom: 22,
             }}>
-              <Info size={13} style={{ color: 'var(--gold)' }} />
+              <span className="material-icons" style={{ fontSize: 13, color: 'var(--gold)' }}>info</span>
               <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--gold)' }}>
                 À propos
               </span>
@@ -121,11 +119,11 @@ export default function AProposPage() {
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <Link href="/residences" className="btn btn-dark">
-                <Building2 size={17} />
+                <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
                 Voir les résidences
               </Link>
               <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-                <MessageCircle size={17} />
+                <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
                 Nous contacter
               </a>
             </div>
@@ -152,19 +150,19 @@ export default function AProposPage() {
                 Évitez les galères habituelles :
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
-                {['Informations floues','Prix qui changent','Photos trompeuses'].map((txt, i) => (
+                {['Informations floues','Prix qui changent','Photos trompeuses'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <X size={16} style={{ color: '#DC2626', flexShrink: 0 }} />
-                    <span style={{ fontSize: 14, color: 'var(--muted)' }}>{txt}</span>
+                    <span className="material-icons" style={{ fontSize: 16, color: '#DC2626' }}>close</span>
+                    <span style={{ fontSize: 14, color: 'var(--muted)' }}>{x}</span>
                   </div>
                 ))}
               </div>
               <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 10 }}>Avec Allons Somo, tout est simple :</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {['Des résidences réelles','Des photos fidèles','Des prix transparents','Une réservation directe'].map((txt, i) => (
+                {['Des résidences réelles','Des photos fidèles','Des prix transparents','Une réservation directe'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Check size={16} style={{ color: '#16A34A', flexShrink: 0 }} />
-                    <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{txt}</span>
+                    <span className="material-icons" style={{ fontSize: 16, color: '#16A34A' }}>check</span>
+                    <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{x}</span>
                   </div>
                 ))}
               </div>
@@ -179,10 +177,10 @@ export default function AProposPage() {
               boxShadow: '0 4px 24px rgba(15,14,12,.05)',
             }}>
               {[
-                { n: '2023',    label: 'Année de création',   Icon: Clock },
-                { n: 'CI',      label: 'Entreprise ivoirienne', Icon: MapPin },
-                { n: 'Abidjan', label: 'Ville couverte',      Icon: MapPin },
-                { n: '24h/7j',  label: 'Support disponible',  Icon: Users2 },
+                { n: '2023',     label: 'Année de création', icon: 'calendar_today' },
+                { n: '🇨🇮',      label: 'Entreprise ivoirienne', icon: null },
+                { n: 'Abidjan', label: 'Ville couverte',     icon: 'place' },
+                { n: '24h/7j',  label: 'Support disponible', icon: 'support_agent' },
               ].map((s, i) => (
                 <div key={i} style={{
                   padding: 'clamp(20px,3vw,32px) clamp(16px,2.5vw,28px)',
@@ -190,7 +188,7 @@ export default function AProposPage() {
                   borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none',
                   borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
                 }}>
-                  <s.Icon size={20} style={{ color: 'var(--gold)', display: 'block', marginBottom: 8 }} />
+                  {s.icon && <span className="material-icons" style={{ fontSize: 20, color: 'var(--gold)', display: 'block', marginBottom: 8 }}>{s.icon}</span>}
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 400, letterSpacing: '-.02em', marginBottom: 4, color: 'var(--ink)' }}>{s.n}</div>
                   <div style={{ fontSize: 12, color: 'var(--subtle)', fontWeight: 500 }}>{s.label}</div>
                 </div>
@@ -219,7 +217,7 @@ export default function AProposPage() {
                 tout est pensé pour être rapide et sans stress.
               </p>
               <Link href="/aide" className="btn btn-outline" style={{ display: 'inline-flex' }}>
-                <HelpCircle size={17} />
+                <span className="material-icons" style={{ fontSize: 17 }}>help_outline</span>
                 FAQ complète
               </Link>
             </div>
@@ -253,19 +251,19 @@ export default function AProposPage() {
             gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))',
             gap: 18,
           }}>
-            <Pillar Icon={CheckCircle2}
+            <Pillar icon="check_circle"
               title="Simplicité totale"
               desc="Pas de formulaire compliqué, tout passe par WhatsApp. Trois actions suffisent : choisir, cliquer, réserver."
               delay={0} />
-            <Pillar Icon={Users2}
+            <Pillar icon="handshake"
               title="Zéro intermédiaire"
               desc="Vous échangez directement, sans passer par des agences. Relation directe, confiance immédiate."
               delay={80} />
-            <Pillar Icon={ShieldCheck}
+            <Pillar icon="verified"
               title="Transparence"
               desc="Ce que vous voyez = ce que vous aurez. Photos réelles, prix affichés, conditions claires."
               delay={160} />
-            <Pillar Icon={MapPin}
+            <Pillar icon="place"
               title="Expérience locale"
               desc="Des résidences situées dans les meilleurs quartiers d'Abidjan, sélectionnées par une équipe ivoirienne."
               delay={240} />
@@ -285,20 +283,20 @@ export default function AProposPage() {
             <div>
               <div className="section-label">Notre présence</div>
               <h2 className="section-title" style={{ marginBottom: 20, color: 'var(--ink)' }}>
-                Basé à<br/><em>Abidjan</em>
+                Basé à<br/><em>Abidjan 🇨🇮</em>
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {[
-                  { Icon: MapPin, text: 'Zones couvertes : Cocody, Riviera, Marcory (et plus à venir)' },
-                  { Icon: Clock,  text: 'Réponse rapide via WhatsApp' },
-                  { Icon: Globe,  text: "Aujourd'hui à Abidjan, demain dans d'autres villes de CI" },
+                  { icon: 'place',    text: 'Zones couvertes : Cocody, Riviera, Marcory (et plus à venir)' },
+                  { icon: 'schedule', text: 'Réponse rapide via WhatsApp' },
+                  { icon: 'public',   text: "Aujourd'hui à Abidjan, demain dans d'autres villes de CI" },
                 ].map((x, i) => (
                   <div key={i} style={{
                     display: 'flex', alignItems: 'flex-start', gap: 12,
                     padding: '14px 18px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 14,
                   }}>
-                    <x.Icon size={18} style={{ color: 'var(--gold)', flexShrink: 0, marginTop: 1 }} />
+                    <span className="material-icons" style={{ fontSize: 18, color: 'var(--gold)', flexShrink: 0, marginTop: 1 }}>{x.icon}</span>
                     <span style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}
@@ -320,7 +318,7 @@ export default function AProposPage() {
         </div>
       </div>
 
-      {/* ── CTA final — fond toujours sombre (fix dark mode) ── */}
+      {/* ── CTA final ── */}
       <div style={{ padding: 'clamp(56px,9vw,96px) var(--pad)', background: 'var(--white)' }}>
         <div style={{
           maxWidth: 1280, margin: '0 auto',
@@ -340,17 +338,17 @@ export default function AProposPage() {
               Prêt à trouver<br/>
               <em style={{ color: 'rgba(255,255,255,.45)' }}>votre prochaine résidence ?</em>
             </h2>
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.4)', maxWidth: 400 }}>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.42)', maxWidth: 400 }}>
               Parcourez notre catalogue et réservez directement par WhatsApp.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
             <Link href="/residences" className="btn btn-white">
-              <Building2 size={17} />
-              Parcourir les résidences
+              <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
+              Parcourez les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-              <MessageCircle size={17} />
+              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
               WhatsApp
             </a>
           </div>

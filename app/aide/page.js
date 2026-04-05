@@ -1,15 +1,12 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { HelpCircle, Building2, User, ChevronDown, MessageCircle } from 'lucide-react'
 import { SITE } from '@/lib/config'
-
-const ICON_MAP = { HelpCircle, Building2, User }
 
 const FAQ = [
   {
     cat: 'Réservation',
-    icon: 'HelpCircle',
+    icon: 'event_available',
     items: [
       { q: 'Comment réserver une résidence ?', a: 'La réservation se fait directement via WhatsApp. Trouvez la résidence qui vous convient, cliquez sur « Réserver par WhatsApp » et envoyez votre demande avec vos dates. Notre équipe vous confirme la disponibilité en moins de 30 minutes.' },
       { q: "Qu'est-ce que la caution et comment est-elle calculée ?", a: "La caution représente 20% du tarif de base. Elle est réglée avant votre arrivée pour confirmer votre réservation. Les 80% restants sont payés directement sur place à votre arrivée. La caution vous est intégralement remboursée à votre départ si la résidence est rendue en bon état." },
@@ -19,7 +16,7 @@ const FAQ = [
   },
   {
     cat: 'Les résidences',
-    icon: 'Building2',
+    icon: 'apartment',
     items: [
       { q: 'Les photos sont-elles authentiques ?', a: "Toutes les photos publiées sur Allons Somo sont vérifiées par notre équipe avant publication. Nous nous engageons à ce que les photos correspondent fidèlement à la réalité. Si vous constatez un écart significatif, contactez-nous immédiatement." },
       { q: 'Les équipements listés sont-ils toujours disponibles ?', a: "Oui, les équipements indiqués dans chaque annonce (wifi, climatisation, etc.) sont ceux présents dans la résidence au moment de la publication. En cas de panne ou d'absence, contactez le gérant ou notre support." },
@@ -28,7 +25,7 @@ const FAQ = [
   },
   {
     cat: 'Compte & données',
-    icon: 'User',
+    icon: 'person',
     items: [
       { q: "Ai-je besoin d'un compte pour réserver ?", a: "Non, aucun compte n'est nécessaire. La réservation se fait entièrement via WhatsApp. Vous nous communiquez vos informations directement dans la conversation." },
       { q: 'Comment sont protégées mes données personnelles ?', a: "Vos informations partagées via WhatsApp sont traitées conformément à notre politique de confidentialité. Elles sont utilisées uniquement pour la gestion de votre réservation et ne sont jamais revendues à des tiers." },
@@ -64,9 +61,13 @@ function FaqItem({ item }) {
           background: open ? 'rgba(201,150,58,.1)' : 'var(--bg)',
           border: `1px solid ${open ? 'rgba(201,150,58,.3)' : 'var(--border)'}`,
           transition: 'all .2s',
-          transform: open ? 'rotate(180deg)' : 'none',
         }}>
-          <ChevronDown size={16} style={{ color: open ? '#C9963A' : 'var(--subtle)' }} />
+          <span className="material-icons" style={{
+            fontSize: 16,
+            color: open ? '#C9963A' : 'var(--subtle)',
+            transform: open ? 'rotate(180deg)' : 'none',
+            transition: 'transform .2s',
+          }}>expand_more</span>
         </div>
       </button>
       {open && (
@@ -82,30 +83,32 @@ export default function AidePage() {
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
 
-      {/* Header */}
+      {/* ── Header — blanc/noir ── */}
       <div style={{
         padding: 'clamp(90px,10vw,140px) var(--pad) clamp(48px,6vw,72px)',
         background: 'var(--white)',
         borderBottom: '1px solid var(--border)',
         position: 'relative', overflow: 'hidden',
       }}>
+        {/* Gold top line */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 2,
           background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.3) 30%, rgba(201,150,58,.3) 70%, transparent)',
         }}/>
+        {/* Subtle radial bg */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 60% 70% at 80% 50%, rgba(201,150,58,.04) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 70% at 90% 50%, rgba(201,150,58,.04) 0%, transparent 70%)',
         }}/>
 
-        <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 2 }}>
+        <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '5px 14px', borderRadius: 99,
             background: 'rgba(201,150,58,.07)', border: '1px solid rgba(201,150,58,.2)',
-            marginBottom: 20,
+            marginBottom: 18,
           }}>
-            <HelpCircle size={13} style={{ color: '#C9963A' }} />
+            <span className="material-icons" style={{ fontSize: 13, color: '#C9963A' }}>help_outline</span>
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#C9963A' }}>Centre d'aide</span>
           </div>
 
@@ -125,40 +128,39 @@ export default function AidePage() {
           </p>
 
           <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-            <MessageCircle size={18} />
+            <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
             Contactez-nous sur WhatsApp
           </a>
         </div>
       </div>
 
-      {/* FAQ content */}
+      {/* ── FAQ content ── */}
       <div style={{ maxWidth: 820, margin: '0 auto', padding: 'clamp(48px,7vw,72px) var(--pad) 88px' }}>
-        {FAQ.map((section, si) => {
-          const SectionIcon = ICON_MAP[section.icon] || HelpCircle
-          return (
-            <div key={si} style={{ marginBottom: 48 }}>
+        {FAQ.map((section, si) => (
+          <div key={si} style={{ marginBottom: 48 }}>
+            {/* Section label */}
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: 9,
+              marginBottom: 22, padding: '9px 16px',
+              borderRadius: 12, background: 'var(--white)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 1px 4px rgba(15,14,12,.04)',
+            }}>
               <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 9,
-                marginBottom: 22, padding: '9px 16px',
-                borderRadius: 12, background: 'var(--white)',
-                border: '1px solid var(--border)',
-                boxShadow: '0 1px 4px rgba(15,14,12,.04)',
+                width: 32, height: 32, borderRadius: 9,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(201,150,58,.08)', border: '1px solid rgba(201,150,58,.2)',
               }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: 9,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  background: 'rgba(201,150,58,.08)', border: '1px solid rgba(201,150,58,.2)',
-                }}>
-                  <SectionIcon size={16} style={{ color: '#C9963A' }} />
-                </div>
-                <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: 'var(--ink)', letterSpacing: '.02em' }}>
-                  {section.cat}
-                </span>
+                <span className="material-icons" style={{ fontSize: 16, color: '#C9963A' }}>{section.icon}</span>
               </div>
-              {section.items.map((item, i) => <FaqItem key={i} item={item} />)}
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: 'var(--ink)', letterSpacing: '.02em' }}>
+                {section.cat}
+              </span>
             </div>
-          )
-        })}
+
+            {section.items.map((item, i) => <FaqItem key={i} item={item} />)}
+          </div>
+        ))}
 
         {/* Contact CTA */}
         <div style={{
@@ -169,30 +171,35 @@ export default function AidePage() {
           boxShadow: '0 4px 24px rgba(15,14,12,.06)',
           textAlign: 'center', position: 'relative', overflow: 'hidden',
         }}>
+          {/* Gold top accent */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: 2,
             background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.3) 30%, rgba(201,150,58,.3) 70%, transparent)',
           }}/>
+
           <div style={{
             width: 56, height: 56, borderRadius: 16, margin: '0 auto 18px',
             background: 'rgba(94,232,150,.1)', border: '1px solid rgba(94,232,150,.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <MessageCircle size={26} style={{ color: '#16A34A' }} />
+            <span className="material-icons" style={{ fontSize: 26, color: '#16A34A' }}>chat</span>
           </div>
+
           <h3 style={{
             fontFamily: 'var(--font-display)', fontSize: 22,
             fontWeight: 400, fontStyle: 'italic',
             color: 'var(--ink)', marginBottom: 10,
           }}>Vous n'avez pas trouvé votre réponse ?</h3>
+
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 24, maxWidth: 400, margin: '0 auto 24px' }}>
             Notre équipe répond sur WhatsApp en moins de 30 minutes, 7j/7.
           </p>
+
           <a
             href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question concernant vos résidences.")}`}
             target="_blank" rel="noopener" className="btn-wa"
             style={{ fontSize: 14, padding: '13px 30px' }}>
-            <MessageCircle size={19} />
+            <span className="material-icons" style={{ fontSize: 19 }}>chat</span>
             Écrire sur WhatsApp
           </a>
         </div>

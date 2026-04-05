@@ -1,5 +1,6 @@
 /* ── Google Fonts ── */
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 /* ═══════════════════════════════════════════
    DESIGN TOKENS — LIGHT MODE
@@ -40,9 +41,9 @@
   --sh-lg:  0 12px 48px rgba(15,14,12,.12), 0 4px 16px rgba(15,14,12,.08);
   --sh-xl:  0 24px 80px rgba(15,14,12,.16), 0 8px 24px rgba(15,14,12,.1);
 
-  /* CTA block – always stays dark regardless of color scheme */
-  --cta-bg: #0F0E0C;
-  --cta-text: #FFFFFF;
+  /* CTA banner — always dark regardless of theme */
+  --cta-bg:        #0F0E0C;
+  --cta-text-dim:  rgba(255,255,255,.42);
 
   /* Nav / Footer — mode clair = blanc */
   --nav-bg:        rgba(255,255,255,.97);
@@ -78,6 +79,10 @@ html.dark {
   --sh-md:  0 4px 24px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
   --sh-lg:  0 12px 48px rgba(0,0,0,.5), 0 4px 16px rgba(0,0,0,.4);
   --sh-xl:  0 24px 80px rgba(0,0,0,.6), 0 8px 24px rgba(0,0,0,.5);
+
+  /* CTA banner — stays dark even in dark mode */
+  --cta-bg:        #1A1916;
+  --cta-text-dim:  rgba(255,255,255,.38);
 
   /* Nav / Footer — mode sombre = noir */
   --nav-bg:        rgba(10,10,8,.97);
@@ -531,6 +536,7 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-burger { display: flex; }
+  .theme-toggle { display: none; }   /* caché dans la nav mobile — reste dans le burger */
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
   .hero-title { font-size: clamp(2.6rem, 10vw, 5rem); }
   .feature-strip { grid-template-columns: 1fr 1fr; }

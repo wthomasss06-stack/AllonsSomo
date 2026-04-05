@@ -1,6 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { Search, X, SearchX } from 'lucide-react'
 import { getResidences, VILLES, TYPES_BIEN } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
@@ -31,12 +30,13 @@ export default function ResidencesPage() {
     })
 
   const hasFilters = ville || type || search
+
   const clearFilters = () => { setSearch(''); setVille(''); setType('') }
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64 }}>
 
-      {/* Header */}
+      {/* ── Header ── */}
       <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: 'clamp(40px,6vw,72px) var(--pad) clamp(32px,5vw,56px)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div className="section-label">Catalogue complet</div>
@@ -49,11 +49,12 @@ export default function ResidencesPage() {
         </div>
       </div>
 
-      {/* Filter Bar */}
+      {/* ── Filter Bar ── */}
       <div className="filter-bar">
         <div className="filter-bar-inner">
+          {/* Search */}
           <div style={{ position: 'relative', flex: '1 1 220px', minWidth: 0 }}>
-            <Search size={18} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--subtle)', pointerEvents: 'none' }} />
+            <span className="material-icons" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 18, color: 'var(--subtle)', pointerEvents: 'none' }}>search</span>
             <input
               className="input"
               type="text"
@@ -64,33 +65,38 @@ export default function ResidencesPage() {
             />
           </div>
 
+          {/* Ville */}
           <select className="select" value={ville} onChange={e => setVille(e.target.value)} style={{ flex: '0 1 160px' }}>
             <option value="">Toutes villes</option>
             {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
           </select>
 
+          {/* Type */}
           <select className="select" value={type} onChange={e => setType(e.target.value)} style={{ flex: '0 1 140px' }}>
             <option value="">Tous types</option>
             {TYPES_BIEN.map(t => <option key={t} value={t} style={{ textTransform: 'capitalize' }}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
           </select>
 
+          {/* Sort */}
           <select className="select" value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ flex: '0 1 150px' }}>
             <option value="default">Mise en avant</option>
             <option value="prix-asc">Prix croissant</option>
             <option value="prix-desc">Prix décroissant</option>
           </select>
 
+          {/* Clear */}
           {hasFilters && (
             <button className="btn btn-outline" onClick={clearFilters} style={{ padding: '8px 16px', fontSize: 13, flexShrink: 0 }}>
-              <X size={15} />
+              <span className="material-icons" style={{ fontSize: 15 }}>close</span>
               Effacer
             </button>
           )}
         </div>
       </div>
 
-      {/* Results */}
+      {/* ── Results ── */}
       <div style={{ padding: 'clamp(32px,5vw,56px) var(--pad)', maxWidth: 1280, margin: '0 auto' }}>
+        {/* Count */}
         {!loading && (
           <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
             <p style={{ fontSize: 14, color: 'var(--muted)' }}>
@@ -99,6 +105,7 @@ export default function ResidencesPage() {
           </div>
         )}
 
+        {/* Grid */}
         {loading ? (
           <div className="grid-auto">
             {[...Array(6)].map((_, i) => (
@@ -118,7 +125,7 @@ export default function ResidencesPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <SearchX size={56} style={{ color: 'var(--border)', display: 'block', margin: '0 auto 16px' }} />
+            <span className="material-icons" style={{ fontSize: 56, color: 'var(--border)', display: 'block', marginBottom: 16 }}>search_off</span>
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 400, marginBottom: 8 }}>Aucun résultat</h3>
             <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Essayez avec d'autres critères de recherche.</p>
             <button className="btn btn-dark" onClick={clearFilters}>Effacer les filtres</button>

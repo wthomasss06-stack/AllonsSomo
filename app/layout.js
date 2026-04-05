@@ -3,15 +3,11 @@ import './globals.css'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import {
-  Sun, Moon, Menu, X, MessageCircle, Camera, Mail,
-  Home, Building2, Info, HelpCircle, FileText, MapPin, Cookie,
-  ExternalLink,
-} from 'lucide-react'
 import { SITE } from '@/lib/config'
 
-// ── Logo ──────────────────────────────────────────────────────
-export function Logo({ size = 36 }) {
+// ── Logo (adapté thème) ────────────────────────────────────────
+export function Logo({ size = 36, forceLight = false }) {
+  // forceLight = fond clair (logo foncé), sinon auto selon thème
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect width="40" height="40" rx="10" fill="currentColor"/>
@@ -42,7 +38,7 @@ export function WordMark({ hero = false }) {
   )
 }
 
-// ── Thème ─────────────────────────────────────────────────────
+// ── Thème hook ─────────────────────────────────────────────────
 function useTheme() {
   const [dark, setDark] = useState(false)
   useEffect(() => {
@@ -132,40 +128,38 @@ function Navbar({ isHero }) {
             ))}
           </ul>
           <div className="nav-actions">
+            {/* Dark mode toggle — masqué sur mobile via CSS, visible dans le burger */}
             <button className="theme-toggle" onClick={toggle} aria-label="Changer le thème" title={dark ? 'Mode clair' : 'Mode sombre'}>
-              {dark ? <Sun size={18} /> : <Moon size={18} />}
+              <span className="material-icons" style={{fontSize:18}}>{dark ? 'light_mode' : 'dark_mode'}</span>
             </button>
-            <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa" style={{padding:'8px 16px',fontSize:13}}>
-              <MessageCircle size={15} />WhatsApp
-            </a>
             <button className="nav-burger" onClick={() => setMenuOpen(o=>!o)} aria-label="Menu">
-              {menuOpen ? <X size={20} /> : <Menu size={20} />}
+              <span className="material-icons" style={{fontSize:20}}>{menuOpen?'close':'menu'}</span>
             </button>
           </div>
         </div>
       </nav>
-
-      {/* Mobile Nav */}
       <div className={`mobile-nav${menuOpen?' open':''}`}>
         <div style={{display:'flex',alignItems:'center',gap:10}}><Logo size={34}/><WordMark/></div>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
-          <X size={20} />
+          <span className="material-icons" style={{fontSize:20}}>close</span>
         </button>
         <ul className="mobile-nav-links">
           {NAV_LINKS.map(({ href, label }) => (
             <li key={href}>
-              <Link href={href} className={pathname===href?'active':''}>{label}</Link>
+              <Link href={href} className={pathname===href?'active':''}>
+                {label}
+              </Link>
             </li>
           ))}
           <li style={{marginTop:12}}>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener"
               style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'#16A34A',borderRadius:'var(--r-md)'}}>
-              <MessageCircle size={20} />Contacter sur WhatsApp
+              <span className="material-icons" style={{fontSize:20}}>chat</span>Contacter sur WhatsApp
             </a>
           </li>
           <li>
             <button onClick={toggle} style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'var(--muted)',borderRadius:'var(--r-md)',width:'100%',textAlign:'left',background:'none',border:'none',cursor:'pointer'}}>
-              {dark ? <Sun size={20} /> : <Moon size={20} />}
+              <span className="material-icons" style={{fontSize:20}}>{dark ? 'light_mode' : 'dark_mode'}</span>
               {dark ? 'Mode clair' : 'Mode sombre'}
             </button>
           </li>
@@ -195,7 +189,7 @@ function FooterMap() {
   return (
     <div style={{marginTop:24}}>
       <div style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--footer-muted)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
-        <MapPin size={12} style={{color:'var(--gold)'}} />Nous trouver
+        <span className="material-icons" style={{fontSize:12,color:'var(--gold)'}}>location_on</span>Nous trouver
       </div>
       <div style={{borderRadius:12,overflow:'hidden',border:'1px solid var(--footer-border)',background:'var(--surface)',opacity:ready?1:.5,transition:'opacity .4s'}}>
         <a href={osmLink} target="_blank" rel="noopener" style={{display:'block',textDecoration:'none'}}>
@@ -208,7 +202,7 @@ function FooterMap() {
           />
         </a>
         <div style={{padding:'8px 12px',background:'var(--footer-bg)',display:'flex',alignItems:'center',gap:6,borderTop:'1px solid var(--footer-border)'}}>
-          <MapPin size={13} style={{color:'var(--gold)',flexShrink:0}} />
+          <span className="material-icons" style={{fontSize:13,color:'var(--gold)',flexShrink:0}}>place</span>
           <span style={{fontSize:11,color:'var(--footer-muted)',lineHeight:1.4,flex:1}}>{label}</span>
           <a href={osmLink} target="_blank" rel="noopener"
             style={{fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'var(--gold)',textDecoration:'none',flexShrink:0}}>
@@ -220,6 +214,7 @@ function FooterMap() {
   )
 }
 
+// ── WhatsApp hook (récupère depuis API) ────────────────────────
 function useWhatsApp() {
   const [wa, setWa] = useState(SITE.whatsapp)
   useEffect(() => {
@@ -232,20 +227,6 @@ function useWhatsApp() {
 function Footer() {
   const year = new Date().getFullYear()
   const wa = useWhatsApp()
-
-  const socialLinks = [
-    { href: SITE.instagram, Icon: Camera, label: 'Instagram' },
-    { href: `https://wa.me/${wa}`, Icon: MessageCircle, label: 'WhatsApp', green: true },
-    { href: `mailto:${SITE.email}`, Icon: Mail, label: 'Email' },
-  ]
-
-  const navLinks = [
-    { href: '/', label: 'Accueil', Icon: Home },
-    { href: '/residences', label: 'Toutes les résidences', Icon: Building2 },
-    { href: '/a-propos', label: 'À propos', Icon: Info },
-    { href: '/aide', label: "Centre d'aide (FAQ)", Icon: HelpCircle },
-    { href: '/cookies', label: 'Politique Cookies', Icon: FileText },
-  ]
 
   return (
     <footer style={{
@@ -269,7 +250,7 @@ function Footer() {
           paddingBottom: 'clamp(40px,6vw,72px)',
         }} className="footer-main-grid">
 
-          {/* Brand */}
+          {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
               <Logo size={36}/><WordMark/>
@@ -277,24 +258,28 @@ function Footer() {
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
             <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:99,background:'var(--surface)',border:'1px solid var(--footer-border)',marginBottom:24}}>
-              <MapPin size={13} style={{color:'var(--gold)'}} />
+              <span style={{fontSize:14}}>🇨🇮</span>
               <span style={{fontSize:11,color:'var(--footer-text)',fontWeight:600,letterSpacing:'.04em'}}>Abidjan, Côte d'Ivoire</span>
             </div>
 
             <div style={{display:'flex',gap:8,marginBottom:28}}>
-              {socialLinks.map(({ href, Icon, label, green }) => (
-                <a key={label} href={href} target="_blank" rel="noopener" aria-label={label}
+              {[
+                { href: SITE.instagram, icon: 'photo_camera', label: 'Instagram' },
+                { href: `https://wa.me/${wa}`, icon: 'chat', label: 'WhatsApp', green: true },
+                { href: `mailto:${SITE.email}`, icon: 'mail', label: 'Email' },
+              ].map((s, i) => (
+                <a key={i} href={s.href} target="_blank" rel="noopener" aria-label={s.label}
                   style={{
                     width:40,height:40,borderRadius:12,
                     display:'flex',alignItems:'center',justifyContent:'center',
-                    background:green?'rgba(37,211,102,.08)':'var(--surface)',
-                    border:`1px solid ${green?'rgba(37,211,102,.2)':'var(--footer-border)'}`,
-                    color:green?'#16A34A':'var(--footer-text)',
+                    background:s.green?'rgba(37,211,102,.08)':'var(--surface)',
+                    border:`1px solid ${s.green?'rgba(37,211,102,.2)':'var(--footer-border)'}`,
+                    color:s.green?'#16A34A':'var(--footer-text)',
                     transition:'all .18s',
                   }}
                   onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='var(--sh-sm)'}}
                   onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}>
-                  <Icon size={17} />
+                  <span className="material-icons" style={{fontSize:17}}>{s.icon}</span>
                 </a>
               ))}
             </div>
@@ -303,21 +288,27 @@ function Footer() {
               style={{display:'inline-flex',alignItems:'center',gap:8,padding:'10px 18px',borderRadius:99,background:'#25D366',color:'#fff',fontSize:13,fontWeight:600,boxShadow:'0 4px 20px rgba(37,211,102,.25)',transition:'all .18s',textDecoration:'none'}}
               onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 8px 32px rgba(37,211,102,.35)'}}
               onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 4px 20px rgba(37,211,102,.25)'}}>
-              <MessageCircle size={16} />
+              <span className="material-icons" style={{fontSize:16}}>chat</span>
               Réserver via WhatsApp
             </a>
           </div>
 
-          {/* Navigation */}
+          {/* Navigation column */}
           <div>
             <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Navigation</div>
             <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:4}}>
-              {navLinks.map(({ href, label, Icon }) => (
+              {[
+                { href: '/', label: 'Accueil', icon: 'home' },
+                { href: '/residences', label: 'Toutes les résidences', icon: 'apartment' },
+                { href: '/a-propos', label: 'À propos', icon: 'info' },
+                { href: '/aide', label: "Centre d'aide (FAQ)", icon: 'help_outline' },
+                { href: '/cookies', label: 'Politique Cookies', icon: 'policy' },
+              ].map(({ href, label, icon }) => (
                 <li key={href}>
                   <Link href={href} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <Icon size={14} style={{color:'rgba(201,150,58,.6)'}} />
+                    <span className="material-icons" style={{fontSize:14,color:'rgba(201,150,58,.6)'}}>{icon}</span>
                     {label}
                   </Link>
                 </li>
@@ -325,7 +316,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Quartiers */}
+          {/* Quartiers column */}
           <div>
             <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Nos quartiers</div>
             <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:4}}>
@@ -334,7 +325,7 @@ function Footer() {
                   <Link href={`/residences?ville=Abidjan&q=${q}`} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <MapPin size={13} style={{color:'rgba(201,150,58,.5)'}} />
+                    <span className="material-icons" style={{fontSize:13,color:'rgba(201,150,58,.5)'}}>place</span>
                     {q}
                   </Link>
                 </li>
@@ -342,7 +333,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact + Carte column */}
           <div>
             <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Contact</div>
             <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:24}}>
@@ -350,14 +341,14 @@ function Footer() {
                 style={{display:'flex',alignItems:'flex-start',gap:10,color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
                 onMouseEnter={e=>e.currentTarget.style.color='#16A34A'}
                 onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                <MessageCircle size={15} style={{marginTop:1,color:'#16A34A',flexShrink:0}} />
+                <span className="material-icons" style={{fontSize:15,marginTop:1,color:'#16A34A'}}>chat</span>
                 <span>WhatsApp<br/><span style={{fontSize:11,color:'var(--subtle)'}}>Réponse rapide</span></span>
               </a>
               <a href={`mailto:${SITE.email}`}
                 style={{display:'flex',alignItems:'flex-start',gap:10,color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
                 onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                 onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                <Mail size={15} style={{marginTop:1,color:'var(--gold)',flexShrink:0}} />
+                <span className="material-icons" style={{fontSize:15,marginTop:1,color:'var(--gold)'}}>mail</span>
                 <span>{SITE.email}<br/><span style={{fontSize:11,color:'var(--subtle)'}}>Support 24h/7j</span></span>
               </a>
             </div>
@@ -371,7 +362,7 @@ function Footer() {
           <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
             <span style={{fontSize:12,color:'var(--footer-muted)'}}>© {year} Allons Somo · Tous droits réservés</span>
             <span style={{width:3,height:3,borderRadius:'50%',background:'var(--footer-border)',display:'inline-block'}}/>
-            <span style={{fontSize:12,color:'var(--footer-muted)'}}>Résidences premium en Côte d'Ivoire</span>
+            <span style={{fontSize:12,color:'var(--footer-muted)'}}>Résidences premium en Côte d'Ivoire 🇨🇮</span>
           </div>
           <div style={{display:'flex',alignItems:'center',gap:20}}>
             <Link href="/cookies" style={{fontSize:12,color:'var(--footer-muted)',transition:'color .15s'}}
@@ -413,7 +404,7 @@ function CookieBanner() {
       animation:'fadeUp .35s var(--ease) both',flexWrap:'wrap',
     }}>
       <div style={{display:'flex',alignItems:'center',gap:10,flex:'1 1 240px',minWidth:0}}>
-        <Cookie size={20} style={{color:'var(--gold)',flexShrink:0}} />
+        <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0}}>cookie</span>
         <p style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.5,margin:0}}>
           Nous utilisons des cookies.{' '}
           <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>
@@ -444,8 +435,8 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
-        {/* Material Icons conservé uniquement pour le dashboard admin */}
-        {isAdmin && <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>}
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        {/* Prevent flash of wrong theme */}
         <script dangerouslySetInnerHTML={{__html:`
           (function(){
             var s=localStorage.getItem('as-theme');

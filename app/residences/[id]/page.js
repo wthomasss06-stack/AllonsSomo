@@ -2,18 +2,11 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import {
-  Building2, MessageCircle, Shield, Star, MapPin,
-  ChevronRight, ChevronLeft, SearchX, CreditCard,
-  Wifi, Wind, Car, ChefHat, Waves, Tv, Shirt, ShieldCheck, Zap, Building,
-} from 'lucide-react'
 import { getResidence, getResidences, getWAReservation, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
-const LUCIDE_EQUIP = { Wifi, Wind, Car, ChefHat, Waves, Tv, Shirt, Building, ShieldCheck, Zap }
-
 // ── Gallery ───────────────────────────────────────────────────
-function Gallery({ photos, titre }) {
+function Gallery({ photos, titre, typeBien }) {
   const [cur, setCur] = useState(0)
   const total = photos.length
 
@@ -28,7 +21,7 @@ function Gallery({ photos, titre }) {
 
   if (total === 0) return (
     <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-xl)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 320 }}>
-      <Building2 size={64} style={{ color: 'var(--border)' }} />
+      <span className="material-icons" style={{ fontSize: 64, color: 'var(--border)' }}>apartment</span>
     </div>
   )
 
@@ -40,6 +33,7 @@ function Gallery({ photos, titre }) {
 
   return (
     <div>
+      {/* Main stage */}
       <div style={{ position: 'relative', borderRadius: 'var(--r-xl)', overflow: 'hidden', paddingBottom: '62%', background: 'var(--surface)', marginBottom: 8 }}>
         {photos.map((url, i) => (
           <img key={i} src={url} alt={`${titre} ${i+1}`} style={{
@@ -50,7 +44,7 @@ function Gallery({ photos, titre }) {
         ))}
 
         {/* Arrows */}
-        {[{ fn: prev, Icon: ChevronLeft, side: 'left' }, { fn: next, Icon: ChevronRight, side: 'right' }].map(b => (
+        {[{ fn: prev, icon: 'chevron_left', side: 'left' }, { fn: next, icon: 'chevron_right', side: 'right' }].map(b => (
           <button key={b.side} onClick={b.fn} style={{
             position: 'absolute', [b.side]: 14, top: '50%', transform: 'translateY(-50%)', zIndex: 5,
             width: 44, height: 44, borderRadius: '50%',
@@ -61,15 +55,17 @@ function Gallery({ photos, titre }) {
           }}
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; e.currentTarget.style.boxShadow = 'var(--sh-lg)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%)'; e.currentTarget.style.boxShadow = 'var(--sh-md)' }}>
-            <b.Icon size={20} />
+            <span className="material-icons">{b.icon}</span>
           </button>
         ))}
 
+        {/* Counter */}
         <div style={{ position: 'absolute', bottom: 14, right: 14, zIndex: 5, background: 'rgba(15,14,12,.7)', color: '#fff', padding: '5px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600 }}>
           {cur + 1} / {total}
         </div>
       </div>
 
+      {/* Thumbnails */}
       <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
         {photos.slice(0, 6).map((url, i) => (
           <button key={i} onClick={() => setCur(i)} style={{
@@ -105,16 +101,16 @@ function BookingCard({ residence }) {
   const today = new Date().toISOString().split('T')[0]
 
   const buildWA = () => {
-    const msg = `Bonjour ! Je souhaite réserver "${residence.titre}" à ${residence.ville}.\n\nArrivée : ${date ? new Date(date).toLocaleDateString('fr-FR') : 'à définir'}\nDurée : ${nb} ${typeKey || firstKey || ''}\n${selected ? formatPrix(selected.prix) : ''}\n\nPuis-vous confirmer la disponibilité ?`
+    const msg = `Bonjour ! Je souhaite réserver "${residence.titre}" à ${residence.ville}.\n\n📅 Arrivée : ${date ? new Date(date).toLocaleDateString('fr-FR') : 'à définir'}\n⏱ Durée : ${nb} ${typeKey || firstKey || ''}\n💰 ${selected ? formatPrix(selected.prix) : ''}\n\nPuis-vous confirmer la disponibilité ?`
     return `https://wa.me/${wa}?text=${encodeURIComponent(msg)}`
   }
 
   if (!firstKey) return (
     <div className="booking-card" style={{ textAlign: 'center', color: 'var(--muted)' }}>
-      <CreditCard size={36} style={{ color: 'var(--subtle)', display: 'block', margin: '0 auto 10px' }} />
+      <span className="material-icons" style={{ fontSize: 36, display: 'block', marginBottom: 10, color: 'var(--subtle)' }}>payments</span>
       <p style={{ fontSize: 14 }}>Tarifs sur demande WhatsApp</p>
-      <a href={`https://wa.me/${wa}?text=${encodeURIComponent("Bonjour ! Je souhaite des informations sur la résidence \""+residence.titre+"\"")}`} target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
-        <MessageCircle size={17} />
+      <a href={`https://wa.me/${wa}?text=${encodeURIComponent("Bonjour ! Je souhaite des informations sur la résidence \""+residence.titre+"\"")}` } target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
+        <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
         Contacter par WhatsApp
       </a>
     </div>
@@ -122,11 +118,13 @@ function BookingCard({ residence }) {
 
   return (
     <div className="booking-card">
+      {/* Price */}
       <div className="booking-price">{formatPrix(selected?.prix)}</div>
       <div className="booking-price-unit">{selected?.label?.toLowerCase()}</div>
 
       <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }}/>
 
+      {/* Tarif type pills */}
       {Object.keys(tarifs).length > 1 && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8 }}>Type de durée</div>
@@ -144,13 +142,17 @@ function BookingCard({ residence }) {
         </div>
       )}
 
+      {/* Date */}
       <div style={{ marginBottom: 14 }}>
         <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Date d'arrivée</label>
         <input className="input" type="date" min={today} value={date} onChange={e => setDate(e.target.value)}/>
       </div>
 
+      {/* Quantity stepper */}
       <div style={{ marginBottom: 20 }}>
-        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Durée</label>
+        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>
+          Durée
+        </label>
         <div style={{ display: 'flex', alignItems: 'center', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 'var(--r-md)', overflow: 'hidden' }}>
           <button onClick={() => setNb(n => Math.max(1, n-1))} style={{ width: 46, height: 44, background: 'none', border: 'none', borderRight: '1px solid var(--border)', color: 'var(--ink)', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
@@ -162,6 +164,7 @@ function BookingCard({ residence }) {
         </div>
       </div>
 
+      {/* Total */}
       {selected && (
         <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-md)', padding: '12px 16px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>Total estimé</span>
@@ -171,13 +174,14 @@ function BookingCard({ residence }) {
 
       {residence.montant_caution > 0 && (
         <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 5 }}>
-          <Shield size={14} style={{ flexShrink: 0 }} />
+          <span className="material-icons" style={{ fontSize: 14 }}>shield</span>
           Caution : {formatPrix(residence.montant_caution)}
         </p>
       )}
 
+      {/* CTA */}
       <a href={buildWA()} target="_blank" rel="noopener" className="btn-wa" style={{ width: '100%', justifyContent: 'center', fontSize: 15 }}>
-        <MessageCircle size={18} />
+        <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
         Réserver par WhatsApp
       </a>
 
@@ -219,7 +223,7 @@ export default function DetailPage() {
   if (!res) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', paddingTop: 64 }}>
       <div style={{ textAlign: 'center' }}>
-        <SearchX size={64} style={{ color: 'var(--border)', display: 'block', margin: '0 auto 16px' }} />
+        <span className="material-icons" style={{ fontSize: 64, color: 'var(--border)', display: 'block', marginBottom: 16 }}>search_off</span>
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '2rem', marginBottom: 8 }}>Résidence introuvable</h2>
         <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Cette résidence n'existe pas ou a été supprimée.</p>
         <Link href="/residences" className="btn btn-dark">Retour au catalogue</Link>
@@ -234,32 +238,29 @@ export default function DetailPage() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)' }}>
 
         {/* Breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)' }}>
           <Link href="/" style={{ color: 'var(--muted)' }}>Accueil</Link>
-          <ChevronRight size={14} />
+          <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
           <Link href="/residences" style={{ color: 'var(--muted)' }}>Résidences</Link>
-          <ChevronRight size={14} />
+          <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
           <span style={{ color: 'var(--ink)', fontWeight: 500 }}>{res.titre}</span>
         </div>
 
         <div className="detail-grid">
           {/* Left */}
           <div>
+            {/* Gallery */}
             <div style={{ marginBottom: 36 }}>
               <Gallery photos={res.photos || []} titre={res.titre} typeBien={res.type_bien}/>
             </div>
 
+            {/* Title + meta */}
             <div style={{ marginBottom: 28 }}>
               <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', marginBottom: 10 }}>
                 <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', align: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
                     <span className="badge badge-muted" style={{ textTransform: 'capitalize' }}>{res.type_bien}</span>
-                    {res.featured && (
-                      <span className="badge badge-gold">
-                        <Star size={11} />
-                        À la une
-                      </span>
-                    )}
+                    {res.featured && <span className="badge badge-gold"><span className="material-icons" style={{ fontSize: 11 }}>star</span>À la une</span>}
                   </div>
                   <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', letterSpacing: '-.025em', lineHeight: 1.1, color: 'var(--ink)' }}>
                     {res.titre}
@@ -267,9 +268,9 @@ export default function DetailPage() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap', color: 'var(--muted)', fontSize: 14 }}>
+              <div style={{ display: 'flex', align: 'center', gap: 16, flexWrap: 'wrap', color: 'var(--muted)', fontSize: 14 }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <MapPin size={16} />
+                  <span className="material-icons" style={{ fontSize: 16 }}>location_on</span>
                   {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
                 </span>
               </div>
@@ -277,6 +278,7 @@ export default function DetailPage() {
 
             <div style={{ height: 1, background: 'var(--border)', marginBottom: 28 }}/>
 
+            {/* Description */}
             {res.description && (
               <div style={{ marginBottom: 32 }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 14 }}>À propos</h2>
@@ -284,23 +286,22 @@ export default function DetailPage() {
               </div>
             )}
 
+            {/* Equipements */}
             {equips.length > 0 && (
               <div style={{ marginBottom: 32 }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 16 }}>Équipements</h2>
                 <div className="equip-grid">
-                  {equips.map(([k, eq]) => {
-                    const EquipIcon = LUCIDE_EQUIP[eq.icon]
-                    return (
-                      <div key={k} className="equip-item">
-                        {EquipIcon ? <EquipIcon size={18} className="equip-icon" /> : null}
-                        {eq.label}
-                      </div>
-                    )
-                  })}
+                  {equips.map(([k, eq]) => (
+                    <div key={k} className="equip-item">
+                      <span className="material-icons equip-icon">{eq.icon}</span>
+                      {eq.label}
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
 
+            {/* Tarifs table */}
             <div>
               <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 16 }}>Tarifs</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
@@ -331,6 +332,7 @@ export default function DetailPage() {
           </div>
         </div>
 
+        {/* Similar */}
         {similar.length > 0 && (
           <div style={{ marginTop: 'clamp(56px,8vw,96px)' }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 16, marginBottom: 32, flexWrap: 'wrap' }}>
