@@ -333,21 +333,31 @@ function StepsCarousel({ steps }) {
   const trackRef = useRef(null)
   const startX = useRef(null)
 
-  const goTo = (i) => {
-    const c = Math.max(0, Math.min(i, steps.length - 1))
-    setCur(c)
-    if (trackRef.current) trackRef.current.style.transform = `translateX(${-c * 100}%)`
-  }
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCur(c => {
+        const next = (c + 1) % steps.length
+        if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
+        return next
+      })
+    }, 3000)
+    return () => clearInterval(id)
+  }, [steps.length])
+
   const onTouchStart = (e) => { startX.current = e.touches[0].clientX }
-  const onTouchEnd   = (e) => {
+  const onTouchEnd = (e) => {
     const dx = e.changedTouches[0].clientX - startX.current
-    if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1))
+    if (Math.abs(dx) > 40) {
+      const next = Math.max(0, Math.min(cur + (dx < 0 ? 1 : -1), steps.length - 1))
+      setCur(next)
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
+    }
   }
 
   return (
     <div>
       <div style={{ overflow: 'hidden' }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-        <div ref={trackRef} style={{ display: 'flex', transition: 'transform .38s cubic-bezier(.4,0,.2,1)', willChange: 'transform' }}>
+        <div ref={trackRef} style={{ display: 'flex', transition: 'transform .5s cubic-bezier(.4,0,.2,1)', willChange: 'transform' }}>
           {steps.map((s, i) => (
             <div key={i} style={{ minWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 8px' }}>
               <div style={{ position: 'relative', marginBottom: 20 }}>
@@ -372,24 +382,15 @@ function StepsCarousel({ steps }) {
           ))}
         </div>
       </div>
-      {/* Dots + arrows */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 28 }}>
-        <button onClick={() => goTo(cur - 1)} disabled={cur === 0}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: cur === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
-          <span className="material-icons" style={{ fontSize: 22 }}>chevron_left</span>
-        </button>
+      {/* Dots only — no arrows */}
+      <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 28 }}>
         {steps.map((_, i) => (
-          <button key={i} onClick={() => goTo(i)} style={{
+          <div key={i} style={{
             width: i === cur ? 24 : 8, height: 8, borderRadius: 99,
             background: i === cur ? 'var(--gold)' : 'var(--border)',
-            border: 'none', cursor: 'pointer', padding: 0,
-            transition: 'all .25s', flexShrink: 0,
+            transition: 'all .3s',
           }}/>
         ))}
-        <button onClick={() => goTo(cur + 1)} disabled={cur === steps.length - 1}
-          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: cur === steps.length - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
-          <span className="material-icons" style={{ fontSize: 22 }}>chevron_right</span>
-        </button>
       </div>
     </div>
   )
@@ -635,7 +636,7 @@ export default function HomePage() {
       </div>
 
       {/* ── Featured Residences ── */}
-      <div style={{ background: 'var(--surface)' }}>
+      <div style={{ background: 'var(--surface)', overflow: 'hidden' }}>
         <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
             <div>
