@@ -11,7 +11,7 @@ const FAQ = [
     items: [
       { q: 'Comment réserver une résidence ?', a: 'La réservation se fait directement via WhatsApp. Trouvez la résidence qui vous convient, cliquez sur « Réserver par WhatsApp » et envoyez votre demande avec vos dates. Notre équipe confirme la disponibilité en moins de 30 minutes.' },
       { q: "Qu'est-ce que la caution ?", a: "La caution représente 20% du tarif de base. Elle est réglée avant votre arrivée pour confirmer votre réservation. Les 80% restants sont payés sur place à votre arrivée. La caution est intégralement remboursée à votre départ si la résidence est rendue en bon état." },
-      { q: 'Puis-je annuler ma réservation ?', a: "Les conditions d'annulation sont à discuter avec notre équipe sur WhatsApp. En général, une annulation plus de 48h avant l'arrivée permet un remboursement partiel de la caution." },
+      { q: 'Puis-je annuler ma réservation ?', a: "Les conditions d’annulation sont à discuter avec notre équipe sur WhatsApp. En général, une annulation plus de 48h avant l'arrivée permet un remboursement partiel de la caution." },
       { q: 'Quels modes de paiement sont acceptés ?', a: "La caution peut être réglée via Mobile Money (Orange Money, MTN MoMo), virement bancaire ou en espèces. Le solde est réglé sur place. Les cartes bancaires en ligne ne sont pas encore disponibles." },
     ],
   },
@@ -19,7 +19,7 @@ const FAQ = [
     cat: 'Les résidences',
     icon: 'apartment',
     items: [
-      { q: 'Les photos sont-elles authentiques ?', a: "Toutes les photos publiées sont vérifiées par notre équipe avant publication. Nous nous engageons à ce que les photos correspondent fidèlement à la réalité. En cas d'écart, contactez-nous immédiatement." },
+      { q: 'Les photos sont-elles authentiques ?', a: "Toutes les photos publiées sont vérifiées par notre équipe avant publication. Nous nous engageons à ce que les photos correspondent fidèlement à la réalité. En cas d’écart, contactez-nous immédiatement." },
       { q: 'Les équipements listés sont-ils disponibles ?', a: "Oui, les équipements indiqués (wifi, climatisation, etc.) sont ceux présents dans la résidence au moment de la publication. En cas de panne, contactez le gérant ou notre support." },
       { q: 'Puis-je visiter avant de réserver ?', a: "Dans certains cas, des visites sont possibles. Contactez-nous par WhatsApp pour en discuter. Nous pouvons également organiser une visite virtuelle par appel vidéo." },
     ],
@@ -28,7 +28,7 @@ const FAQ = [
     cat: 'Compte & données',
     icon: 'person',
     items: [
-      { q: "Ai-je besoin d'un compte pour réserver ?", a: "Non, aucun compte n'est nécessaire. La réservation se fait entièrement via WhatsApp. Vous nous communiquez vos informations directement dans la conversation." },
+      { q: "Ai-je besoin d’un compte pour réserver ?", a: "Non, aucun compte n’est nécessaire. La réservation se fait entièrement via WhatsApp. Vous nous communiquez vos informations directement dans la conversation." },
       { q: 'Comment sont protégées mes données ?', a: "Vos informations partagées via WhatsApp sont utilisées uniquement pour la gestion de votre réservation et ne sont jamais revendues à des tiers." },
     ],
   },
@@ -132,10 +132,10 @@ export default function AidePage() {
 
           <div style={{ height: 1, background: 'var(--border)', margin: '12px 0' }}/>
 
-          <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question.")}`}
+          <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j’ai une question.")}`}
             target="_blank" rel="noopener" className="btn-wa" style={{ width: '100%', justifyContent: 'center' }}>
             <Icon n="chat" size={16}/>
-            Contacter l'équipe
+            Contacter l’équipe
           </a>
         </div>
 
@@ -180,7 +180,7 @@ export default function AidePage() {
             <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 24 }}>
               Notre équipe répond en moins de 30 minutes, 7j/7.
             </p>
-            <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question concernant vos résidences.")}`}
+            <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j’ai une question concernant vos résidences.")}`}
               target="_blank" rel="noopener" className="btn-wa" style={{ padding: '13px 28px' }}>
               <Icon n="chat" size={17}/>
               Écrire sur WhatsApp

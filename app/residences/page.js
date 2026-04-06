@@ -163,7 +163,7 @@ export default function ResidencesPage() {
               <Icon n="search_off" size={36} color={'var(--subtle)'}/>
             </div>
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.8rem', fontWeight: 400, marginBottom: 10 }}>Aucun résultat</h3>
-            <p style={{ color: 'var(--muted)', marginBottom: 28, fontSize: 15 }}>Essayez avec d'autres critères de recherche.</p>
+            <p style={{ color: 'var(--muted)', marginBottom: 28, fontSize: 15 }}>Essayez avec d’autres critères de recherche.</p>
             <button className="btn btn-dark" onClick={clearFilters}>Effacer les filtres</button>
           </div>
         ) : (

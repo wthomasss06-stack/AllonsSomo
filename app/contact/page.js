@@ -155,7 +155,7 @@ export default function ContactPage() {
                 Basé à <em>Abidjan</em>
               </h2>
               <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 28 }}>
-                Nous couvrons toutes les communes d'Abidjan — Cocody, Plateau, Marcory,
+                Nous couvrons toutes les communes d’Abidjan — Cocody, Plateau, Marcory,
                 Yopougon, Treichville, Adjamé et bien plus encore.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
@@ -191,7 +191,7 @@ export default function ContactPage() {
               </h2>
               <MapView quartier={HQ.quartier} commune={HQ.commune} ville={HQ.ville} title="New Horizon — Abidjan" height={380}/>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.6 }}>
-                Autorisez la géolocalisation pour voir l'itinéraire depuis votre position.
+                Autorisez la géolocalisation pour voir l’itinéraire depuis votre position.
               </p>
             </div>
           </div>

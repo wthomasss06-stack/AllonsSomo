@@ -7,7 +7,7 @@ const STATS = [
   { num: '2023', label: 'Fondée en', icon: 'calendar_today' },
   { num: '🇨🇮', label: 'Entreprise ivoirienne', icon: null },
   { num: '24h', label: 'Support disponible', icon: 'support_agent' },
-  { num: '7j/7', label: 'Jours d'ouverture', icon: 'schedule' },
+  { num: '7j/7', label: 'Jours d&apos;ouverture', icon: 'schedule' },
 ]
 
 const VALUES = [
@@ -25,7 +25,7 @@ const VALUES = [
   },
   {
     icon: 'place', title: 'Expérience locale',
-    desc: 'Les meilleurs quartiers d'Abidjan, sélectionnés par une équipe ivoirienne.',
+    desc: 'Les meilleurs quartiers d’Abidjan, sélectionnés par une équipe ivoirienne.',
   },
 ]
 
@@ -70,7 +70,7 @@ export default function AProposPage() {
           </h1>
           <p className="page-hero-desc">
             New Horizon — une solution directe pour louer des résidences meublées
-            en Côte d'Ivoire. Pas d'intermédiaires, pas de frais cachés.
+            en Côte d’Ivoire. Pas d’intermédiaires, pas de frais cachés.
           </p>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
             <Link href="/residences" className="btn btn-white">
@@ -161,7 +161,7 @@ export default function AProposPage() {
                   fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem,2.5vw,1.8rem)',
                   fontWeight: 400, color: '#fff', lineHeight: 1.3, letterSpacing: '-.02em', marginBottom: 24,
                 }}>
-                  "Rendre la location de résidences à Abidjan aussi simple qu'un message WhatsApp."
+                  "Rendre la location de résidences à Abidjan aussi simple qu’un message WhatsApp."
                 </p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   {[
@@ -200,7 +200,7 @@ export default function AProposPage() {
                 Comment<br/><em>ça marche ?</em>
               </h2>
               <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 32 }}>
-                De la recherche à l'emménagement, tout est pensé pour être rapide et sans stress.
+                De la recherche à l’emménagement, tout est pensé pour être rapide et sans stress.
               </p>
               <Link href="/aide" className="btn btn-dark">
                 <Icon n="help_outline" size={17}/>FAQ complète
