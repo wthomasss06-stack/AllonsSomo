@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef, useEffect } from 'react'
+import { useState } from 'react'
 import Link from 'next/link'
 import { SITE } from '@/lib/config'
 import Icon from '@/components/ui/Icon'
@@ -8,9 +8,6 @@ const FAQ = [
   {
     cat: 'Réservation',
     icon: 'event_available',
-    color: '#FF7A1A',
-    bg: 'rgba(255,122,26,.08)',
-    border: 'rgba(255,122,26,.2)',
     items: [
       { q: 'Comment réserver une résidence ?', a: 'La réservation se fait directement via WhatsApp. Trouvez la résidence qui vous convient, cliquez sur « Réserver par WhatsApp » et envoyez votre demande avec vos dates. Notre équipe vous confirme la disponibilité en moins de 30 minutes.' },
       { q: "Qu'est-ce que la caution et comment est-elle calculée ?", a: "La caution représente 20% du tarif de base. Elle est réglée avant votre arrivée pour confirmer votre réservation. Les 80% restants sont payés directement sur place à votre arrivée. La caution vous est intégralement remboursée à votre départ si la résidence est rendue en bon état." },
@@ -21,9 +18,6 @@ const FAQ = [
   {
     cat: 'Les résidences',
     icon: 'apartment',
-    color: '#7C3AED',
-    bg: 'rgba(124,58,237,.08)',
-    border: 'rgba(124,58,237,.2)',
     items: [
       { q: 'Les photos sont-elles authentiques ?', a: "Toutes les photos publiées sur Allons Somo sont vérifiées par notre équipe avant publication. Nous nous engageons à ce que les photos correspondent fidèlement à la réalité. Si vous constatez un écart significatif, contactez-nous immédiatement." },
       { q: 'Les équipements listés sont-ils toujours disponibles ?', a: "Oui, les équipements indiqués dans chaque annonce (wifi, climatisation, etc.) sont ceux présents dans la résidence au moment de la publication. En cas de panne ou d'absence, contactez le gérant ou notre support." },
@@ -33,9 +27,6 @@ const FAQ = [
   {
     cat: 'Compte & données',
     icon: 'person',
-    color: '#0EA5E9',
-    bg: 'rgba(14,165,233,.08)',
-    border: 'rgba(14,165,233,.2)',
     items: [
       { q: "Ai-je besoin d'un compte pour réserver ?", a: "Non, aucun compte n'est nécessaire. La réservation se fait entièrement via WhatsApp. Vous nous communiquez vos informations directement dans la conversation." },
       { q: 'Comment sont protégées mes données personnelles ?', a: "Vos informations partagées via WhatsApp sont traitées conformément à notre politique de confidentialité. Elles sont utilisées uniquement pour la gestion de votre réservation et ne sont jamais revendues à des tiers." },
@@ -43,287 +34,175 @@ const FAQ = [
   },
 ]
 
-function FaqItem({ item, index }) {
+function FaqItem({ item }) {
   const [open, setOpen] = useState(false)
-  const contentRef = useRef(null)
-  const [height, setHeight] = useState(0)
-
-  useEffect(() => {
-    if (open && contentRef.current) setHeight(contentRef.current.scrollHeight)
-    else setHeight(0)
-  }, [open])
-
   return (
-    <div
-      style={{
-        borderRadius: 16,
-        border: `1px solid ${open ? 'rgba(255,122,26,.25)' : 'var(--border)'}`,
-        background: open ? 'rgba(255,122,26,.02)' : 'var(--white)',
-        boxShadow: open ? '0 8px 32px rgba(15,14,12,.08)' : '0 1px 4px rgba(15,14,12,.04)',
-        transition: 'all .25s cubic-bezier(.4,0,.2,1)',
-        marginBottom: 8,
-        overflow: 'hidden',
-        animationDelay: `${index * 60}ms`,
-        animationFillMode: 'both',
-      }}
-      className="faq-item"
-    >
-      <button
-        onClick={() => setOpen(o => !o)}
-        style={{
-          width: '100%', padding: '18px 20px',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
-          background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
-        }}
-        aria-expanded={open}
-      >
+    <div style={{
+      borderRadius: 14,
+      border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
+      background: open ? 'rgba(255,122,26,.03)' : 'var(--white)',
+      boxShadow: open ? '0 4px 20px rgba(15,14,12,.06)' : '0 1px 3px rgba(15,14,12,.04)',
+      transition: 'all .2s cubic-bezier(.4,0,.2,1)',
+      marginBottom: 10,
+      overflow: 'hidden',
+    }}>
+      <button onClick={() => setOpen(o => !o)} style={{
+        width: '100%', padding: '17px 20px',
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16,
+        background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+      }}>
         <span style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600,
           color: open ? '#FF7A1A' : 'var(--ink)',
-          lineHeight: 1.45, transition: 'color .2s', flex: 1,
+          lineHeight: 1.4, transition: 'color .2s',
         }}>{item.q}</span>
         <div style={{
-          width: 30, height: 30, borderRadius: 9, flexShrink: 0,
+          width: 28, height: 28, borderRadius: 8, flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: open ? 'rgba(255,122,26,.12)' : 'var(--surface, #F7F6F3)',
+          background: open ? 'rgba(255,122,26,.1)' : 'var(--bg)',
           border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
-          transition: 'all .25s',
+          transition: 'all .2s',
         }}>
-          <Icon n="expand_more" size={17} style={{
-            color: open ? '#FF7A1A' : 'var(--subtle)',
+          <Icon n="expand_more" size={16} style={{color: open ? '#FF7A1A' : 'var(--subtle)',
             transform: open ? 'rotate(180deg)' : 'none',
-            transition: 'transform .3s cubic-bezier(.4,0,.2,1)',
+            transition: 'transform .2s',
           }}/>
         </div>
       </button>
-
-      <div style={{
-        height: height,
-        overflow: 'hidden',
-        transition: 'height .3s cubic-bezier(.4,0,.2,1)',
-      }}>
-        <div ref={contentRef} style={{ padding: '0 20px 20px', borderTop: '1px solid var(--border)' }}>
-          <p style={{
-            fontSize: 14, color: 'var(--muted)', lineHeight: 1.85,
-            paddingTop: 16, margin: 0,
-          }}>{item.a}</p>
+      {open && (
+        <div style={{ padding: '0 20px 18px', borderTop: '1px solid var(--border)' }}>
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, paddingTop: 14 }}>{item.a}</p>
         </div>
-      </div>
-    </div>
-  )
-}
-
-function SectionBadge({ section }) {
-  return (
-    <div style={{
-      display: 'inline-flex', alignItems: 'center', gap: 10,
-      marginBottom: 20, padding: '10px 18px',
-      borderRadius: 14, background: 'var(--white)',
-      border: `1px solid ${section.border}`,
-      boxShadow: '0 2px 8px rgba(15,14,12,.05)',
-    }}>
-      <div style={{
-        width: 34, height: 34, borderRadius: 10,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        background: section.bg,
-      }}>
-        <Icon n={section.icon} size={17} color={section.color}/>
-      </div>
-      <span style={{
-        fontFamily: "'DM Sans',sans-serif", fontSize: 13.5, fontWeight: 700,
-        color: 'var(--ink)', letterSpacing: '.01em',
-      }}>
-        {section.cat}
-      </span>
-      <span style={{
-        fontSize: 11, fontWeight: 600, color: section.color,
-        background: section.bg, border: `1px solid ${section.border}`,
-        borderRadius: 99, padding: '2px 9px',
-      }}>
-        {section.items.length}
-      </span>
+      )}
     </div>
   )
 }
 
 export default function AidePage() {
-  const [activeSection, setActiveSection] = useState(null)
-
   return (
-    <>
-      <style>{`
-        @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:none; } }
-        .faq-item { animation: fadeUp .4s both; }
-        .section-nav-btn { transition: all .2s; }
-        .section-nav-btn:hover { transform: translateY(-1px); }
-        .btn-wa { display:inline-flex; align-items:center; gap:8px; padding:13px 24px; border-radius:12px; background:#25D366; color:#fff; font-weight:700; font-size:14px; text-decoration:none; transition:all .2s; }
-        .btn-wa:hover { background:#1ebe5d; transform:translateY(-1px); box-shadow:0 6px 20px rgba(37,211,102,.3); }
-      `}</style>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
 
-      <div style={{ minHeight: '100vh', background: 'var(--bg, #F7F6F3)' }}>
-
-        {/* ── Hero ── */}
+      {/* ── Header — blanc/noir ── */}
+      <div style={{
+        padding: 'clamp(90px,10vw,140px) var(--pad) clamp(48px,6vw,72px)',
+        background: 'var(--white)',
+        borderBottom: '1px solid var(--border)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {/* Gold top line */}
         <div style={{
-          padding: 'clamp(96px,11vw,148px) var(--pad, 24px) clamp(52px,7vw,80px)',
-          background: 'var(--white)',
-          borderBottom: '1px solid var(--border)',
-          position: 'relative', overflow: 'hidden',
-        }}>
-          {/* Accent line top */}
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-            background: 'linear-gradient(90deg, transparent, #FF7A1A 40%, #FFAA5A 60%, transparent)',
-            opacity: .35,
-          }}/>
-          {/* Ambient glow */}
-          <div style={{
-            position: 'absolute', inset: 0, pointerEvents: 'none',
-            background: 'radial-gradient(ellipse 55% 80% at 95% 40%, rgba(255,122,26,.06) 0%, transparent 65%)',
-          }}/>
+          position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+          background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.3) 30%, rgba(255,122,26,.3) 70%, transparent)',
+        }}/>
+        {/* Subtle radial bg */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none',
+          background: 'radial-gradient(ellipse 60% 70% at 90% 50%, rgba(255,122,26,.04) 0%, transparent 70%)',
+        }}/>
 
-          <div style={{ maxWidth: 860, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-            {/* Breadcrumb */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 24, opacity: .6 }}>
-              <Link href="/" style={{ fontSize: 12, color: 'var(--muted)', textDecoration: 'none', fontWeight: 500 }}>Accueil</Link>
-              <Icon n="chevron_right" size={13} style={{ color: 'var(--muted)' }}/>
-              <span style={{ fontSize: 12, color: '#FF7A1A', fontWeight: 600 }}>Centre d'aide</span>
-            </div>
+        <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 1 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            padding: '5px 14px', borderRadius: 99,
+            background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
+            marginBottom: 18,
+          }}>
+            <Icon n="help_outline" size={13} color={'#FF7A1A'}/>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF7A1A' }}>Centre d'aide</span>
+          </div>
 
+          <h1 style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: 'clamp(2.2rem,5vw,3.6rem)',
+            fontWeight: 400, fontStyle: 'italic',
+            color: 'var(--ink)',
+            lineHeight: 1.08, marginBottom: 14,
+          }}>
+            Questions <em style={{ color: 'var(--gold)' }}>fréquentes</em>
+          </h1>
+
+          <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.75, maxWidth: 500, marginBottom: 28 }}>
+            Retrouvez les réponses aux questions les plus fréquentes.
+            Pour tout autre renseignement, notre équipe est disponible sur WhatsApp.
+          </p>
+
+          <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
+            <Icon n="chat" size={18}/>
+            Contactez-nous sur WhatsApp
+          </a>
+        </div>
+      </div>
+
+      {/* ── FAQ content ── */}
+      <div style={{ maxWidth: 820, margin: '0 auto', padding: 'clamp(48px,7vw,72px) var(--pad) 88px' }}>
+        {FAQ.map((section, si) => (
+          <div key={si} style={{ marginBottom: 48 }}>
+            {/* Section label */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '5px 14px', borderRadius: 99,
-              background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.18)',
-              marginBottom: 20,
+              display: 'inline-flex', alignItems: 'center', gap: 9,
+              marginBottom: 22, padding: '9px 16px',
+              borderRadius: 12, background: 'var(--white)',
+              border: '1px solid var(--border)',
+              boxShadow: '0 1px 4px rgba(15,14,12,.04)',
             }}>
-              <Icon n="help_outline" size={12} color={'#FF7A1A'}/>
-              <span style={{ fontSize: 10.5, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: '#FF7A1A' }}>
-                Centre d'aide
+              <div style={{
+                width: 32, height: 32, borderRadius: 9,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'rgba(255,122,26,.08)', border: '1px solid rgba(255,122,26,.2)',
+              }}>
+                <Icon n={section.icon} size={16} color={'#FF7A1A'}/>
+              </div>
+              <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: 'var(--ink)', letterSpacing: '.02em' }}>
+                {section.cat}
               </span>
             </div>
 
-            <h1 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.3rem,5.5vw,3.8rem)',
-              fontWeight: 400, fontStyle: 'italic',
-              color: 'var(--ink)', lineHeight: 1.06, marginBottom: 16,
-            }}>
-              Questions <em style={{ color: '#FF7A1A', fontStyle: 'normal' }}>fréquentes</em>
-            </h1>
-
-            <p style={{ fontSize: 15.5, color: 'var(--muted)', lineHeight: 1.8, maxWidth: 480, marginBottom: 32 }}>
-              Retrouvez les réponses aux questions les plus fréquentes.
-              Pour tout autre renseignement, notre équipe est disponible sur WhatsApp.
-            </p>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center' }}>
-              <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-                <Icon n="chat" size={17}/>
-                Contactez-nous sur WhatsApp
-              </a>
-              <div style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6,
-                padding: '8px 14px', borderRadius: 10,
-                background: 'var(--bg)', border: '1px solid var(--border)',
-                fontSize: 12, color: 'var(--muted)', fontWeight: 500,
-              }}>
-                <Icon n="bolt" size={13} color={'#22C55E'}/>
-                Réponse en &lt; 30 min
-              </div>
-            </div>
+            {section.items.map((item, i) => <FaqItem key={i} item={item} />)}
           </div>
-        </div>
+        ))}
 
-        {/* ── Nav sections sticky ── */}
+        {/* Contact CTA */}
         <div style={{
-          position: 'sticky', top: 0, zIndex: 30,
-          background: 'var(--white)', borderBottom: '1px solid var(--border)',
-          backdropFilter: 'blur(8px)',
+          marginTop: 24, padding: 'clamp(32px,4vw,48px)',
+          borderRadius: 24,
+          background: 'var(--white)',
+          border: '1px solid var(--border)',
+          boxShadow: '0 4px 24px rgba(15,14,12,.06)',
+          textAlign: 'center', position: 'relative', overflow: 'hidden',
         }}>
+          {/* Gold top accent */}
           <div style={{
-            maxWidth: 860, margin: '0 auto',
-            padding: '0 var(--pad, 24px)',
-            display: 'flex', gap: 4, overflowX: 'auto',
-            scrollbarWidth: 'none',
-          }}>
-            {FAQ.map((s, i) => (
-              <button
-                key={i}
-                className="section-nav-btn"
-                onClick={() => {
-                  const el = document.getElementById(`section-${i}`)
-                  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  setActiveSection(i)
-                }}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6,
-                  padding: '14px 16px', whiteSpace: 'nowrap',
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontSize: 13, fontWeight: 600, fontFamily: "'DM Sans', sans-serif",
-                  color: activeSection === i ? s.color : 'var(--muted)',
-                  borderBottom: `2px solid ${activeSection === i ? s.color : 'transparent'}`,
-                  transition: 'all .2s',
-                }}
-              >
-                <Icon n={s.icon} size={14} color={activeSection === i ? s.color : 'var(--muted)'}/>
-                {s.cat}
-              </button>
-            ))}
-          </div>
-        </div>
+            position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+            background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.3) 30%, rgba(255,122,26,.3) 70%, transparent)',
+          }}/>
 
-        {/* ── FAQ Content ── */}
-        <div style={{ maxWidth: 860, margin: '0 auto', padding: 'clamp(48px,7vw,72px) var(--pad, 24px) 96px' }}>
-          {FAQ.map((section, si) => (
-            <div key={si} id={`section-${si}`} style={{ marginBottom: 56, scrollMarginTop: 60 }}>
-              <SectionBadge section={section} />
-              {section.items.map((item, i) => (
-                <FaqItem key={i} item={item} index={i} />
-              ))}
-            </div>
-          ))}
-
-          {/* ── CTA final ── */}
           <div style={{
-            marginTop: 16,
-            borderRadius: 24,
-            overflow: 'hidden',
-            background: 'var(--white)',
-            border: '1px solid var(--border)',
-            boxShadow: '0 8px 40px rgba(15,14,12,.07)',
+            width: 56, height: 56, borderRadius: 16, margin: '0 auto 18px',
+            background: 'rgba(94,232,150,.1)', border: '1px solid rgba(94,232,150,.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            {/* Top accent */}
-            <div style={{ height: 3, background: 'linear-gradient(90deg, #25D366, #16A34A)' }}/>
-
-            <div style={{ padding: 'clamp(36px,5vw,52px)', textAlign: 'center' }}>
-              <div style={{
-                width: 60, height: 60, borderRadius: 18, margin: '0 auto 20px',
-                background: 'rgba(37,211,102,.1)', border: '1px solid rgba(37,211,102,.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Icon n="support_agent" size={28} color={'#16A34A'}/>
-              </div>
-
-              <h3 style={{
-                fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem,3vw,1.6rem)',
-                fontWeight: 400, fontStyle: 'italic',
-                color: 'var(--ink)', marginBottom: 10,
-              }}>Vous n'avez pas trouvé votre réponse ?</h3>
-
-              <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 28, maxWidth: 380, margin: '0 auto 28px' }}>
-                Notre équipe répond sur WhatsApp en moins de 30 minutes, 7j/7.
-              </p>
-
-              <a
-                href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question concernant vos résidences.")}`}
-                target="_blank" rel="noopener" className="btn-wa"
-                style={{ fontSize: 14 }}>
-                <Icon n="chat" size={18}/>
-                Écrire sur WhatsApp
-              </a>
-            </div>
+            <Icon n="chat" size={26} color={'#16A34A'}/>
           </div>
+
+          <h3 style={{
+            fontFamily: 'var(--font-display)', fontSize: 22,
+            fontWeight: 400, fontStyle: 'italic',
+            color: 'var(--ink)', marginBottom: 10,
+          }}>Vous n'avez pas trouvé votre réponse ?</h3>
+
+          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.75, marginBottom: 24, maxWidth: 400, margin: '0 auto 24px' }}>
+            Notre équipe répond sur WhatsApp en moins de 30 minutes, 7j/7.
+          </p>
+
+          <a
+            href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question concernant vos résidences.")}`}
+            target="_blank" rel="noopener" className="btn-wa"
+            style={{ fontSize: 14, padding: '13px 30px' }}>
+            <Icon n="chat" size={19}/>
+            Écrire sur WhatsApp
+          </a>
         </div>
       </div>
-    </>
+    </div>
   )
 }
