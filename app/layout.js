@@ -85,33 +85,112 @@ function useTheme() {
 // ── Page Loader ───────────────────────────────────────────────
 function PageLoader() {
   const pathname = usePathname()
-  const [w, setW] = useState(0)
-  const [vis, setVis] = useState(false)
-  const prev = useRef(pathname)
-  const timer = useRef(null)
+  const [visible, setVisible] = useState(true)
+  const [leaving, setLeaving] = useState(false)
+  const prev = useRef(null)
+  const minTimer = useRef(null)
+  const navTimer = useRef(null)
 
+  // Initial page load — show loader, hide after min 1.4s
   useEffect(() => {
-    if (prev.current !== pathname) {
-      setW(100); const t = setTimeout(() => { setVis(false); setW(0); prev.current = pathname }, 400)
-      return () => clearTimeout(t)
-    }
+    minTimer.current = setTimeout(() => {
+      setLeaving(true)
+      setTimeout(() => setVisible(false), 600)
+    }, 1400)
+    return () => clearTimeout(minTimer.current)
+  }, [])
+
+  // Navigation between pages — show briefly
+  useEffect(() => {
+    if (prev.current === null) { prev.current = pathname; return }
+    if (prev.current === pathname) return
+    prev.current = pathname
+    setVisible(true)
+    setLeaving(false)
+    clearTimeout(navTimer.current)
+    navTimer.current = setTimeout(() => {
+      setLeaving(true)
+      setTimeout(() => setVisible(false), 500)
+    }, 900)
+    return () => clearTimeout(navTimer.current)
   }, [pathname])
 
+  // Trigger on link clicks
   useEffect(() => {
     const fn = (e) => {
       const a = e.target.closest('a[href]')
       if (!a) return
       const h = a.getAttribute('href')
       if (!h || h.startsWith('http') || h.startsWith('#') || h.startsWith('mailto')) return
-      setVis(true); setW(25); let p = 25
-      clearInterval(timer.current)
-      timer.current = setInterval(() => { p = Math.min(p + Math.random() * 14, 80); setW(p) }, 200)
+      setVisible(true); setLeaving(false)
     }
     document.addEventListener('click', fn)
-    return () => { document.removeEventListener('click', fn); clearInterval(timer.current) }
+    return () => document.removeEventListener('click', fn)
   }, [])
 
-  return <div className="page-loader-bar" style={{ width:`${w}%`, opacity:vis?1:0 }}/>
+  if (!visible) return null
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 99999,
+      background: '#0A0A08',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 32,
+      opacity: leaving ? 0 : 1,
+      transition: leaving ? 'opacity 0.55s cubic-bezier(.4,0,.2,1)' : 'none',
+      pointerEvents: leaving ? 'none' : 'all',
+    }}>
+      {/* Logo NH animé */}
+      <div style={{
+        animation: 'loaderPulse 1.6s ease-in-out infinite',
+        transformOrigin: 'center',
+      }}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="80" height="80">
+          <rect width="500" height="500" rx="100" fill="#1a1a17"/>
+          <g transform="translate(40,20)">
+            <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill="#FFFFFF"/>
+            <polygon points="70,140 120,140 110,180" fill="#FFFFFF"/>
+            <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill="#FF7A1A"/>
+            <polygon points="230,140 270,140 250,170" fill="rgba(255,255,255,0.25)"/>
+            <polygon points="320,140 370,140 340,170" fill="rgba(255,255,255,0.25)"/>
+          </g>
+        </svg>
+      </div>
+
+      {/* Barre de progression animée */}
+      <div style={{ width: 120, height: 2, background: 'rgba(255,255,255,0.08)', borderRadius: 99, overflow: 'hidden' }}>
+        <div style={{
+          height: '100%', borderRadius: 99,
+          background: 'linear-gradient(90deg, #FF7A1A, #FFB347)',
+          animation: 'loaderBar 1.4s cubic-bezier(.4,0,.2,1) forwards',
+        }}/>
+      </div>
+
+      {/* Texte */}
+      <p style={{
+        fontFamily: "'DM Sans', sans-serif",
+        fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.3)', margin: 0,
+        animation: 'loaderFade 0.8s ease forwards',
+      }}>New Horizon</p>
+
+      <style>{`
+        @keyframes loaderPulse {
+          0%,100% { transform: scale(1); opacity: 1; }
+          50% { transform: scale(1.06); opacity: 0.85; }
+        }
+        @keyframes loaderBar {
+          0% { width: 0%; }
+          40% { width: 60%; }
+          70% { width: 82%; }
+          100% { width: 100%; }
+        }
+        @keyframes loaderFade {
+          from { opacity: 0; transform: translateY(6px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  )
 }
 
 // ── Nav ───────────────────────────────────────────────────────
