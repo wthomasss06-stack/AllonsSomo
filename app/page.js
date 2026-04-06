@@ -391,10 +391,6 @@ function StepsCarousel({ steps }) {
           <span className="material-icons" style={{ fontSize: 22 }}>chevron_right</span>
         </button>
       </div>
-      {/* Swipe hint */}
-      <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--muted)', marginTop: 10, letterSpacing: '.04em' }}>
-        ← glissez pour naviguer →
-      </p>
     </div>
   )
 }
@@ -469,44 +465,113 @@ function Testimonials() {
     { name: 'Marie D.', zone: 'Plateau', text: "Résidence exactement comme sur les photos. Aucune mauvaise surprise à l'arrivée. Je recommande vraiment !", avatar: 'M' },
     { name: 'Serge B.', zone: 'Marcory', text: "Réponse en 3 minutes sur WhatsApp. Clé en main, meublé, climatisé. Parfait pour un séjour professionnel.", avatar: 'S' },
   ]
+  const [cur, setCur] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
+  const trackRef = useRef(null)
+  const startX = useRef(null)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
+  // Auto-slide every 3s on mobile
+  useEffect(() => {
+    if (!isMobile) return
+    const id = setInterval(() => {
+      setCur(c => {
+        const next = (c + 1) % REVIEWS.length
+        if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
+        return next
+      })
+    }, 3000)
+    return () => clearInterval(id)
+  }, [isMobile])
+
+  const onTouchStart = (e) => { startX.current = e.touches[0].clientX }
+  const onTouchEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - startX.current
+    if (Math.abs(dx) > 40) {
+      const next = Math.max(0, Math.min(cur + (dx < 0 ? 1 : -1), REVIEWS.length - 1))
+      setCur(next)
+      if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
+    }
+  }
+
+  const ReviewCard = ({ r }) => (
+    <div style={{
+      background: 'var(--white)', border: '1px solid var(--border)',
+      borderRadius: 'var(--r-xl)', padding: 'clamp(20px,3vw,28px)',
+      display: 'flex', flexDirection: 'column', gap: 14,
+    }}>
+      <div style={{ display: 'flex', gap: 2 }}>
+        {'★★★★★'.split('').map((s, j) => <span key={j} style={{ color: '#F59E0B', fontSize: 17 }}>{s}</span>)}
+      </div>
+      <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.7, flex: 1, fontStyle: 'italic' }}>"{r.text}"</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: '50%',
+          background: 'var(--gold-pale)', border: '1px solid rgba(255,122,26,.2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'var(--font-display)', fontSize: 16, color: 'var(--gold)',
+        }}>{r.avatar}</div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', display:'flex', alignItems:'center', gap:4 }}>{r.zone} · <span className="material-icons" style={{fontSize:12,color:'#16A34A'}}>check_circle</span><span>Client vérifié</span></div>
+        </div>
+      </div>
+    </div>
+  )
+
   return (
     <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: 'clamp(32px,5vw,48px)' }}>
         <div className="section-label">Avis clients vérifiés</div>
         <h2 className="section-title">Ils nous font<br/><em>confiance</em></h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', marginTop: 10 }}>
-          <span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:2,marginBottom:4}}>{['star','star','star','star','star'].map((s,i)=><span key={i} className="material-icons" style={{fontSize:16,color:'#F59E0B'}}>{s}</span>)} <span style={{fontSize:14,color:'var(--muted)',marginLeft:6}}>4.9/5 sur 120+ réservations ce mois</span></span>
+          <span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:2,marginBottom:4}}>
+            {['star','star','star','star','star'].map((s,i)=><span key={i} className="material-icons" style={{fontSize:16,color:'#F59E0B'}}>{s}</span>)}
+            <span style={{fontSize:14,color:'var(--muted)',marginLeft:6}}>4.9/5 sur 120+ réservations ce mois</span>
+          </span>
         </p>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
-        {REVIEWS.map((r, i) => (
-          <div key={i} style={{
-            background: 'var(--white)', border: '1px solid var(--border)',
-            borderRadius: 'var(--r-xl)', padding: 'clamp(20px,3vw,28px)',
-            display: 'flex', flexDirection: 'column', gap: 14,
-            transition: 'transform .2s, box-shadow .2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sh-md)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none' }}>
-            <div style={{ display: 'flex', gap: 2 }}>
-              {'★★★★★'.split('').map((s, j) => <span key={j} style={{ color: '#F59E0B', fontSize: 17 }}>{s}</span>)}
-            </div>
-            <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.7, flex: 1, fontStyle: 'italic' }}>"{r.text}"</p>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <div style={{
-                width: 38, height: 38, borderRadius: '50%',
-                background: 'var(--gold-pale)', border: '1px solid rgba(255,122,26,.2)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontFamily: 'var(--font-display)', fontSize: 16, color: 'var(--gold)',
-              }}>{r.avatar}</div>
-              <div>
-                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', display:'flex', alignItems:'center', gap:4 }}>{r.zone} · <span className="material-icons" style={{fontSize:12,color:'#16A34A'}}>check_circle</span><span>Client vérifié</span></div>
-              </div>
+
+      {isMobile ? (
+        /* Mobile: auto-slide carousel, no arrows */
+        <div>
+          <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }}
+            onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div ref={trackRef} style={{
+              display: 'flex',
+              transition: 'transform .5s cubic-bezier(.4,0,.2,1)',
+              willChange: 'transform',
+            }}>
+              {REVIEWS.map((r, i) => (
+                <div key={i} style={{ minWidth: '100%' }}>
+                  <ReviewCard r={r} />
+                </div>
+              ))}
             </div>
           </div>
-        ))}
-      </div>
+          {/* Dots only */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 18 }}>
+            {REVIEWS.map((_, i) => (
+              <div key={i} style={{
+                width: i === cur ? 22 : 7, height: 7, borderRadius: 99,
+                background: i === cur ? 'var(--gold)' : 'var(--border)',
+                transition: 'all .3s',
+              }}/>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Desktop: grid */
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          {REVIEWS.map((r, i) => <ReviewCard key={i} r={r} />)}
+        </div>
+      )}
     </div>
   )
 }
@@ -599,16 +664,9 @@ export default function HomePage() {
               ))}
             </div>
           ) : allRes.length > 0 ? (
-            <>
-              {/* Desktop grid */}
-              <div className="grid-auto hide-mobile">
-                {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
-              </div>
-              {/* Mobile 2×2 carousel */}
-              <div className="show-mobile">
-                <MobileCarousel items={allRes}/>
-              </div>
-            </>
+            <div className="grid-auto">
+              {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+            </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
               <span className="material-icons" style={{ fontSize: 48, display: 'block', marginBottom: 12, color: 'var(--subtle)' }}>apartment</span>
