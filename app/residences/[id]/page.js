@@ -1,83 +1,310 @@
 'use client'
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
-import { getResidence, getResidences, getWAReservation, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
+import { getResidence, getResidences, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
-// ── Gallery ───────────────────────────────────────────────────
-function Gallery({ photos, titre, typeBien }) {
-  const [cur, setCur] = useState(0)
+// ── Page Loader ───────────────────────────────────────────────
+function PageLoader() {
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64 }}>
+      <style>{`
+        @keyframes loaderSlide {
+          0% { background-position: -600px 0; }
+          100% { background-position: 600px 0; }
+        }
+        @keyframes spinAnim { to { transform: rotate(360deg); } }
+        .ld-shimmer {
+          background: linear-gradient(90deg, var(--surface) 0%, var(--border) 40%, var(--surface) 100%);
+          background-size: 600px 100%;
+          animation: loaderSlide 1.3s ease-in-out infinite;
+          border-radius: 12px;
+        }
+      `}</style>
+
+      {/* Spinner centré */}
+      <div style={{
+        position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
+        justifyContent: 'center', pointerEvents: 'none', zIndex: 500,
+      }}>
+        <div style={{
+          width: 48, height: 48, borderRadius: '50%',
+          border: '3px solid var(--border)',
+          borderTopColor: 'var(--gold)',
+          animation: 'spinAnim .75s linear infinite',
+        }}/>
+      </div>
+
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)' }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+          {[80,14,100,14,160].map((w,i) => (
+            <div key={i} className="ld-shimmer" style={{ width: w, height: 14, borderRadius: 99 }}/>
+          ))}
+        </div>
+        <div className="ld-shimmer" style={{ width: '100%', aspectRatio: '16/9', maxHeight: 480, marginBottom: 10, borderRadius: 20 }}/>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 36 }}>
+          {[1,2,3,4,5].map(i => (
+            <div key={i} className="ld-shimmer" style={{ width: 80, height: 56, borderRadius: 10, flexShrink: 0 }}/>
+          ))}
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0,1fr) clamp(280px,30%,360px)', gap: 48 }} className="detail-grid">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            <div style={{ display: 'flex', gap: 8 }}>
+              <div className="ld-shimmer" style={{ width: 90, height: 26, borderRadius: 99 }}/>
+              <div className="ld-shimmer" style={{ width: 80, height: 26, borderRadius: 99 }}/>
+            </div>
+            <div className="ld-shimmer" style={{ height: 42, width: '72%' }}/>
+            <div className="ld-shimmer" style={{ height: 16, width: '38%' }}/>
+            <div style={{ height: 1, background: 'var(--border)', margin: '8px 0' }}/>
+            {[100,88,94,82,96].map((w,i) => (
+              <div key={i} className="ld-shimmer" style={{ height: 14, width: `${w}%` }}/>
+            ))}
+          </div>
+          <div className="ld-shimmer" style={{ height: 420, borderRadius: 20 }}/>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Lightbox Modal ────────────────────────────────────────────
+function Lightbox({ photos, startIndex, onClose }) {
+  const [cur, setCur] = useState(startIndex)
   const total = photos.length
+  const touchX = useRef(null)
 
   const prev = useCallback(() => setCur(c => (c - 1 + total) % total), [total])
   const next = useCallback(() => setCur(c => (c + 1) % total), [total])
 
   useEffect(() => {
-    const fn = e => { if (e.key === 'ArrowLeft') prev(); if (e.key === 'ArrowRight') next() }
+    const fn = e => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowLeft') prev()
+      if (e.key === 'ArrowRight') next()
+    }
+    document.body.style.overflow = 'hidden'
     window.addEventListener('keydown', fn)
-    return () => window.removeEventListener('keydown', fn)
-  }, [prev, next])
+    return () => { document.body.style.overflow = ''; window.removeEventListener('keydown', fn) }
+  }, [prev, next, onClose])
+
+  return (
+    <div onClick={onClose} style={{
+      position: 'fixed', inset: 0, zIndex: 9000,
+      background: 'rgba(0,0,0,.93)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      animation: 'fadeIn .15s',
+    }}>
+      <style>{`@keyframes lbIn { from { opacity:0;transform:scale(.95); } to { opacity:1;transform:scale(1); } }`}</style>
+
+      {/* Main image */}
+      <div onClick={e => e.stopPropagation()}
+        onTouchStart={e => { touchX.current = e.touches[0].clientX }}
+        onTouchEnd={e => {
+          if (touchX.current === null) return
+          const dx = e.changedTouches[0].clientX - touchX.current
+          if (Math.abs(dx) > 40) dx < 0 ? next() : prev()
+          touchX.current = null
+        }}
+        style={{ position: 'relative', maxWidth: 'min(92vw,1100px)', maxHeight: '88vh', animation: 'lbIn .2s' }}>
+        <img key={cur} src={photos[cur]} alt={`Photo ${cur+1}`} style={{
+          display: 'block', maxWidth: '100%', maxHeight: '78vh',
+          borderRadius: 14, objectFit: 'contain',
+          boxShadow: '0 32px 80px rgba(0,0,0,.6)',
+        }}/>
+        <div style={{
+          position: 'absolute', bottom: -34, left: '50%', transform: 'translateX(-50%)',
+          color: 'rgba(255,255,255,.55)', fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap',
+        }}>{cur+1} / {total}</div>
+      </div>
+
+      {/* Arrows */}
+      {total > 1 && [
+        { fn: e => { e.stopPropagation(); prev() }, icon: 'chevron_left', side: 'left' },
+        { fn: e => { e.stopPropagation(); next() }, icon: 'chevron_right', side: 'right' },
+      ].map(b => (
+        <button key={b.side} onClick={b.fn} style={{
+          position: 'fixed', [b.side]: 12, top: '50%', transform: 'translateY(-50%)',
+          width: 48, height: 48, borderRadius: '50%',
+          background: 'rgba(255,255,255,.12)', border: '1px solid rgba(255,255,255,.18)',
+          color: '#fff', cursor: 'pointer',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          backdropFilter: 'blur(8px)', transition: 'background .15s',
+        }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.24)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,.12)'}
+        >
+          <span className="material-icons" style={{ fontSize: 26 }}>{b.icon}</span>
+        </button>
+      ))}
+
+      {/* Close */}
+      <button onClick={onClose} style={{
+        position: 'fixed', top: 14, right: 14,
+        width: 44, height: 44, borderRadius: '50%',
+        background: 'rgba(255,255,255,.12)', border: '1px solid rgba(255,255,255,.18)',
+        color: '#fff', cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backdropFilter: 'blur(8px)', transition: 'background .15s',
+      }}
+        onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.24)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,.12)'}
+      >
+        <span className="material-icons">close</span>
+      </button>
+
+      {/* Thumbnail strip */}
+      {total > 1 && (
+        <div onClick={e => e.stopPropagation()} style={{
+          position: 'fixed', bottom: 14, left: '50%', transform: 'translateX(-50%)',
+          display: 'flex', gap: 6,
+          background: 'rgba(0,0,0,.5)', borderRadius: 12, padding: '8px 10px',
+          backdropFilter: 'blur(12px)',
+          maxWidth: 'calc(100vw - 32px)', overflowX: 'auto',
+        }}>
+          {photos.map((url, i) => (
+            <button key={i} onClick={() => setCur(i)} style={{
+              width: 52, height: 38, borderRadius: 7, overflow: 'hidden',
+              border: `2px solid ${i === cur ? '#fff' : 'transparent'}`,
+              opacity: i === cur ? 1 : .45,
+              transition: 'all .15s', flexShrink: 0, padding: 0, cursor: 'pointer',
+            }}>
+              <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Gallery ───────────────────────────────────────────────────
+function Gallery({ photos, titre }) {
+  const [cur, setCur] = useState(0)
+  const [lightbox, setLightbox] = useState(null)
+  const total = photos.length
+  const touchX = useRef(null)
+
+  const prev = useCallback(e => { e?.stopPropagation(); setCur(c => (c - 1 + total) % total) }, [total])
+  const next = useCallback(e => { e?.stopPropagation(); setCur(c => (c + 1) % total) }, [total])
 
   if (total === 0) return (
-    <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-xl)', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 320 }}>
+    <div style={{
+      background: 'var(--surface)', borderRadius: 20,
+      display: 'flex', alignItems: 'center', justifyContent: 'center', height: 320,
+    }}>
       <span className="material-icons" style={{ fontSize: 64, color: 'var(--border)' }}>apartment</span>
     </div>
   )
 
-  if (total === 1) return (
-    <div style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', position: 'relative', paddingBottom: '60%' }}>
-      <img src={photos[0]} alt={titre} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}/>
-    </div>
-  )
-
   return (
-    <div>
-      {/* Main stage */}
-      <div style={{ position: 'relative', borderRadius: 'var(--r-xl)', overflow: 'hidden', paddingBottom: '62%', background: 'var(--surface)', marginBottom: 8 }}>
+    <>
+      {lightbox !== null && (
+        <Lightbox photos={photos} startIndex={lightbox} onClose={() => setLightbox(null)}/>
+      )}
+
+      {/* Main image — aspect ratio fixe, jamais overflow */}
+      <div
+        style={{
+          position: 'relative', width: '100%',
+          aspectRatio: '16/9', maxHeight: 480,
+          borderRadius: 20, overflow: 'hidden',
+          background: 'var(--surface)',
+          cursor: total > 1 ? 'zoom-in' : 'default',
+          marginBottom: 8,
+        }}
+        onTouchStart={e => { touchX.current = e.touches[0].clientX }}
+        onTouchEnd={e => {
+          if (touchX.current === null) return
+          const dx = e.changedTouches[0].clientX - touchX.current
+          if (Math.abs(dx) > 40) dx < 0 ? next() : prev()
+          touchX.current = null
+        }}
+        onClick={() => setLightbox(cur)}
+      >
         {photos.map((url, i) => (
           <img key={i} src={url} alt={`${titre} ${i+1}`} style={{
-            position: 'absolute', inset: 0, width: '100%', height: '100%',
-            objectFit: 'cover', opacity: i === cur ? 1 : 0,
-            transition: 'opacity .4s var(--ease)',
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover',
+            opacity: i === cur ? 1 : 0,
+            transition: 'opacity .38s var(--ease)',
           }}/>
         ))}
 
-        {/* Arrows */}
-        {[{ fn: prev, icon: 'chevron_left', side: 'left' }, { fn: next, icon: 'chevron_right', side: 'right' }].map(b => (
+        {/* Expand hint */}
+        <div style={{
+          position: 'absolute', top: 12, right: 12, zIndex: 4,
+          background: 'rgba(15,14,12,.62)', backdropFilter: 'blur(8px)',
+          borderRadius: 8, padding: '5px 10px',
+          display: 'flex', alignItems: 'center', gap: 5,
+          color: '#fff', fontSize: 11, fontWeight: 600,
+          pointerEvents: 'none',
+        }}>
+          <span className="material-icons" style={{ fontSize: 14 }}>open_in_full</span>
+          Agrandir
+        </div>
+
+        {/* Nav arrows */}
+        {total > 1 && [
+          { fn: prev, icon: 'chevron_left', side: 'left' },
+          { fn: next, icon: 'chevron_right', side: 'right' },
+        ].map(b => (
           <button key={b.side} onClick={b.fn} style={{
-            position: 'absolute', [b.side]: 14, top: '50%', transform: 'translateY(-50%)', zIndex: 5,
-            width: 44, height: 44, borderRadius: '50%',
-            background: 'rgba(255,255,255,.92)', border: '1px solid var(--border)',
+            position: 'absolute', [b.side]: 12, top: '50%', transform: 'translateY(-50%)', zIndex: 5,
+            width: 40, height: 40, borderRadius: '50%',
+            background: 'rgba(255,255,255,.88)', border: '1px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             color: 'var(--ink)', cursor: 'pointer', boxShadow: 'var(--sh-md)',
-            transition: 'transform .15s, box-shadow .15s',
+            transition: 'transform .15s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-50%) scale(1.08)'; e.currentTarget.style.boxShadow = 'var(--sh-lg)' }}
-          onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(-50%)'; e.currentTarget.style.boxShadow = 'var(--sh-md)' }}>
+            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'}
+            onMouseLeave={e => e.currentTarget.style.transform = 'translateY(-50%)'}
+          >
             <span className="material-icons">{b.icon}</span>
           </button>
         ))}
 
         {/* Counter */}
-        <div style={{ position: 'absolute', bottom: 14, right: 14, zIndex: 5, background: 'rgba(15,14,12,.7)', color: '#fff', padding: '5px 12px', borderRadius: 99, fontSize: 12, fontWeight: 600 }}>
-          {cur + 1} / {total}
-        </div>
+        {total > 1 && (
+          <div style={{
+            position: 'absolute', bottom: 12, right: 12, zIndex: 5,
+            background: 'rgba(15,14,12,.7)', color: '#fff',
+            padding: '4px 10px', borderRadius: 99, fontSize: 12, fontWeight: 600,
+          }}>
+            {cur+1} / {total}
+          </div>
+        )}
       </div>
 
       {/* Thumbnails */}
-      <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
-        {photos.slice(0, 6).map((url, i) => (
-          <button key={i} onClick={() => setCur(i)} style={{
-            flex: '0 0 80px', height: 56, borderRadius: 'var(--r-md)', overflow: 'hidden', cursor: 'pointer',
-            border: `2px solid ${i === cur ? 'var(--ink)' : 'transparent'}`,
-            opacity: i === cur ? 1 : .55, transition: 'all .2s', padding: 0,
-          }}>
-            <img src={url} alt={`Thumb ${i+1}`} style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
-          </button>
-        ))}
-      </div>
-    </div>
+      {total > 1 && (
+        <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 4 }}>
+          {photos.slice(0, 8).map((url, i) => (
+            <button key={i} onClick={() => setCur(i)} style={{
+              flex: '0 0 80px', height: 56, borderRadius: 10, overflow: 'hidden',
+              border: `2px solid ${i === cur ? 'var(--ink)' : 'transparent'}`,
+              opacity: i === cur ? 1 : .5, transition: 'all .18s', padding: 0, cursor: 'pointer',
+            }}>
+              <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}/>
+            </button>
+          ))}
+          {total > 8 && (
+            <button onClick={() => setLightbox(0)} style={{
+              flex: '0 0 80px', height: 56, borderRadius: 10, overflow: 'hidden',
+              border: '2px solid var(--border)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              flexDirection: 'column', gap: 2,
+              background: 'var(--surface)', color: 'var(--muted)', padding: 0,
+              fontSize: 11, fontWeight: 600,
+            }}>
+              <span className="material-icons" style={{ fontSize: 16 }}>photo_library</span>
+              +{total - 8}
+            </button>
+          )}
+        </div>
+      )}
+    </>
   )
 }
 
@@ -109,7 +336,7 @@ function BookingCard({ residence }) {
     <div className="booking-card" style={{ textAlign: 'center', color: 'var(--muted)' }}>
       <span className="material-icons" style={{ fontSize: 36, display: 'block', marginBottom: 10, color: 'var(--subtle)' }}>payments</span>
       <p style={{ fontSize: 14 }}>Tarifs sur demande WhatsApp</p>
-      <a href={`https://wa.me/${wa}?text=${encodeURIComponent("Bonjour ! Je souhaite des informations sur la résidence \""+residence.titre+"\"")}` } target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
+      <a href={`https://wa.me/${wa}?text=${encodeURIComponent('Bonjour ! Je souhaite des informations sur la résidence "'+residence.titre+'"')}`} target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
         <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
         Contacter par WhatsApp
       </a>
@@ -118,13 +345,11 @@ function BookingCard({ residence }) {
 
   return (
     <div className="booking-card">
-      {/* Price */}
       <div className="booking-price">{formatPrix(selected?.prix)}</div>
       <div className="booking-price-unit">{selected?.label?.toLowerCase()}</div>
 
       <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }}/>
 
-      {/* Tarif type pills */}
       {Object.keys(tarifs).length > 1 && (
         <div style={{ marginBottom: 16 }}>
           <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 8 }}>Type de durée</div>
@@ -133,7 +358,7 @@ function BookingCard({ residence }) {
               <button key={k} onClick={() => setTypeKey(k)} style={{
                 padding: '7px 14px', borderRadius: 99, fontSize: 12, fontWeight: 600, cursor: 'pointer',
                 background: (typeKey||firstKey) === k ? 'var(--ink)' : 'var(--surface)',
-                color: (typeKey||firstKey) === k ? '#fff' : 'var(--ink-2)',
+                color: (typeKey||firstKey) === k ? 'var(--bg)' : 'var(--ink-2)',
                 border: `1.5px solid ${(typeKey||firstKey) === k ? 'var(--ink)' : 'var(--border)'}`,
                 transition: 'all .15s',
               }}>{t.label}</button>
@@ -142,17 +367,13 @@ function BookingCard({ residence }) {
         </div>
       )}
 
-      {/* Date */}
       <div style={{ marginBottom: 14 }}>
         <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Date d'arrivée</label>
         <input className="input" type="date" min={today} value={date} onChange={e => setDate(e.target.value)}/>
       </div>
 
-      {/* Quantity stepper */}
       <div style={{ marginBottom: 20 }}>
-        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>
-          Durée
-        </label>
+        <label style={{ display: 'block', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>Durée</label>
         <div style={{ display: 'flex', alignItems: 'center', background: 'var(--surface)', border: '1.5px solid var(--border)', borderRadius: 'var(--r-md)', overflow: 'hidden' }}>
           <button onClick={() => setNb(n => Math.max(1, n-1))} style={{ width: 46, height: 44, background: 'none', border: 'none', borderRight: '1px solid var(--border)', color: 'var(--ink)', fontSize: 20, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
             onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
@@ -164,7 +385,6 @@ function BookingCard({ residence }) {
         </div>
       </div>
 
-      {/* Total */}
       {selected && (
         <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-md)', padding: '12px 16px', marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>Total estimé</span>
@@ -172,20 +392,12 @@ function BookingCard({ residence }) {
         </div>
       )}
 
-      {residence.montant_caution > 0 && (
-        <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 5 }}>
-          <span className="material-icons" style={{ fontSize: 14 }}>shield</span>
-          Caution : {formatPrix(residence.montant_caution)}
-        </p>
-      )}
-
-      {/* CTA */}
       <a href={buildWA()} target="_blank" rel="noopener" className="btn-wa" style={{ width: '100%', justifyContent: 'center', fontSize: 15 }}>
         <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
         Réserver par WhatsApp
       </a>
 
-      <button className="btn btn-outline" onClick={() => window.open(`https://wa.me/${SITE.whatsapp}`, '_blank')} style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
+      <button className="btn btn-outline" onClick={() => window.open(`https://wa.me/${wa}`, '_blank')} style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
         Poser une question
       </button>
     </div>
@@ -204,21 +416,7 @@ export default function DetailPage() {
     getResidences().then(all => setSim(all.filter(r => r.id !== id).slice(0, 3)))
   }, [id])
 
-  if (loading) return (
-    <div style={{ minHeight: '100vh', paddingTop: 100, background: 'var(--bg)' }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)' }}>
-        <div className="skeleton" style={{ height: '60vh', borderRadius: 'var(--r-xl)', marginBottom: 32 }}/>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 360px', gap: 48 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div className="skeleton" style={{ height: 40, width: '70%' }}/>
-            <div className="skeleton" style={{ height: 18, width: '45%' }}/>
-            <div className="skeleton" style={{ height: 18, width: '85%' }}/>
-          </div>
-          <div className="skeleton" style={{ height: 400, borderRadius: 'var(--r-xl)' }}/>
-        </div>
-      </div>
-    </div>
-  )
+  if (loading) return <PageLoader/>
 
   if (!res) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', paddingTop: 64 }}>
@@ -238,47 +436,38 @@ export default function DetailPage() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)' }}>
 
         {/* Breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)', flexWrap: 'wrap' }}>
           <Link href="/" style={{ color: 'var(--muted)' }}>Accueil</Link>
           <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
           <Link href="/residences" style={{ color: 'var(--muted)' }}>Résidences</Link>
           <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
-          <span style={{ color: 'var(--ink)', fontWeight: 500 }}>{res.titre}</span>
+          <span style={{ color: 'var(--ink)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{res.titre}</span>
         </div>
 
         <div className="detail-grid">
           {/* Left */}
-          <div>
-            {/* Gallery */}
+          <div style={{ minWidth: 0 }}>
             <div style={{ marginBottom: 36 }}>
-              <Gallery photos={res.photos || []} titre={res.titre} typeBien={res.type_bien}/>
+              <Gallery photos={res.photos || []} titre={res.titre}/>
             </div>
 
             {/* Title + meta */}
             <div style={{ marginBottom: 28 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', marginBottom: 10 }}>
-                <div>
-                  <div style={{ display: 'flex', align: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
-                    <span className="badge badge-muted" style={{ textTransform: 'capitalize' }}>{res.type_bien}</span>
-                    {res.featured && <span className="badge badge-gold"><span className="material-icons" style={{ fontSize: 11 }}>star</span>À la une</span>}
-                  </div>
-                  <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', letterSpacing: '-.025em', lineHeight: 1.1, color: 'var(--ink)' }}>
-                    {res.titre}
-                  </h1>
-                </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+                <span className="badge badge-muted" style={{ textTransform: 'capitalize' }}>{res.type_bien}</span>
+                {res.featured && <span className="badge badge-gold"><span className="material-icons" style={{ fontSize: 11 }}>star</span>À la une</span>}
               </div>
-
-              <div style={{ display: 'flex', align: 'center', gap: 16, flexWrap: 'wrap', color: 'var(--muted)', fontSize: 14 }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span className="material-icons" style={{ fontSize: 16 }}>location_on</span>
-                  {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
-                </span>
-              </div>
+              <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', letterSpacing: '-.025em', lineHeight: 1.1, color: 'var(--ink)', marginBottom: 12 }}>
+                {res.titre}
+              </h1>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--muted)', fontSize: 14 }}>
+                <span className="material-icons" style={{ fontSize: 16 }}>location_on</span>
+                {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
+              </span>
             </div>
 
             <div style={{ height: 1, background: 'var(--border)', marginBottom: 28 }}/>
 
-            {/* Description */}
             {res.description && (
               <div style={{ marginBottom: 32 }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 14 }}>À propos</h2>
@@ -286,7 +475,6 @@ export default function DetailPage() {
               </div>
             )}
 
-            {/* Equipements */}
             {equips.length > 0 && (
               <div style={{ marginBottom: 32 }}>
                 <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 16 }}>Équipements</h2>
@@ -301,29 +489,25 @@ export default function DetailPage() {
               </div>
             )}
 
-            {/* Tarifs table */}
-            <div>
-              <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 16 }}>Tarifs</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
-                {[
-                  { label: 'Nuit',    val: res.prix_nuit },
-                  { label: 'Journée', val: res.prix_journee },
-                  { label: 'Semaine', val: res.prix_semaine },
-                  { label: 'Mois',    val: res.prix_mois },
-                ].filter(t => t.val).map(t => (
-                  <div key={t.label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '16px 20px' }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>{t.label}</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 400, color: 'var(--ink)', letterSpacing: '-.02em' }}>{formatPrix(t.val)}</div>
-                  </div>
-                ))}
-                {res.montant_caution > 0 && (
-                  <div style={{ background: 'var(--gold-pale)', border: '1px solid rgba(201,150,58,.2)', borderRadius: 'var(--r-md)', padding: '16px 20px' }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--gold)', marginBottom: 6 }}>Caution</div>
-                    <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 400, color: 'var(--gold)', letterSpacing: '-.02em' }}>{formatPrix(res.montant_caution)}</div>
-                  </div>
-                )}
+            {/* Tarifs — sans caution */}
+            {[res.prix_nuit, res.prix_journee, res.prix_semaine, res.prix_mois].some(Boolean) && (
+              <div>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 16 }}>Tarifs</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10 }}>
+                  {[
+                    { label: 'Nuit',    val: res.prix_nuit },
+                    { label: 'Journée', val: res.prix_journee },
+                    { label: 'Semaine', val: res.prix_semaine },
+                    { label: 'Mois',    val: res.prix_mois },
+                  ].filter(t => t.val).map(t => (
+                    <div key={t.label} style={{ background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 'var(--r-md)', padding: '16px 20px' }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 6 }}>{t.label}</div>
+                      <div style={{ fontFamily: 'var(--font-display)', fontSize: '1.3rem', fontWeight: 400, color: 'var(--ink)', letterSpacing: '-.02em' }}>{formatPrix(t.val)}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Right — booking */}
