@@ -3,195 +3,230 @@ import Link from 'next/link'
 import { SITE } from '@/lib/config'
 import Icon from '@/components/ui/Icon'
 
-// ── Value pillar card ─────────────────────────────────────────
-function Pillar({ icon, title, desc, delay = 0 }) {
-  return (
-    <div style={{
-      background: 'var(--white)',
-      border: '1px solid var(--border)',
-      borderRadius: 20,
-      padding: 'clamp(24px,3.5vw,36px)',
-      display: 'flex', flexDirection: 'column', gap: 14,
-      animation: `fadeUp .5s cubic-bezier(.22,.68,0,1.2) ${delay}ms both`,
-      transition: 'box-shadow .2s, transform .2s',
-    }}
-    onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 32px rgba(15,14,12,.08)'; e.currentTarget.style.transform = 'translateY(-3px)' }}
-    onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
-      <div style={{
-        width: 48, height: 48, borderRadius: 14,
-        background: 'rgba(255,122,26,.08)',
-        border: '1px solid rgba(255,122,26,.18)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-      }}>
-        <Icon n={icon} size={22} color={'var(--gold)'}/>
-      </div>
-      <div>
-        <h3 style={{
-          fontFamily: 'var(--font-display)', fontSize: 'clamp(1.05rem,1.8vw,1.2rem)',
-          fontWeight: 400, letterSpacing: '-.02em', marginBottom: 7,
-          fontStyle: 'italic', color: 'var(--ink)',
-        }}>{title}</h3>
-        <p style={{ fontSize: 14, lineHeight: 1.75, color: 'var(--muted)' }}>{desc}</p>
-      </div>
-    </div>
-  )
-}
+const STATS = [
+  { num: '2023', label: 'Fondée en', icon: 'calendar_today' },
+  { num: '🇨🇮', label: 'Entreprise ivoirienne', icon: null },
+  { num: '24h', label: 'Support disponible', icon: 'support_agent' },
+  { num: '7j/7', label: 'Jours d'ouverture', icon: 'schedule' },
+]
 
-// ── How-it-works step ─────────────────────────────────────────
-function HowStep({ num, title, desc, last = false }) {
-  return (
-    <div style={{ display: 'flex', gap: 20, marginBottom: last ? 0 : 28 }}>
-      <div style={{
-        width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-        background: 'rgba(255,122,26,.08)',
-        border: '1px solid rgba(255,122,26,.22)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 400,
-        color: 'var(--gold)', fontStyle: 'italic',
-      }}>{num}</div>
-      <div>
-        <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 5, color: 'var(--ink)' }}>{title}</div>
-        <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--muted)' }}>{desc}</p>
-      </div>
-    </div>
-  )
-}
+const VALUES = [
+  {
+    icon: 'check_circle', title: 'Simplicité totale',
+    desc: 'Pas de formulaire. Tout passe par WhatsApp. Trois actions : choisir, cliquer, réserver.',
+  },
+  {
+    icon: 'handshake', title: 'Zéro intermédiaire',
+    desc: 'Échanges directs, sans agences. Relation honnête et confiance immédiate.',
+  },
+  {
+    icon: 'verified', title: 'Transparence',
+    desc: 'Ce que vous voyez = ce que vous aurez. Photos réelles, prix affichés, conditions claires.',
+  },
+  {
+    icon: 'place', title: 'Expérience locale',
+    desc: 'Les meilleurs quartiers d'Abidjan, sélectionnés par une équipe ivoirienne.',
+  },
+]
 
-// ── Main Page ─────────────────────────────────────────────────
+const STEPS = [
+  { num: '01', title: 'Vous explorez', desc: 'Des logements meublés avec des photos fidèles à la réalité.' },
+  { num: '02', title: 'Vous contactez', desc: 'Un bouton → contact direct. Pas de formulaire compliqué.' },
+  { num: '03', title: 'Vous confirmez', desc: 'Simple et rapide. Notre équipe répond en moins de 30 minutes.' },
+  { num: '04', title: 'Vous emménagez', desc: 'La résidence est prête. Clés en main, meublée et climatisée.' },
+]
+
 export default function AProposPage() {
   return (
     <>
       <style>{`
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:none} }
+        .val-card { transition: transform .22s var(--ease), box-shadow .22s var(--ease); }
+        .val-card:hover { transform: translateY(-4px); box-shadow: var(--sh-lg); }
+        .step-line::after {
+          content:'';position:absolute;left:21px;top:52px;bottom:-28px;
+          width:1px;background:var(--border);
+        }
       `}</style>
 
       {/* ── Hero ── */}
-      <div style={{
-        background: 'var(--white)',
-        minHeight: 'clamp(320px,48vw,480px)',
-        display: 'flex', alignItems: 'center',
-        padding: 'clamp(100px,12vw,160px) var(--pad) clamp(60px,8vw,100px)',
-        position: 'relative', overflow: 'hidden',
-        borderBottom: '1px solid var(--border)',
-      }}>
+      <div className="page-hero">
         <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 60% at 80% 50%, rgba(255,122,26,.05) 0%, transparent 70%)',
+          position: 'absolute', inset: 0, opacity: .03, pointerEvents: 'none',
+          backgroundImage: 'linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
         }}/>
-        <div style={{
-          position: 'absolute', bottom: 0, left: 'var(--pad)', right: 'var(--pad)', height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.22) 30%, rgba(255,122,26,.22) 70%, transparent)',
-        }}/>
+        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, var(--gold) 40%, var(--gold) 60%, transparent)', opacity: .4 }}/>
 
-        <div style={{ maxWidth: 1280, margin: '0 auto', width: '100%', position: 'relative', zIndex: 2 }}>
-          <div style={{ animation: 'fadeUp .6s cubic-bezier(.22,.68,0,1.2) both' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              padding: '5px 14px', borderRadius: 99,
-              background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
-              marginBottom: 22,
-            }}>
-              <Icon n="info" size={13} color={'var(--gold)'}/>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--gold)' }}>
-                À propos
-              </span>
-            </div>
-
-            <h1 style={{
-              fontFamily: 'var(--font-display)',
-              fontSize: 'clamp(2.2rem,6vw,4rem)',
-              fontWeight: 400, color: 'var(--ink)',
-              letterSpacing: '-.03em', lineHeight: 1.08,
-              marginBottom: 22, maxWidth: 640,
-            }}>
-              Louez simplement,<br/>
-              <em style={{ color: 'var(--gold)' }}>sans stress à Abidjan</em>
-            </h1>
-
-            <p style={{
-              fontSize: 'clamp(15px,2vw,18px)', lineHeight: 1.75,
-              color: 'var(--muted)', maxWidth: 500, marginBottom: 36,
-            }}>
-              New Horizon, c'est une solution simple pour louer des résidences meublées
-              à Abidjan, sans complications et sans perte de temps.
-              Pas d'intermédiaires, pas de frais cachés.
-            </p>
-
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-              <Link href="/residences" className="btn btn-dark">
-                <Icon n="apartment" size={17}/>
-                Voir les résidences
-              </Link>
-              <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-                <Icon n="chat" size={17}/>
-                Nous contacter
-              </a>
-            </div>
+        <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
+          <div className="page-hero-label">
+            <span style={{ width: 5, height: 5, borderRadius: '50%', background: 'var(--gold)', display: 'inline-block' }}/>
+            À propos
+          </div>
+          <h1 className="page-hero-title">
+            Louez simplement,<br/>
+            <em>sans stress</em><br/>
+            <span className="accent">à Abidjan</span>
+          </h1>
+          <p className="page-hero-desc">
+            New Horizon — une solution directe pour louer des résidences meublées
+            en Côte d'Ivoire. Pas d'intermédiaires, pas de frais cachés.
+          </p>
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <Link href="/residences" className="btn btn-white">
+              <Icon n="apartment" size={17}/>Voir les résidences
+            </Link>
+            <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
+              <Icon n="chat" size={17}/>Nous contacter
+            </a>
           </div>
         </div>
       </div>
 
-      {/* ── Notre objectif ── */}
-      <div style={{ background: 'var(--white)', padding: 'clamp(56px,9vw,96px) var(--pad)' }}>
+      {/* ── Stats ── */}
+      <div style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1 }}>
+            {STATS.map((s, i) => (
+              <div key={i} className="about-stat" style={{
+                borderRadius: 0,
+                borderLeft: i > 0 ? '1px solid var(--border)' : 'none',
+                border: 'none',
+                borderLeft: i > 0 ? '1px solid var(--border)' : 'none',
+                padding: 'clamp(28px,4vw,48px) clamp(20px,3vw,36px)',
+              }}>
+                {s.icon && <Icon n={s.icon} size={20} color={'var(--gold)'} style={{ display: 'block', marginBottom: 12 }}/>}
+                <div className="about-stat-num">{s.num}</div>
+                <div className="about-stat-label">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Notre objectif — split ── */}
+      <div style={{ background: 'var(--white)', padding: 'clamp(64px,9vw,120px) var(--pad)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-            gap: 'clamp(40px,6vw,72px)',
-            alignItems: 'center',
-          }}>
-            <div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'clamp(48px,7vw,96px)', alignItems: 'center' }}>
+            <div style={{ animation: 'fadeUp .5s both' }}>
               <div className="section-label">Notre objectif</div>
-              <h2 className="section-title" style={{ marginBottom: 20, color: 'var(--ink)' }}>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3.2rem)',
+                fontWeight: 400, letterSpacing: '-.03em', lineHeight: 1.08,
+                color: 'var(--ink)', marginBottom: 22,
+              }}>
                 Vous faire gagner<br/><em>du temps</em>
               </h2>
-              <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 18 }}>
+              <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 20 }}>
                 Trouver une bonne résidence à Abidjan peut vite devenir compliqué.
                 Évitez les galères habituelles :
               </p>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
                 {['Informations floues','Prix qui changent','Photos trompeuses'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Icon n="close" size={16} color={'#DC2626'}/>
+                    <div style={{ width: 20, height: 20, borderRadius: 99, background: 'rgba(220,38,38,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Icon n="close" size={13} color={'#DC2626'}/>
+                    </div>
                     <span style={{ fontSize: 14, color: 'var(--muted)' }}>{x}</span>
                   </div>
                 ))}
               </div>
-              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 10 }}>Avec Allons Somo, tout est simple :</p>
+              <div style={{ height: 1, background: 'var(--border)', margin: '20px 0' }}/>
+              <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--ink)', marginBottom: 12 }}>Avec New Horizon :</p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {['Des résidences réelles','Des photos fidèles','Des prix transparents','Une réservation directe'].map((x, i) => (
+                {['Photos fidèles à la réalité','Prix transparents et affichés','Réservation directe WhatsApp','Support disponible 7j/7'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Icon n="check" size={16} color={'#16A34A'}/>
+                    <div style={{ width: 20, height: 20, borderRadius: 99, background: 'rgba(22,163,74,.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <Icon n="check" size={13} color={'#16A34A'}/>
+                    </div>
                     <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{x}</span>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Stats */}
+            {/* Visual block */}
             <div style={{
-              background: 'var(--bg)', border: '1px solid var(--border)',
-              borderRadius: 24, padding: 'clamp(28px,4vw,48px)',
-              display: 'grid', gridTemplateColumns: '1fr 1fr',
-              gap: 1, overflow: 'hidden',
-              boxShadow: '0 4px 24px rgba(15,14,12,.05)',
+              background: 'var(--ink)', borderRadius: 'var(--r-2xl)',
+              padding: 'clamp(32px,5vw,56px)',
+              display: 'flex', flexDirection: 'column', gap: 20,
+              position: 'relative', overflow: 'hidden',
             }}>
-              {[
-                { n: '2023',     label: 'Année de création', icon: 'calendar_today' },
-                { n: '🇨🇮',      label: 'Entreprise ivoirienne', icon: null },
-                { n: 'Abidjan', label: 'Ville couverte',     icon: 'place' },
-                { n: '24h/7j',  label: 'Support disponible', icon: 'support_agent' },
-              ].map((s, i) => (
-                <div key={i} style={{
-                  padding: 'clamp(20px,3vw,32px) clamp(16px,2.5vw,28px)',
-                  background: i % 2 === 0 ? 'var(--white)' : 'var(--bg)',
-                  borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none',
-                  borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
+              <div style={{ position: 'absolute', top: -40, right: -40, width: 220, height: 220, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,122,26,.15) 0%, transparent 70%)' }}/>
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.14em', textTransform: 'uppercase', color: 'rgba(255,255,255,.35)', marginBottom: 16 }}>
+                  Notre mission
+                </div>
+                <p style={{
+                  fontFamily: 'var(--font-display)', fontSize: 'clamp(1.3rem,2.5vw,1.8rem)',
+                  fontWeight: 400, color: '#fff', lineHeight: 1.3, letterSpacing: '-.02em', marginBottom: 24,
                 }}>
-                  {s.icon && <Icon n={s.icon} size={20} color={'var(--gold)'} style={{display: 'block', marginBottom: 8 }}/>}
-                  <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 400, letterSpacing: '-.02em', marginBottom: 4, color: 'var(--ink)' }}>{s.n}</div>
-                  <div style={{ fontSize: 12, color: 'var(--subtle)', fontWeight: 500 }}>{s.label}</div>
+                  "Rendre la location de résidences à Abidjan aussi simple qu'un message WhatsApp."
+                </p>
+                <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+                  {[
+                    { val: 'Simple', icon: 'flash_on' },
+                    { val: 'Direct', icon: 'chat' },
+                    { val: 'Fiable', icon: 'verified' },
+                  ].map((t, i) => (
+                    <div key={i} style={{
+                      display: 'flex', alignItems: 'center', gap: 7,
+                      padding: '8px 16px', borderRadius: 99,
+                      background: 'rgba(255,255,255,.07)', border: '1px solid rgba(255,255,255,.12)',
+                      color: 'rgba(255,255,255,.7)', fontSize: 12, fontWeight: 600,
+                    }}>
+                      <Icon n={t.icon} size={14} color={'var(--gold)'}/>
+                      {t.val}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Comment ça marche ── */}
+      <div style={{ background: 'var(--bg)', padding: 'clamp(64px,9vw,120px) var(--pad)', borderTop: '1px solid var(--border)' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'clamp(48px,7vw,80px)', alignItems: 'start' }}>
+            <div>
+              <div className="section-label">Le processus</div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3.2rem)',
+                fontWeight: 400, letterSpacing: '-.03em', lineHeight: 1.08,
+                color: 'var(--ink)', marginBottom: 20,
+              }}>
+                Comment<br/><em>ça marche ?</em>
+              </h2>
+              <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)', marginBottom: 32 }}>
+                De la recherche à l'emménagement, tout est pensé pour être rapide et sans stress.
+              </p>
+              <Link href="/aide" className="btn btn-dark">
+                <Icon n="help_outline" size={17}/>FAQ complète
+              </Link>
+            </div>
+
+            <div>
+              {STEPS.map((s, i) => (
+                <div key={i} style={{
+                  display: 'flex', gap: 20, paddingBottom: i < STEPS.length - 1 ? 28 : 0,
+                  position: 'relative',
+                }}>
+                  {i < STEPS.length - 1 && (
+                    <div style={{ position: 'absolute', left: 21, top: 44, bottom: 0, width: 1, background: 'var(--border)' }}/>
+                  )}
+                  <div style={{
+                    width: 44, height: 44, borderRadius: 'var(--r-md)', flexShrink: 0, zIndex: 1,
+                    background: 'var(--white)', border: '1px solid var(--border)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontFamily: 'var(--font-display)', fontSize: 14, fontWeight: 400, color: 'var(--gold)',
+                    fontStyle: 'italic', boxShadow: 'var(--sh-sm)',
+                  }}>{s.num}</div>
+                  <div style={{ paddingTop: 10 }}>
+                    <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 400, letterSpacing: '-.01em', color: 'var(--ink)', marginBottom: 6 }}>{s.title}</div>
+                    <p style={{ fontSize: 14, lineHeight: 1.7, color: 'var(--muted)' }}>{s.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -199,158 +234,69 @@ export default function AProposPage() {
         </div>
       </div>
 
-      {/* ── Comment ça marche ── */}
-      <div style={{ background: 'var(--bg)', padding: 'clamp(56px,9vw,96px) var(--pad)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+      {/* ── Nos valeurs ── */}
+      <div style={{ background: 'var(--white)', padding: 'clamp(64px,9vw,120px) var(--pad)', borderTop: '1px solid var(--border)' }}>
         <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-            gap: 'clamp(40px,6vw,72px)',
-            alignItems: 'start',
-          }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 24, marginBottom: 48, flexWrap: 'wrap' }}>
             <div>
-              <div className="section-label">Le processus</div>
-              <h2 className="section-title" style={{ marginBottom: 12, color: 'var(--ink)' }}>
-                Comment<br/><em>ça marche ?</em>
+              <div className="section-label">Ce qui nous différencie</div>
+              <h2 style={{
+                fontFamily: 'var(--font-display)', fontSize: 'clamp(2rem,4vw,3.2rem)',
+                fontWeight: 400, letterSpacing: '-.03em', color: 'var(--ink)',
+              }}>
+                Pourquoi nous<br/>choisir ?
               </h2>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: 'var(--muted)', marginBottom: 32 }}>
-                De la recherche à l'arrivée dans votre résidence,
-                tout est pensé pour être rapide et sans stress.
-              </p>
-              <Link href="/aide" className="btn btn-outline" style={{ display: 'inline-flex' }}>
-                <Icon n="help_outline" size={17}/>
-                FAQ complète
-              </Link>
-            </div>
-
-            <div style={{ paddingTop: 8 }}>
-              <HowStep num="1" title="Vous explorez les résidences"
-                desc="Des logements meublés, propres et prêts à vivre, avec des photos fidèles à la réalité." />
-              <HowStep num="2" title="Vous cliquez sur WhatsApp"
-                desc="Un bouton → vous êtes en contact direct. Pas de formulaire compliqué, tout passe par WhatsApp." />
-              <HowStep num="3" title="Vous confirmez votre réservation"
-                desc="Simple et rapide, sans processus compliqué. Notre équipe vous répond en moins de 30 minutes." />
-              <HowStep num="4" title="Vous emménagez tranquillement"
-                desc="La résidence est prête, vous arrivez sans stress. Clés en main, meublée et climatisée." last />
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* ── Pourquoi Allons Somo ── */}
-      <div style={{ background: 'var(--white)', padding: 'clamp(56px,9vw,96px) var(--pad)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(36px,5vw,56px)' }}>
-            <div className="section-label">Nos avantages</div>
-            <h2 className="section-title" style={{ color: 'var(--ink)' }}>
-              Pourquoi choisir<br/><em>Allons Somo ?</em>
-            </h2>
-          </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))',
-            gap: 18,
-          }}>
-            <Pillar icon="check_circle"
-              title="Simplicité totale"
-              desc="Pas de formulaire compliqué, tout passe par WhatsApp. Trois actions suffisent : choisir, cliquer, réserver."
-              delay={0} />
-            <Pillar icon="handshake"
-              title="Zéro intermédiaire"
-              desc="Vous échangez directement, sans passer par des agences. Relation directe, confiance immédiate."
-              delay={80} />
-            <Pillar icon="verified"
-              title="Transparence"
-              desc="Ce que vous voyez = ce que vous aurez. Photos réelles, prix affichés, conditions claires."
-              delay={160} />
-            <Pillar icon="place"
-              title="Expérience locale"
-              desc="Des résidences situées dans les meilleurs quartiers d'Abidjan, sélectionnées par une équipe ivoirienne."
-              delay={240} />
-          </div>
-        </div>
-      </div>
-
-      {/* ── Notre présence + Vision ── */}
-      <div style={{ background: 'var(--bg)', padding: 'clamp(56px,9vw,96px) var(--pad)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-            gap: 'clamp(40px,6vw,64px)',
-            alignItems: 'center',
-          }}>
-            <div>
-              <div className="section-label">Notre présence</div>
-              <h2 className="section-title" style={{ marginBottom: 20, color: 'var(--ink)' }}>
-                Basé à<br/><em>Abidjan 🇨🇮</em>
-              </h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {[
-                  { icon: 'place',    text: 'Zones couvertes : Cocody, Riviera, Marcory (et plus à venir)' },
-                  { icon: 'schedule', text: 'Réponse rapide via WhatsApp' },
-                  { icon: 'public',   text: "Aujourd'hui à Abidjan, demain dans d'autres villes de CI" },
-                ].map((x, i) => (
-                  <div key={i} style={{
-                    display: 'flex', alignItems: 'flex-start', gap: 12,
-                    padding: '14px 18px', background: 'var(--white)',
-                    border: '1px solid var(--border)', borderRadius: 14,
-                  }}>
-                    <Icon n={x.icon} size={18} color={'var(--gold)'} style={{flexShrink: 0, marginTop: 1 }}/>
-                    <span style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>{x.text}</span>
-                  </div>
-                ))}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 20 }}>
+            {VALUES.map((v, i) => (
+              <div key={i} className="val-card" style={{
+                background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)',
+                padding: 'clamp(24px,3.5vw,36px)', display: 'flex', flexDirection: 'column', gap: 14,
+                animation: 'fadeUp .4s both', animationDelay: `${i * 80}ms`,
+              }}>
+                <div style={{
+                  width: 48, height: 48, borderRadius: 14,
+                  background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.15)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  <Icon n={v.icon} size={22} color={'var(--gold)'}/>
+                </div>
+                <div>
+                  <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.1rem', fontWeight: 400, letterSpacing: '-.02em', marginBottom: 8, color: 'var(--ink)', fontStyle: 'italic' }}>{v.title}</h3>
+                  <p style={{ fontSize: 14, lineHeight: 1.75, color: 'var(--muted)' }}>{v.desc}</p>
+                </div>
               </div>
-            </div>
-
-            <div>
-              <div className="section-label">Notre vision</div>
-              <h2 className="section-title" style={{ marginBottom: 16, color: 'var(--ink)' }}>
-                Simple. Fiable.<br/><em>Local.</em>
-              </h2>
-              <p style={{ fontSize: 15, lineHeight: 1.8, color: 'var(--muted)' }}>
-                Développer un service simple et fiable pour la location
-                de résidences meublées en Côte d'Ivoire.
-                Aujourd'hui à Abidjan, demain dans d'autres villes.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* ── CTA final ── */}
-      <div style={{ padding: 'clamp(56px,9vw,96px) var(--pad)', background: 'var(--white)' }}>
+      {/* ── CTA ── */}
+      <div style={{ padding: 'clamp(64px,9vw,96px) var(--pad)', background: 'var(--bg)', borderTop: '1px solid var(--border)' }}>
         <div style={{
           maxWidth: 1280, margin: '0 auto',
-          background: 'var(--cta-bg)', borderRadius: 24,
-          padding: 'clamp(48px,7vw,80px) var(--pad)',
+          background: 'var(--cta-bg)', borderRadius: 'var(--r-2xl)',
+          padding: 'clamp(48px,6vw,72px) var(--pad)',
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          gap: 32, flexWrap: 'wrap',
-          position: 'relative', overflow: 'hidden',
+          gap: 32, flexWrap: 'wrap', position: 'relative', overflow: 'hidden',
         }}>
-          <div style={{ position: 'absolute', top: -60, right: 40, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,122,26,.12) 0%, transparent 70%)', pointerEvents: 'none' }}/>
+          <div style={{ position: 'absolute', top: -60, right: 40, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,122,26,.1) 0%, transparent 70%)', pointerEvents: 'none' }}/>
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <h2 style={{
-              fontFamily: 'var(--font-display)', fontWeight: 400,
-              fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff',
-              letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12,
-            }}>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff', letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12 }}>
               Prêt à trouver<br/>
-              <em style={{ color: 'rgba(255,255,255,.45)' }}>votre prochaine résidence ?</em>
+              <em style={{ color: 'rgba(255,255,255,.38)' }}>votre prochaine résidence ?</em>
             </h2>
-            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.42)', maxWidth: 400 }}>
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.38)', maxWidth: 400 }}>
               Parcourez notre catalogue et réservez directement par WhatsApp.
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
             <Link href="/residences" className="btn btn-white">
-              <Icon n="apartment" size={17}/>
-              Parcourez les résidences
+              <Icon n="apartment" size={17}/>Parcourir les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-              <Icon n="chat" size={17}/>
-              WhatsApp
+              <Icon n="chat" size={17}/>WhatsApp
             </a>
           </div>
         </div>

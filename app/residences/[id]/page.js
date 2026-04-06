@@ -579,16 +579,20 @@ export default function DetailPage() {
   const equips = Object.entries(EQUIPEMENTS_ICONS).filter(([k]) => (res.equipements || []).includes(k))
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64, overflowX: 'hidden' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 80, overflowX: 'hidden' }}>
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)', overflowX: 'hidden' }}>
 
         {/* Breadcrumb */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)', flexWrap: 'wrap' }}>
-          <Link href="/" style={{ color: 'var(--muted)' }}>Accueil</Link>
-          <Icon n="chevron_right" size={14}/>
-          <Link href="/residences" style={{ color: 'var(--muted)' }}>Résidences</Link>
-          <Icon n="chevron_right" size={14}/>
-          <span style={{ color: 'var(--ink)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{res.titre}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32, fontSize: 11, fontWeight: 700, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--muted)', flexWrap: 'wrap' }}>
+          <Link href="/" style={{ color: 'var(--muted)', transition: 'color .15s' }}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
+            onMouseLeave={e=>e.currentTarget.style.color='var(--muted)'}>Accueil</Link>
+          <Icon n="chevron_right" size={13} color={'var(--subtle)'}/>
+          <Link href="/residences" style={{ color: 'var(--muted)', transition: 'color .15s' }}
+            onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
+            onMouseLeave={e=>e.currentTarget.style.color='var(--muted)'}>Résidences</Link>
+          <Icon n="chevron_right" size={13} color={'var(--subtle)'}/>
+          <span style={{ color: 'var(--ink)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{res.titre}</span>
         </div>
 
         <div className="detail-grid">
