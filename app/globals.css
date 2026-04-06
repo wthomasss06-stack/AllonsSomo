@@ -347,7 +347,7 @@ h1, h2, h3, h4, h5 {
 }
 
 /* GRIDS */
-.grid-auto { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.5vw, 28px); }
+.grid-auto { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: clamp(16px, 2.5vw, 28px); }
 .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(16px, 2.5vw, 28px); }
 .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: clamp(16px, 2.5vw, 28px); }
 
@@ -568,7 +568,6 @@ h1, h2, h3, h4, h5 {
 /* RESPONSIVE */
 @media (max-width: 1024px) {
   .grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .grid-auto { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 900px) {
   .detail-grid { grid-template-columns: 1fr; }
@@ -576,9 +575,8 @@ h1, h2, h3, h4, h5 {
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .nav-burger { display: flex; }
-  .theme-toggle { display: none; }   /* caché dans la nav mobile — reste dans le burger */
+  .theme-toggle { display: none; }
   .grid-3, .grid-2 { grid-template-columns: 1fr; }
-  .grid-auto { grid-template-columns: repeat(2, 1fr); gap: 12px; }
   .hero-title { font-size: clamp(2.6rem, 10vw, 5rem); }
   .feature-strip { grid-template-columns: repeat(2, 1fr); }
   .gallery-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
@@ -599,18 +597,4 @@ h1, h2, h3, h4, h5 {
   .feature-desc { font-size: 12px; }
   .feature-icon { width: 36px; height: 36px; margin-bottom: 12px; font-size: 18px; }
   .stats-row { gap: 24px; }
-  .grid-auto { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  /* Compact card styles for 2-col mobile grid */
-  .res-card-body { padding: 10px 12px 12px; }
-  .res-card-title { font-size: 13px; margin-bottom: 6px; }
-  .res-card-location { font-size: 9px; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .res-card-tags { gap: 4px; }
-  .res-card-tag { font-size: 10px; padding: 2px 6px; gap: 3px; }
-  .res-card-price-overlay { bottom: 8px; left: 8px; }
-  .res-card-price-overlay .price-amount { font-size: 14px; }
-  .res-card-price-overlay .price-unit { font-size: 9px; }
-  .res-card-badges { top: 8px; left: 8px; right: 8px; }
-  .badge { font-size: 9px; padding: 2px 6px; }
-  .slide-dots { bottom: 6px; }
-  .slide-dot { width: 4px; height: 4px; }
 }
