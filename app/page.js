@@ -4,6 +4,87 @@ import Link from 'next/link'
 import { getResidences, SITE, COMMUNES, TYPES_BIEN, formatPrix } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
+// ── Mobile 2×2 Carousel ───────────────────────────────────────
+function MobileCarousel({ items }) {
+  const [page, setPage] = useState(0)
+  const trackRef = useRef(null)
+  const startX = useRef(null)
+  const dragging = useRef(false)
+
+  // Group items into pages of 4 (2 cols × 2 rows)
+  const pages = []
+  for (let i = 0; i < items.length; i += 4) pages.push(items.slice(i, i + 4))
+  const total = pages.length
+
+  const goTo = (p) => {
+    const clamped = Math.max(0, Math.min(p, total - 1))
+    setPage(clamped)
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translateX(${-clamped * 100}%)`
+    }
+  }
+
+  const onTouchStart = (e) => { startX.current = e.touches[0].clientX; dragging.current = true }
+  const onTouchEnd   = (e) => {
+    if (!dragging.current) return
+    const dx = e.changedTouches[0].clientX - startX.current
+    if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1))
+    dragging.current = false
+  }
+  const onMouseDown  = (e) => { startX.current = e.clientX; dragging.current = true }
+  const onMouseUp    = (e) => {
+    if (!dragging.current) return
+    const dx = e.clientX - startX.current
+    if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1))
+    dragging.current = false
+  }
+
+  return (
+    <div>
+      {/* Track */}
+      <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }}
+        onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
+        onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+        <div ref={trackRef} style={{
+          display: 'flex', transition: 'transform .38s cubic-bezier(.4,0,.2,1)',
+          willChange: 'transform', userSelect: 'none',
+        }}>
+          {pages.map((group, gi) => (
+            <div key={gi} style={{
+              minWidth: '100%', display: 'grid',
+              gridTemplateColumns: '1fr 1fr', gap: 10,
+            }}>
+              {group.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dots + arrows */}
+      {total > 1 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 20 }}>
+          <button onClick={() => goTo(page - 1)} disabled={page === 0}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+            <span className="material-icons" style={{ fontSize: 20 }}>chevron_left</span>
+          </button>
+          {pages.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} style={{
+              width: i === page ? 22 : 7, height: 7, borderRadius: 99,
+              background: i === page ? 'var(--ink)' : 'var(--border)',
+              border: 'none', cursor: 'pointer', padding: 0,
+              transition: 'all .25s', flexShrink: 0,
+            }}/>
+          ))}
+          <button onClick={() => goTo(page + 1)} disabled={page === total - 1}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === total - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+            <span className="material-icons" style={{ fontSize: 20 }}>chevron_right</span>
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
 // ── Animated counter ──────────────────────────────────────────
 function Counter({ target, suffix = '' }) {
   const [val, setVal] = useState(0)
@@ -247,12 +328,91 @@ function QuickSearch() {
 }
 
 // ── How it works ──────────────────────────────────────────────
+function StepsCarousel({ steps }) {
+  const [cur, setCur] = useState(0)
+  const trackRef = useRef(null)
+  const startX = useRef(null)
+
+  const goTo = (i) => {
+    const c = Math.max(0, Math.min(i, steps.length - 1))
+    setCur(c)
+    if (trackRef.current) trackRef.current.style.transform = `translateX(${-c * 100}%)`
+  }
+  const onTouchStart = (e) => { startX.current = e.touches[0].clientX }
+  const onTouchEnd   = (e) => {
+    const dx = e.changedTouches[0].clientX - startX.current
+    if (Math.abs(dx) > 40) goTo(cur + (dx < 0 ? 1 : -1))
+  }
+
+  return (
+    <div>
+      <div style={{ overflow: 'hidden' }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+        <div ref={trackRef} style={{ display: 'flex', transition: 'transform .38s cubic-bezier(.4,0,.2,1)', willChange: 'transform' }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{ minWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 8px' }}>
+              <div style={{ position: 'relative', marginBottom: 20 }}>
+                <div style={{
+                  width: 72, height: 72, borderRadius: 'var(--r-xl)',
+                  background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
+                }}>
+                  <span className="material-icons" style={{ fontSize: 32 }}>{s.icon}</span>
+                </div>
+                <div style={{
+                  position: 'absolute', top: -8, right: -8,
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: 'var(--ink)', color: 'var(--bg)',
+                  fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{s.num}</div>
+              </div>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 400, color: 'var(--ink)', marginBottom: 10 }}>{s.title}</div>
+              <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 260 }}>{s.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      {/* Dots + arrows */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 28 }}>
+        <button onClick={() => goTo(cur - 1)} disabled={cur === 0}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: cur === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+          <span className="material-icons" style={{ fontSize: 22 }}>chevron_left</span>
+        </button>
+        {steps.map((_, i) => (
+          <button key={i} onClick={() => goTo(i)} style={{
+            width: i === cur ? 24 : 8, height: 8, borderRadius: 99,
+            background: i === cur ? 'var(--gold)' : 'var(--border)',
+            border: 'none', cursor: 'pointer', padding: 0,
+            transition: 'all .25s', flexShrink: 0,
+          }}/>
+        ))}
+        <button onClick={() => goTo(cur + 1)} disabled={cur === steps.length - 1}
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: cur === steps.length - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+          <span className="material-icons" style={{ fontSize: 22 }}>chevron_right</span>
+        </button>
+      </div>
+      {/* Swipe hint */}
+      <p style={{ textAlign: 'center', fontSize: 11, color: 'var(--muted)', marginTop: 10, letterSpacing: '.04em' }}>
+        ← glissez pour naviguer →
+      </p>
+    </div>
+  )
+}
+
 function HowItWorks() {
   const STEPS = [
     { icon: 'apartment', num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
     { icon: 'chat',      num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'intermédiaire.' },
     { icon: 'check_circle', num: '3', title: 'Confirmez en 2 minutes', desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
   ]
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768)
+    check()
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   return (
     <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
       <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
@@ -260,30 +420,37 @@ function HowItWorks() {
           <div className="section-label">Simple & rapide</div>
           <h2 className="section-title">Comment<br/><em>ça marche ?</em></h2>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 'clamp(16px,3vw,32px)' }}>
-          {STEPS.map((s, i) => (
-            <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
-              <div style={{ position: 'relative', marginBottom: 16 }}>
-                <div style={{
-                  width: 64, height: 64, borderRadius: 'var(--r-xl)',
-                  background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
-                }}>
-                  <span className="material-icons" style={{ fontSize: 28 }}>{s.icon}</span>
+
+        {/* Mobile: carousel | Desktop: grid */}
+        {isMobile ? (
+          <StepsCarousel steps={STEPS} />
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(16px,3vw,32px)' }}>
+            {STEPS.map((s, i) => (
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
+                <div style={{ position: 'relative', marginBottom: 16 }}>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: 'var(--r-xl)',
+                    background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
+                  }}>
+                    <span className="material-icons" style={{ fontSize: 28 }}>{s.icon}</span>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: -8, right: -8,
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: 'var(--ink)', color: 'var(--bg)',
+                    fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{s.num}</div>
                 </div>
-                <div style={{
-                  position: 'absolute', top: -8, right: -8,
-                  width: 22, height: 22, borderRadius: '50%',
-                  background: 'var(--ink)', color: 'var(--bg)',
-                  fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>{s.num}</div>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 400, color: 'var(--ink)', marginBottom: 8 }}>{s.title}</div>
+                <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.6, maxWidth: 220 }}>{s.desc}</p>
               </div>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 400, color: 'var(--ink)', marginBottom: 8 }}>{s.title}</div>
-              <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.6, maxWidth: 220 }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
+
         <div style={{ textAlign: 'center', marginTop: 'clamp(32px,4vw,48px)' }}>
           <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse" style={{ fontSize: 15, padding: '14px 32px' }}>
             <span className="material-icons" style={{ fontSize: 19 }}>chat</span>
@@ -432,9 +599,16 @@ export default function HomePage() {
               ))}
             </div>
           ) : allRes.length > 0 ? (
-            <div className="grid-auto">
-              {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
-            </div>
+            <>
+              {/* Desktop grid */}
+              <div className="grid-auto hide-mobile">
+                {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+              </div>
+              {/* Mobile 2×2 carousel */}
+              <div className="show-mobile">
+                <MobileCarousel items={allRes}/>
+              </div>
+            </>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
               <span className="material-icons" style={{ fontSize: 48, display: 'block', marginBottom: 12, color: 'var(--subtle)' }}>apartment</span>

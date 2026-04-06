@@ -354,12 +354,12 @@ function CookieBanner() {
   const refuse = () => { localStorage.setItem('as-cookies','refused');  setVisible(false) }
   return (
     <div style={{
-      position:'fixed',bottom:20,left:'50%',transform:'translateX(-50%)',
+      position:'fixed',bottom:20,left:16,right:16,
+      margin:'0 auto',maxWidth:540,
       background:'var(--white)',border:'1px solid var(--border)',
       borderRadius:'var(--r-xl)',padding:'16px 20px',
       display:'flex',alignItems:'center',gap:12,
       boxShadow:'var(--sh-xl)',zIndex:8000,
-      width:'calc(100vw - 32px)',maxWidth:540,
       animation:'fadeUp .35s var(--ease) both',flexWrap:'wrap',
     }}>
       <div style={{display:'flex',alignItems:'center',gap:10,flex:'1 1 240px',minWidth:0}}>
