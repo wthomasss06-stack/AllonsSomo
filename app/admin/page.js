@@ -52,22 +52,22 @@ export default function AdminLogin() {
   // Tokens adaptatifs
   const bg        = dark ? '#0E1510' : '#F5F4F1'
   const cardBg    = dark ? 'rgba(24,31,26,.92)' : '#FFFFFF'
-  const cardBorder= dark ? 'rgba(200,112,58,.18)' : 'rgba(201,150,58,.22)'
+  const cardBorder= dark ? 'rgba(255,122,26,.18)' : 'rgba(255,122,26,.22)'
   const textMain  = dark ? '#F5EDD8' : '#0F0E0C'
   const textMuted = dark ? 'rgba(245,237,216,.4)' : '#8A8784'
   const inputBg   = dark ? 'rgba(14,21,16,.8)' : '#FAFAF8'
-  const inputBorder = dark ? 'rgba(200,112,58,.22)' : '#D9D7D4'
+  const inputBorder = dark ? 'rgba(255,122,26,.22)' : '#D9D7D4'
   const subtleText= dark ? 'rgba(245,237,216,.25)' : 'rgba(15,14,12,.3)'
 
   const bgImage = dark
-    ? `radial-gradient(ellipse 70% 60% at 80% 20%, rgba(200,112,58,.08) 0%, transparent 60%),
+    ? `radial-gradient(ellipse 70% 60% at 80% 20%, rgba(255,122,26,.08) 0%, transparent 60%),
        radial-gradient(ellipse 50% 50% at 15% 80%, rgba(26,61,45,.6) 0%, transparent 60%),
-       repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(200,112,58,.025) 40px),
-       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(200,112,58,.025) 40px)`
-    : `radial-gradient(ellipse 70% 60% at 80% 20%, rgba(201,150,58,.06) 0%, transparent 60%),
-       radial-gradient(ellipse 50% 50% at 15% 80%, rgba(201,150,58,.04) 0%, transparent 60%),
-       repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(201,150,58,.018) 40px),
-       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,150,58,.018) 40px)`
+       repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,122,26,.025) 40px),
+       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,122,26,.025) 40px)`
+    : `radial-gradient(ellipse 70% 60% at 80% 20%, rgba(255,122,26,.06) 0%, transparent 60%),
+       radial-gradient(ellipse 50% 50% at 15% 80%, rgba(255,122,26,.04) 0%, transparent 60%),
+       repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,122,26,.018) 40px),
+       repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255,122,26,.018) 40px)`
 
   return (
     <div style={{
@@ -91,7 +91,7 @@ export default function AdminLogin() {
             color: textMain, letterSpacing:'-.02em', marginBottom:6,
             fontStyle:'italic',
           }}>
-            New <span style={{color:'#C8703A'}}>Horizon</span>
+            New <span style={{color:'#FF7A1A'}}>Horizon</span>
           </h1>
           <p style={{ fontSize:12, color: textMuted, letterSpacing:'.06em', textTransform:'uppercase', fontFamily:"'DM Sans',sans-serif" }}>
             Espace Administration
@@ -105,20 +105,20 @@ export default function AdminLogin() {
           borderRadius:18, padding:'36px 32px',
           backdropFilter:'blur(20px)',
           boxShadow: dark
-            ? '0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(200,112,58,.06)'
-            : '0 12px 48px rgba(15,14,12,.08), 0 0 0 1px rgba(201,150,58,.08)',
+            ? '0 24px 60px rgba(0,0,0,.5), 0 0 0 1px rgba(255,122,26,.06)'
+            : '0 12px 48px rgba(15,14,12,.08), 0 0 0 1px rgba(255,122,26,.08)',
           transition: 'background .3s, border-color .3s, box-shadow .3s',
         }}>
           <div style={{ marginBottom:28 }}>
             <div style={{
               display:'inline-flex', alignItems:'center', gap:8,
               padding:'6px 14px', borderRadius:999,
-              background:'rgba(200,112,58,.1)', border:'1px solid rgba(200,112,58,.2)',
+              background:'rgba(255,122,26,.1)', border:'1px solid rgba(255,122,26,.2)',
               fontFamily:"'DM Sans',sans-serif", fontSize:10, fontWeight:700,
-              letterSpacing:'.1em', textTransform:'uppercase', color:'#C8703A',
+              letterSpacing:'.1em', textTransform:'uppercase', color:'#FF7A1A',
               marginBottom:16,
             }}>
-              <span style={{ width:6, height:6, borderRadius:'50%', background:'#C8703A', display:'inline-block' }}/>
+              <span style={{ width:6, height:6, borderRadius:'50%', background:'#FF7A1A', display:'inline-block' }}/>
               Accès restreint
             </div>
             <h2 style={{ fontFamily:"'DM Sans',sans-serif", fontSize:18, fontWeight:700, color: textMain, marginBottom:4 }}>
@@ -156,7 +156,7 @@ export default function AdminLogin() {
                     letterSpacing: show ? 'normal' : '0.1em',
                     boxSizing:'border-box',
                   }}
-                  onFocus={e => e.target.style.borderColor='rgba(200,112,58,.6)'}
+                  onFocus={e => e.target.style.borderColor='rgba(255,122,26,.6)'}
                   onBlur={e => e.target.style.borderColor=error?'rgba(252,165,165,.5)':inputBorder}
                 />
                 <button type="button" onClick={() => setShow(s => !s)} style={{
@@ -180,12 +180,12 @@ export default function AdminLogin() {
 
             <button type="submit" disabled={loading || !password} style={{
               width:'100%', padding:'14px', borderRadius:12, border:'none',
-              background: loading ? 'rgba(200,112,58,.5)' : 'linear-gradient(135deg, #C8703A, #D9844E)',
+              background: loading ? 'rgba(255,122,26,.5)' : 'linear-gradient(135deg, #FF7A1A, #FF9F3A)',
               color:'#fff', fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:800,
               letterSpacing:'.05em', textTransform:'uppercase', cursor: loading ? 'not-allowed' : 'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', gap:8,
               transition:'all .2s',
-              boxShadow: loading ? 'none' : '0 4px 20px rgba(200,112,58,.35)',
+              boxShadow: loading ? 'none' : '0 4px 20px rgba(255,122,26,.35)',
             }}>
               {loading ? (
                 <>

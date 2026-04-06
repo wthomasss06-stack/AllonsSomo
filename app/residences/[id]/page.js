@@ -40,17 +40,17 @@ function PageLoader() {
             <g transform="translate(40,20)">
               <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill="var(--ink)"/>
               <polygon points="70,140 120,140 110,180" fill="var(--ink)"/>
-              <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill="#FF8C42"/>
+              <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill="#FF7A1A"/>
               <polygon points="230,140 270,140 250,170" fill="rgba(255,255,255,0.5)"/>
               <polygon points="320,140 370,140 340,170" fill="rgba(255,255,255,0.5)"/>
               <path d="M 270 260 C 310 260, 340 230, 360 210 C 330 240, 300 280, 270 280 Z" fill="url(#lgs)"/>
               <path d="M 280 290 C 330 290, 360 320, 380 350 C 350 320, 310 310, 260 310 Z" fill="url(#lgb)"/>
-              <text x="220" y="380" fontFamily="'DM Sans',Arial,sans-serif" fontWeight="900" fontSize="36" textAnchor="middle" letterSpacing="2"><tspan fill="var(--ink)">NEW </tspan><tspan fill="#FF8C42">HORIZON</tspan></text>
+              <text x="220" y="380" fontFamily="'DM Sans',Arial,sans-serif" fontWeight="900" fontSize="36" textAnchor="middle" letterSpacing="2"><tspan fill="var(--ink)">NEW </tspan><tspan fill="#FF7A1A">HORIZON</tspan></text>
             </g>
           </svg>
         </div>
         <div style={{ width: 180, height: 2, borderRadius: 99, background: 'var(--border)', overflow: 'hidden' }}>
-          <div style={{ height: '100%', background: '#FF8C42', borderRadius: 99, animation: 'loaderBar 1.4s ease-in-out infinite' }}/>
+          <div style={{ height: '100%', background: '#FF7A1A', borderRadius: 99, animation: 'loaderBar 1.4s ease-in-out infinite' }}/>
         </div>
       </div>
 

@@ -83,8 +83,8 @@ export default function ContactPage() {
               background: 'rgba(255,140,66,.07)', border: '1px solid rgba(255,140,66,.2)',
               marginBottom: 22,
             }}>
-              <span className="material-icons" style={{ fontSize: 13, color: '#FF8C42' }}>contact_support</span>
-              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF8C42' }}>Contact</span>
+              <span className="material-icons" style={{ fontSize: 13, color: '#FF7A1A' }}>contact_support</span>
+              <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF7A1A' }}>Contact</span>
             </div>
 
             <h1 style={{
@@ -92,7 +92,7 @@ export default function ContactPage() {
               fontWeight: 400, letterSpacing: '-.03em', lineHeight: 1.08,
               marginBottom: 18, maxWidth: 600,
             }}>
-              Parlons de votre<br/><em style={{ color: '#FF8C42' }}>prochain logement</em>
+              Parlons de votre<br/><em style={{ color: '#FF7A1A' }}>prochain logement</em>
             </h1>
 
             <p style={{ fontSize: 'clamp(14px,1.8vw,17px)', color: 'var(--muted)', maxWidth: 480, lineHeight: 1.7 }}>
@@ -123,7 +123,7 @@ export default function ContactPage() {
               icon="mail" label="Email"
               value={SITE.email}
               href={`mailto:${SITE.email}`}
-              sub="Pour toute demande formelle" color="#FF8C42"
+              sub="Pour toute demande formelle" color="#FF7A1A"
             />
             <ContactCard
               icon="facebook" label="Facebook"
@@ -131,17 +131,6 @@ export default function ContactPage() {
               href={SITE.facebook}
               sub="Actualités et nouvelles résidences" color="#1877F2"
             />
-          </div>
-
-          {/* Infos rapides à copier */}
-          <div style={{ marginBottom: 'clamp(48px,7vw,72px)' }}>
-            <div className="section-label" style={{ marginBottom: 20 }}>Informations directes</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-              <CopyField label="Email" value={SITE.email}/>
-              <CopyField label="WhatsApp" value={`+${SITE.whatsapp}`}/>
-              <CopyField label="Localisation" value="Abidjan, Côte d'Ivoire"/>
-              <CopyField label="Horaires" value="Tous les jours, 7h–22h"/>
-            </div>
           </div>
 
           {/* Map + infos zone */}
@@ -176,7 +165,7 @@ export default function ContactPage() {
                     padding: '12px 16px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 12,
                   }}>
-                    <span className="material-icons" style={{ fontSize: 18, color: '#FF8C42', flexShrink: 0 }}>{x.icon}</span>
+                    <span className="material-icons" style={{ fontSize: 18, color: '#FF7A1A', flexShrink: 0 }}>{x.icon}</span>
                     <span style={{ fontSize: 14, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}

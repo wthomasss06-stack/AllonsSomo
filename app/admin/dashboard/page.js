@@ -14,9 +14,9 @@ function makeT(dark) {
     bg:      dark ? '#111612' : '#FAFAF8',
     surface: dark ? '#1A2118' : '#FFFFFF',
     border:  dark ? '#2E3830' : '#E8E6E3',
-    borderG: dark ? 'rgba(201,150,58,.3)' : 'rgba(201,150,58,.25)',
-    gold:    '#C9963A',
-    goldL:   '#E8B458',
+    borderG: dark ? 'rgba(255,122,26,.3)' : 'rgba(255,122,26,.25)',
+    gold:    '#FF7A1A',
+    goldL:   '#FF9F3A',
     ink:     dark ? '#F0EBE0' : '#0F0E0C',
     ink2:    dark ? '#D8D2C8' : '#2A2823',
     muted:   dark ? '#8A9088' : '#8A8784',
@@ -35,7 +35,7 @@ const IS = {
   background:'#FAFAF8', border:'1px solid #E8E6E3',
   color:'#0F0E0C', fontSize:13, fontFamily:"'DM Sans',sans-serif", outline:'none', transition:'border-color .18s',
 }
-function onF(e){ e.target.style.borderColor = 'rgba(201,150,58,.5)' }
+function onF(e){ e.target.style.borderColor = 'rgba(255,122,26,.5)' }
 function onB(e){ e.target.style.borderColor = '#E8E6E3' }
 
 // ─── Stat card ────────────────────────────────────────────────
@@ -48,7 +48,7 @@ function Stat({ icon, value, label, accent = T.gold }) {
     }}>
       <div style={{
         width:44, height:44, borderRadius:T.r, flexShrink:0,
-        background:'rgba(201,150,58,.08)', border:'1px solid rgba(201,150,58,.18)',
+        background:'rgba(255,122,26,.08)', border:'1px solid rgba(255,122,26,.18)',
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
         <span className="material-icons" style={{fontSize:20,color:accent}}>{icon}</span>
@@ -66,7 +66,7 @@ function Section({ title, icon, children, style={} }) {
   return (
     <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, boxShadow:'0 1px 4px rgba(15,14,12,.04)', ...style}}>
       <div style={{display:'flex',alignItems:'center',gap:10,paddingBottom:16,marginBottom:18,borderBottom:`1px solid ${T.border}`}}>
-        <div style={{width:34,height:34,borderRadius:T.r,background:'rgba(201,150,58,.08)',border:'1px solid rgba(201,150,58,.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
+        <div style={{width:34,height:34,borderRadius:T.r,background:'rgba(255,122,26,.08)',border:'1px solid rgba(255,122,26,.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
           <span className="material-icons" style={{fontSize:16,color:T.gold}}>{icon}</span>
         </div>
         <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>{title}</h3>
@@ -204,8 +204,8 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
                 return (
                   <button key={eq.value} type="button" onClick={()=>toggleEq(eq.value)} style={{
                     padding:'5px 11px',borderRadius:8,cursor:'pointer',fontSize:11,fontFamily:"'DM Sans',sans-serif",fontWeight:600,
-                    background:on?'rgba(201,150,58,.1)':T.surface,
-                    border:`1px solid ${on?'rgba(201,150,58,.4)':T.border}`,
+                    background:on?'rgba(255,122,26,.1)':T.surface,
+                    border:`1px solid ${on?'rgba(255,122,26,.4)':T.border}`,
                     color:on?T.gold:T.muted, transition:'all .13s',
                   }}>{eq.label}</button>
                 )
@@ -327,7 +327,7 @@ function ResidencesList({ adminKey, onAdd }) {
               <tbody>
                 {list.map(r=>(
                   <tr key={r.id} style={{borderBottom:`1px solid ${T.border}`,transition:'background .14s'}}
-                    onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.03)'}
+                    onMouseEnter={e=>e.currentTarget.style.background='rgba(255,122,26,.03)'}
                     onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
                     <td style={{padding:'12px 15px'}}>
                       {r.photos?.[0]?(
@@ -586,7 +586,7 @@ function AddForm({ adminKey, onSuccess }) {
         boxShadow:saving?'none':`0 6px 24px ${T.gold}30`,transition:'all .18s',
       }}>
         {saving?(
-          <><span style={{width:16,height:16,border:'2px solid rgba(201,150,58,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Publication…</>
+          <><span style={{width:16,height:16,border:'2px solid rgba(255,122,26,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Publication…</>
         ):(
           <><span className="material-icons" style={{fontSize:17}}>publish</span>Publier la résidence</>
         )}
@@ -634,7 +634,7 @@ function MapPicker({ lat, lon, onMove }) {
 
       const goldIcon = L.divIcon({
         className: '',
-        html: `<div style="width:22px;height:22px;border-radius:50%;background:#C9963A;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`,
+        html: `<div style="width:22px;height:22px;border-radius:50%;background:#FF7A1A;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35)"></div>`,
         iconSize: [22,22], iconAnchor: [11,11],
       })
 
@@ -845,7 +845,7 @@ function SettingsTab() {
           boxShadow:saving?'none':`0 4px 16px ${T.gold}28`,transition:'all .18s',
         }}>
           {saving?(
-            <><span style={{width:14,height:14,border:'2px solid rgba(201,150,58,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Enregistrement…</>
+            <><span style={{width:14,height:14,border:'2px solid rgba(255,122,26,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Enregistrement…</>
           ):(
             <><span className="material-icons" style={{fontSize:15}}>save</span>Enregistrer</>
           )}
@@ -885,7 +885,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
             textDecoration:'none', padding:'8px 12px', borderRadius:12,
             transition:'background .18s', flexShrink:0,
           }}
-          onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.06)'}
+          onMouseEnter={e=>e.currentTarget.style.background='rgba(255,122,26,.06)'}
           onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
             <Logo size={36}/>
             <div style={{lineHeight:1}}>
@@ -898,7 +898,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
           <div style={{width:1,height:28,background:T.border,margin:'0 16px',flexShrink:0}}/>
           <div style={{
             padding:'4px 10px', borderRadius:8,
-            background:'rgba(201,150,58,.08)', border:`1px solid rgba(201,150,58,.2)`,
+            background:'rgba(255,122,26,.08)', border:`1px solid rgba(255,122,26,.2)`,
             fontSize:10, fontWeight:700, letterSpacing:'.1em', textTransform:'uppercase',
             color:T.gold, flexShrink:0, fontFamily:"'DM Sans',sans-serif",
           }}>Administration</div>
@@ -911,7 +911,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                   display:'flex', alignItems:'center', gap:7,
                   padding:'8px 14px', borderRadius:10,
                   border:`1px solid ${on ? T.borderG : 'transparent'}`,
-                  background: on ? `rgba(201,150,58,.08)` : 'transparent',
+                  background: on ? `rgba(255,122,26,.08)` : 'transparent',
                   color: on ? T.gold : T.muted,
                   fontFamily:"'DM Sans',sans-serif", fontSize:12, fontWeight:600,
                   cursor:'pointer', transition:'all .16s',
@@ -951,7 +951,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
           </div>
           <button className="admin-hamburger" onClick={()=>setMobMenu(o=>!o)} style={{
             display:'none', padding:8,
-            background:'rgba(201,150,58,.08)', border:`1px solid rgba(201,150,58,.2)`,
+            background:'rgba(255,122,26,.08)', border:`1px solid rgba(255,122,26,.2)`,
             borderRadius:10, color:T.gold, cursor:'pointer',
           }}>
             <span className="material-icons">{mobileMenuOpen?'close':'menu'}</span>
@@ -974,7 +974,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                   display:'flex', alignItems:'center', gap:11,
                   padding:'12px 14px', borderRadius:12,
                   border:`1px solid ${on ? T.borderG : 'transparent'}`,
-                  background: on ? 'rgba(201,150,58,.08)' : 'transparent',
+                  background: on ? 'rgba(255,122,26,.08)' : 'transparent',
                   color: on ? T.gold : T.muted,
                   fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600,
                   cursor:'pointer', textAlign:'left', width:'100%',
@@ -1077,7 +1077,7 @@ export default function AdminDashboard() {
                   background:`linear-gradient(135deg,${T.gold},${T.goldL})`,
                   color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,
                   letterSpacing:'.05em',textTransform:'uppercase',cursor:'pointer',
-                  boxShadow:`0 4px 18px rgba(201,150,58,.3)`,transition:'all .2s',
+                  boxShadow:`0 4px 18px rgba(255,122,26,.3)`,transition:'all .2s',
                 }}
                 onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
                 onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>

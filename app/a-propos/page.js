@@ -18,8 +18,8 @@ function Pillar({ icon, title, desc, delay = 0 }) {
     onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.transform = 'none' }}>
       <div style={{
         width: 48, height: 48, borderRadius: 14,
-        background: 'rgba(201,150,58,.08)',
-        border: '1px solid rgba(201,150,58,.18)',
+        background: 'rgba(255,122,26,.08)',
+        border: '1px solid rgba(255,122,26,.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <span className="material-icons" style={{ fontSize: 22, color: 'var(--gold)' }}>{icon}</span>
@@ -42,8 +42,8 @@ function HowStep({ num, title, desc, last = false }) {
     <div style={{ display: 'flex', gap: 20, marginBottom: last ? 0 : 28 }}>
       <div style={{
         width: 42, height: 42, borderRadius: 13, flexShrink: 0,
-        background: 'rgba(201,150,58,.08)',
-        border: '1px solid rgba(201,150,58,.22)',
+        background: 'rgba(255,122,26,.08)',
+        border: '1px solid rgba(255,122,26,.22)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontFamily: 'var(--font-display)', fontSize: 15, fontWeight: 400,
         color: 'var(--gold)', fontStyle: 'italic',
@@ -76,11 +76,11 @@ export default function AProposPage() {
       }}>
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 70% 60% at 80% 50%, rgba(201,150,58,.05) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 60% at 80% 50%, rgba(255,122,26,.05) 0%, transparent 70%)',
         }}/>
         <div style={{
           position: 'absolute', bottom: 0, left: 'var(--pad)', right: 'var(--pad)', height: 1,
-          background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.22) 30%, rgba(201,150,58,.22) 70%, transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.22) 30%, rgba(255,122,26,.22) 70%, transparent)',
         }}/>
 
         <div style={{ maxWidth: 1280, margin: '0 auto', width: '100%', position: 'relative', zIndex: 2 }}>
@@ -88,7 +88,7 @@ export default function AProposPage() {
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '5px 14px', borderRadius: 99,
-              background: 'rgba(201,150,58,.07)', border: '1px solid rgba(201,150,58,.2)',
+              background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
               marginBottom: 22,
             }}>
               <span className="material-icons" style={{ fontSize: 13, color: 'var(--gold)' }}>info</span>
@@ -328,7 +328,7 @@ export default function AProposPage() {
           gap: 32, flexWrap: 'wrap',
           position: 'relative', overflow: 'hidden',
         }}>
-          <div style={{ position: 'absolute', top: -60, right: 40, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(201,150,58,.12) 0%, transparent 70%)', pointerEvents: 'none' }}/>
+          <div style={{ position: 'absolute', top: -60, right: 40, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(255,122,26,.12) 0%, transparent 70%)', pointerEvents: 'none' }}/>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <h2 style={{
               fontFamily: 'var(--font-display)', fontWeight: 400,

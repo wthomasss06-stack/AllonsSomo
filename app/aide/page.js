@@ -38,8 +38,8 @@ function FaqItem({ item }) {
   return (
     <div style={{
       borderRadius: 14,
-      border: `1px solid ${open ? 'rgba(201,150,58,.3)' : 'var(--border)'}`,
-      background: open ? 'rgba(201,150,58,.03)' : 'var(--white)',
+      border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
+      background: open ? 'rgba(255,122,26,.03)' : 'var(--white)',
       boxShadow: open ? '0 4px 20px rgba(15,14,12,.06)' : '0 1px 3px rgba(15,14,12,.04)',
       transition: 'all .2s cubic-bezier(.4,0,.2,1)',
       marginBottom: 10,
@@ -52,19 +52,19 @@ function FaqItem({ item }) {
       }}>
         <span style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 600,
-          color: open ? '#C9963A' : 'var(--ink)',
+          color: open ? '#FF7A1A' : 'var(--ink)',
           lineHeight: 1.4, transition: 'color .2s',
         }}>{item.q}</span>
         <div style={{
           width: 28, height: 28, borderRadius: 8, flexShrink: 0,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: open ? 'rgba(201,150,58,.1)' : 'var(--bg)',
-          border: `1px solid ${open ? 'rgba(201,150,58,.3)' : 'var(--border)'}`,
+          background: open ? 'rgba(255,122,26,.1)' : 'var(--bg)',
+          border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
           transition: 'all .2s',
         }}>
           <span className="material-icons" style={{
             fontSize: 16,
-            color: open ? '#C9963A' : 'var(--subtle)',
+            color: open ? '#FF7A1A' : 'var(--subtle)',
             transform: open ? 'rotate(180deg)' : 'none',
             transition: 'transform .2s',
           }}>expand_more</span>
@@ -93,23 +93,23 @@ export default function AidePage() {
         {/* Gold top line */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-          background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.3) 30%, rgba(201,150,58,.3) 70%, transparent)',
+          background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.3) 30%, rgba(255,122,26,.3) 70%, transparent)',
         }}/>
         {/* Subtle radial bg */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none',
-          background: 'radial-gradient(ellipse 60% 70% at 90% 50%, rgba(201,150,58,.04) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 60% 70% at 90% 50%, rgba(255,122,26,.04) 0%, transparent 70%)',
         }}/>
 
         <div style={{ maxWidth: 820, margin: '0 auto', position: 'relative', zIndex: 1 }}>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '5px 14px', borderRadius: 99,
-            background: 'rgba(201,150,58,.07)', border: '1px solid rgba(201,150,58,.2)',
+            background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
             marginBottom: 18,
           }}>
-            <span className="material-icons" style={{ fontSize: 13, color: '#C9963A' }}>help_outline</span>
-            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#C9963A' }}>Centre d'aide</span>
+            <span className="material-icons" style={{ fontSize: 13, color: '#FF7A1A' }}>help_outline</span>
+            <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF7A1A' }}>Centre d'aide</span>
           </div>
 
           <h1 style={{
@@ -149,9 +149,9 @@ export default function AidePage() {
               <div style={{
                 width: 32, height: 32, borderRadius: 9,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: 'rgba(201,150,58,.08)', border: '1px solid rgba(201,150,58,.2)',
+                background: 'rgba(255,122,26,.08)', border: '1px solid rgba(255,122,26,.2)',
               }}>
-                <span className="material-icons" style={{ fontSize: 16, color: '#C9963A' }}>{section.icon}</span>
+                <span className="material-icons" style={{ fontSize: 16, color: '#FF7A1A' }}>{section.icon}</span>
               </div>
               <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: 'var(--ink)', letterSpacing: '.02em' }}>
                 {section.cat}
@@ -174,7 +174,7 @@ export default function AidePage() {
           {/* Gold top accent */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-            background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.3) 30%, rgba(201,150,58,.3) 70%, transparent)',
+            background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.3) 30%, rgba(255,122,26,.3) 70%, transparent)',
           }}/>
 
           <div style={{

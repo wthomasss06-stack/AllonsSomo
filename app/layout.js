@@ -12,7 +12,7 @@ export function Logo({ size = 44, force = null, hero = false }) {
   // En mode hero (fond sombre) ou dark → lettre N en blanc
   // En mode clair → lettre N en noir
   const ink = hero || force === 'dark' ? '#FFFFFF' : 'var(--ink)'
-  const accent = '#FF8C42'
+  const accent = '#FF7A1A'
   const textNew = hero || force === 'dark' ? '#FFFFFF' : '#000000'
 
   return (
@@ -218,7 +218,7 @@ function Footer() {
     }}>
       <div style={{
         position: 'absolute', top: 0, left: 'var(--pad)', right: 'var(--pad)',
-        height: '1px', background: 'linear-gradient(90deg, transparent, rgba(201,150,58,.35) 30%, rgba(201,150,58,.35) 70%, transparent)',
+        height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,122,26,.35) 30%, rgba(255,122,26,.35) 70%, transparent)',
       }}/>
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)', position: 'relative' }}>
@@ -232,7 +232,7 @@ function Footer() {
           {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <Logo size={48}/>
+              <Logo size={72}/>
             </div>
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
@@ -288,7 +288,7 @@ function Footer() {
                   <Link href={href} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:14,color:'rgba(201,150,58,.6)'}}>{icon}</span>
+                    <span className="material-icons" style={{fontSize:14,color:'rgba(255,122,26,.6)'}}>{icon}</span>
                     {label}
                   </Link>
                 </li>
@@ -305,7 +305,7 @@ function Footer() {
                   <Link href={`/residences?ville=Abidjan&q=${q}`} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:13,color:'rgba(201,150,58,.5)'}}>place</span>
+                    <span className="material-icons" style={{fontSize:13,color:'rgba(255,122,26,.5)'}}>place</span>
                     {q}
                   </Link>
                 </li>

@@ -16,9 +16,9 @@
   --bg:         #FAFAF8;
   --white:      #FFFFFF;
 
-  --gold:       #C9963A;
-  --gold-light: #E8B458;
-  --gold-pale:  #FBF0DC;
+  --gold:       #FF7A1A;
+  --gold-light: #FF9F3A;
+  --gold-pale:  #FFF0E6;
 
   --font-display: 'DM Serif Display', Georgia, serif;
   --font-ui:      'DM Sans', system-ui, sans-serif;
@@ -71,9 +71,9 @@ html.dark {
   --bg:         #111009;
   --white:      #1E1C19;
 
-  --gold:       #D4A44A;
-  --gold-light: #E8B458;
-  --gold-pale:  #2A2116;
+  --gold:       #FF8C2A;
+  --gold-light: #FF9F3A;
+  --gold-pale:  #2A1800;
 
   --sh-sm:  0 1px 4px rgba(0,0,0,.3), 0 2px 12px rgba(0,0,0,.2);
   --sh-md:  0 4px 24px rgba(0,0,0,.4), 0 1px 4px rgba(0,0,0,.3);
@@ -250,8 +250,8 @@ h1, h2, h3, h4, h5 {
 .btn:active { transform: scale(.97) !important; }
 .btn-dark { background: var(--ink); color: var(--bg); box-shadow: var(--sh-sm); }
 .btn-dark:hover { background: var(--ink-2); box-shadow: var(--sh-md); transform: translateY(-1px); }
-.btn-gold { background: var(--gold); color: var(--white); box-shadow: 0 4px 16px rgba(201,150,58,.3); }
-.btn-gold:hover { background: var(--gold-light); box-shadow: 0 8px 28px rgba(201,150,58,.4); transform: translateY(-2px); }
+.btn-gold { background: var(--gold); color: var(--white); box-shadow: 0 4px 16px rgba(255,122,26,.3); }
+.btn-gold:hover { background: var(--gold-light); box-shadow: 0 8px 28px rgba(255,122,26,.4); transform: translateY(-2px); }
 .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
 .btn-outline:hover { background: var(--surface); border-color: var(--subtle); }
 .btn-white { background: var(--white); color: var(--ink); box-shadow: var(--sh-md); }
@@ -283,7 +283,7 @@ h1, h2, h3, h4, h5 {
 }
 .pill-dark { background: var(--ink); color: var(--bg); }
 .pill-muted { background: var(--surface); color: var(--muted); border: 1px solid var(--border); }
-.pill-gold { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(201,150,58,.2); }
+.pill-gold { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(255,122,26,.2); }
 .pill-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; display: inline-block; }
 .badge {
   display: inline-flex; align-items: center; gap: 5px;
@@ -303,7 +303,7 @@ h1, h2, h3, h4, h5 {
   font-size: 14px; color: var(--ink); outline: none; width: 100%;
   transition: border-color .15s, box-shadow .15s;
 }
-.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,58,.1); }
+.input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,122,26,.1); }
 .input::placeholder { color: var(--subtle); }
 .select {
   height: 46px; padding: 0 40px 0 16px;
@@ -314,7 +314,7 @@ h1, h2, h3, h4, h5 {
   background-repeat: no-repeat; background-position: right 10px center; background-size: 20px;
   transition: border-color .15s, box-shadow .15s;
 }
-.select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(201,150,58,.1); }
+.select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(255,122,26,.1); }
 
 /* SECTION LABEL */
 .section-label {

@@ -268,7 +268,7 @@ function HowItWorks() {
                   width: 64, height: 64, borderRadius: 'var(--r-xl)',
                   background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: '#fff', boxShadow: '0 8px 24px rgba(201,150,58,.3)',
+                  color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
                 }}>
                   <span className="material-icons" style={{ fontSize: 28 }}>{s.icon}</span>
                 </div>
@@ -328,7 +328,7 @@ function Testimonials() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <div style={{
                 width: 38, height: 38, borderRadius: '50%',
-                background: 'var(--gold-pale)', border: '1px solid rgba(201,150,58,.2)',
+                background: 'var(--gold-pale)', border: '1px solid rgba(255,122,26,.2)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 fontFamily: 'var(--font-display)', fontSize: 16, color: 'var(--gold)',
               }}>{r.avatar}</div>
