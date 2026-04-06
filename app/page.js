@@ -707,7 +707,7 @@ export default function HomePage() {
             ].map((f, i) => (
               <div key={i} className="feature-item">
                 <div className="feature-icon">
-                  <Icon n={f.icon} size={20}/>
+                  <Icon n={f.icon} size={36}/>
                 </div>
                 <div className="feature-title">{f.title}</div>
                 <div className="feature-desc">{f.desc}</div>
