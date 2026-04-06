@@ -5,7 +5,88 @@ import { getResidences, SITE, COMMUNES, TYPES_BIEN, formatPrix } from '@/lib/con
 import ResidenceCard from '@/components/ui/ResidenceCard'
 import Icon from '@/components/ui/Icon'
 
-/* ── Animated counter ── */
+// ── Mobile 2×2 Carousel ───────────────────────────────────────
+function MobileCarousel({ items }) {
+  const [page, setPage] = useState(0)
+  const trackRef = useRef(null)
+  const startX = useRef(null)
+  const dragging = useRef(false)
+
+  // Group items into pages of 4 (2 cols × 2 rows)
+  const pages = []
+  for (let i = 0; i < items.length; i += 4) pages.push(items.slice(i, i + 4))
+  const total = pages.length
+
+  const goTo = (p) => {
+    const clamped = Math.max(0, Math.min(p, total - 1))
+    setPage(clamped)
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translateX(${-clamped * 100}%)`
+    }
+  }
+
+  const onTouchStart = (e) => { startX.current = e.touches[0].clientX; dragging.current = true }
+  const onTouchEnd   = (e) => {
+    if (!dragging.current) return
+    const dx = e.changedTouches[0].clientX - startX.current
+    if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1))
+    dragging.current = false
+  }
+  const onMouseDown  = (e) => { startX.current = e.clientX; dragging.current = true }
+  const onMouseUp    = (e) => {
+    if (!dragging.current) return
+    const dx = e.clientX - startX.current
+    if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1))
+    dragging.current = false
+  }
+
+  return (
+    <div>
+      {/* Track */}
+      <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }}
+        onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}
+        onMouseDown={onMouseDown} onMouseUp={onMouseUp}>
+        <div ref={trackRef} style={{
+          display: 'flex', transition: 'transform .38s cubic-bezier(.4,0,.2,1)',
+          willChange: 'transform', userSelect: 'none',
+        }}>
+          {pages.map((group, gi) => (
+            <div key={gi} style={{
+              minWidth: '100%', display: 'grid',
+              gridTemplateColumns: '1fr 1fr', gap: 10,
+            }}>
+              {group.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Dots + arrows */}
+      {total > 1 && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 20 }}>
+          <button onClick={() => goTo(page - 1)} disabled={page === 0}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+            <Icon n="chevron_left" size={20}/>
+          </button>
+          {pages.map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} style={{
+              width: i === page ? 22 : 7, height: 7, borderRadius: 99,
+              background: i === page ? 'var(--ink)' : 'var(--border)',
+              border: 'none', cursor: 'pointer', padding: 0,
+              transition: 'all .25s', flexShrink: 0,
+            }}/>
+          ))}
+          <button onClick={() => goTo(page + 1)} disabled={page === total - 1}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === total - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
+            <Icon n="chevron_right" size={20}/>
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Animated counter ──────────────────────────────────────────
 function Counter({ target, suffix = '' }) {
   const [val, setVal] = useState(0)
   const ref = useRef(null)
@@ -27,28 +108,25 @@ function Counter({ target, suffix = '' }) {
   return <span ref={ref}>{val}{suffix}</span>
 }
 
-/* ── Hero slides ── */
+// ── Hero ──────────────────────────────────────────────────────
 const SLIDES = [
   {
     eyebrow: 'Abidjan · Cocody · Riviera',
-    title: 'Trouvez votre',
-    titleItalic: 'résidence',
+    title: ['Trouvez votre résidence', <em key="e"> en 5 min</em>],
     sub: 'Logements meublés, climatisés, prêts à vivre. Sans frais cachés. Réservation directe sur WhatsApp.',
     localImage: '/hero/hero-1.jpg',
     fallback: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1800&q=85&auto=format&fit=crop',
   },
   {
     eyebrow: 'Cocody · Marcory · Plateau · Yopougon',
-    title: 'Votre chez-vous',
-    titleItalic: 'à Abidjan',
+    title: ['Votre chez-vous', <em key="e"> à Abidjan</em>],
     sub: 'Studios, appartements et villas disponibles dans tous les quartiers. Réponse WhatsApp en moins de 5 min.',
     localImage: '/hero/hero-2.jpg',
     fallback: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1800&q=85&auto=format&fit=crop',
   },
   {
     eyebrow: 'Réservation instantanée',
-    title: 'Réservez en',
-    titleItalic: '30 secondes',
+    title: ['Réservez en', <em key="e"> 30 secondes</em>],
     sub: 'Un clic sur WhatsApp, on vous répond immédiatement. Aucun paiement avant validation.',
     localImage: '/hero/hero-3.jpg',
     fallback: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=1800&q=85&auto=format&fit=crop',
@@ -69,8 +147,10 @@ function useHeroImage(localPath, fallback) {
 function HeroSlide({ slide, active }) {
   const src = useHeroImage(slide.localImage, slide.fallback)
   return (
-    <div className={`hero-slide ${active ? 'active' : 'inactive'}`}
-      style={{ backgroundImage: `url(${src})` }}/>
+    <div
+      className={`hero-slide ${active ? 'active' : 'inactive'}`}
+      style={{ backgroundImage: `url(${src})` }}
+    />
   )
 }
 
@@ -94,63 +174,80 @@ function Hero() {
 
   return (
     <div className="hero">
-      {SLIDES.map((sl, i) => <HeroSlide key={i} slide={sl} active={i === active}/>)}
+      {SLIDES.map((sl, i) => (
+        <HeroSlide key={i} slide={sl} active={i === active} />
+      ))}
       <div className="hero-overlay"/>
 
-      <div className="hero-urgency-badge">
-        <span className="hero-urgency-dot"/>
-        <Icon n="local_fire_department" size={13}/>
-        <span>Très demandé cette semaine</span>
+      {/* Urgency badge */}
+      <div style={{
+        position: 'absolute', top: 80, right: 'var(--pad)', zIndex: 20,
+        background: 'rgba(239,68,68,.92)', backdropFilter: 'blur(12px)',
+        borderRadius: 99, padding: '7px 14px',
+        display: 'flex', alignItems: 'center', gap: 7,
+        boxShadow: '0 4px 20px rgba(239,68,68,.4)',
+        animation: 'pulseUrgency 2.5s ease-in-out infinite',
+      }}>
+        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', display: 'inline-block', animation: 'blink 1.2s ease-in-out infinite' }}/>
+        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.04em', display:'flex', alignItems:'center', gap:5 }}><Icon n="local_fire_department" size={14}/> Très demandé cette semaine</span>
       </div>
 
-      <div className="hero-content">
-        <div style={{ opacity: fading ? 0 : 1, transition: 'opacity .5s, transform .55s', transform: fading ? 'translateY(14px)' : 'none' }}>
-          <div className="hero-eyebrow">{s.eyebrow}</div>
-          <h1 className="hero-title">
-            {s.title}<br/><em>{s.titleItalic}</em>
+      {/* Content */}
+      <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="hero-content">
+          <div className="hero-eyebrow" style={{ opacity: fading ? 0 : 1, transition: 'opacity .5s', transform: fading ? 'translateY(-8px)' : 'none', transitionProperty: 'opacity, transform' }}>
+            {s.eyebrow}
+          </div>
+          <h1 className="hero-title" style={{ opacity: fading ? 0 : 1, transform: fading ? 'translateY(16px)' : 'none', transition: 'opacity .55s .06s, transform .55s .06s' }}>
+            {s.title[0]}<br/>{s.title[1]}
           </h1>
-          <p className="hero-sub">{s.sub}</p>
-          <div className="hero-actions">
+          <p className="hero-sub" style={{ opacity: fading ? 0 : 1, transition: 'opacity .55s .12s' }}>
+            {s.sub}
+          </p>
+          <div className="hero-actions" style={{ opacity: fading ? 0 : 1, transition: 'opacity .55s .18s' }}>
             <Link href="/residences" className="btn btn-white">
               <Icon n="apartment" size={17}/>
               Voir les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
               <Icon n="chat" size={17}/>
-              <Icon n="local_fire_department" size={13}/>
-              Réserver (2 min)
+              <Icon n="local_fire_department" size={14}/> Réserver maintenant (réponse en 2 min)
             </a>
           </div>
-          <div className="hero-trust">
+
+          {/* Trust bar sous les CTA */}
+          <div style={{
+            display: 'flex', gap: 20, marginTop: 24, flexWrap: 'wrap',
+            opacity: fading ? 0 : 1, transition: 'opacity .55s .22s',
+          }}>
             {[
-              { icon: 'shield',   text: 'Aucun paiement avant validation' },
-              { icon: 'verified', text: 'Visites réelles vérifiées' },
-              { icon: 'lock',     text: 'Zéro arnaque garantie' },
+              { icon: 'shield', text: 'Aucun paiement avant validation' },
+              { icon: 'verified', text: 'Visite réelle avant publication' },
+              { icon: 'lock', text: 'Zéro arnaque garantie' },
             ].map((t, i) => (
-              <div key={i} className="hero-trust-item">
-                <Icon n={t.icon} size={13} color={'rgba(255,255,255,.55)'}/>
-                <span>{t.text}</span>
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icon n={t.icon} size={14} color={'rgba(255,255,255,.7)'}/>
+                <span style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', fontWeight: 500 }}>{t.text}</span>
               </div>
             ))}
           </div>
         </div>
       </div>
 
+      {/* Dots */}
       <div className="hero-dots">
         {SLIDES.map((_, i) => (
-          <button key={i} className={`hero-dot${i === active ? ' active' : ''}`}
-            onClick={() => go(i)} aria-label={`Slide ${i+1}`}/>
+          <button key={i} className={`hero-dot${i === active ? ' active' : ''}`} onClick={() => go(i)} aria-label={`Slide ${i+1}`}/>
         ))}
       </div>
     </div>
   )
 }
 
-/* ── Search Bar ── */
+// ── Search quick filter ───────────────────────────────────────
 function QuickSearch() {
-  const [ville, setVille]   = useState('')
-  const [type, setType]     = useState('')
-  const [budget, setBudget] = useState('')
+  const [ville, setVille] = useState('')
+  const [type, setType]   = useState('')
 
   const handleSearch = () => {
     const params = new URLSearchParams()
@@ -159,120 +256,141 @@ function QuickSearch() {
     window.location.href = `/residences${params.toString() ? '?' + params : ''}`
   }
 
-  const BUDGETS = [
-    { label: 'Tout budget', val: '' },
-    { label: '< 100 000 XOF', val: '0-100000' },
-    { label: '100k – 250k XOF', val: '100000-250000' },
-    { label: '250k – 500k XOF', val: '250000-500000' },
-    { label: '> 500 000 XOF', val: '500000-' },
+  const QUICK_SUGGESTIONS = [
+    { label: 'Studio à Cocody', ville: 'Abidjan', type: 'studio' },
+    { label: 'Villa avec piscine', ville: '', type: 'villa' },
+    { label: 'Appartement Plateau', ville: 'Abidjan', type: 'appartement' },
   ]
 
   return (
-    <div className="search-pill">
-      <div className="search-pill-field">
-        <div className="search-pill-label">Commune / Quartier</div>
-        <select value={ville} onChange={e => setVille(e.target.value)} className="search-pill-select">
-          <option value="">Toutes communes</option>
-          {COMMUNES.map(v => <option key={v} value={v}>{v}</option>)}
-        </select>
+    <div>
+      <div style={{
+        background: 'var(--white)', borderRadius: 'var(--r-2xl)',
+        boxShadow: 'var(--sh-xl)', padding: 8,
+        display: 'flex', alignItems: 'center', gap: 0,
+        flexWrap: 'wrap',
+      }}>
+        <div style={{ flex: '1 1 180px', padding: '10px 20px', borderRight: '1px solid var(--border)', minWidth: 0 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: 4 }}>Commune / Quartier</div>
+          <select value={ville} onChange={e => setVille(e.target.value)} style={{
+            width: '100%', border: 'none', outline: 'none', background: 'transparent',
+            fontFamily: 'var(--font-ui)', fontSize: 14, color: ville ? 'var(--ink)' : 'var(--subtle)', cursor: 'pointer',
+          }}>
+            <option value="">Toutes communes</option>
+            {COMMUNES.map(v => <option key={v} value={v}>{v}</option>)}
+          </select>
+        </div>
+
+        <div style={{ flex: '1 1 160px', padding: '10px 20px', minWidth: 0 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: 4 }}>Type</div>
+          <select value={type} onChange={e => setType(e.target.value)} style={{
+            width: '100%', border: 'none', outline: 'none', background: 'transparent',
+            fontFamily: 'var(--font-ui)', fontSize: 14, color: type ? 'var(--ink)' : 'var(--subtle)', cursor: 'pointer',
+          }}>
+            <option value="">Tous types</option>
+            {TYPES_BIEN.map(t => <option key={t} value={t} style={{ textTransform: 'capitalize' }}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
+          </select>
+        </div>
+
+        <div style={{ padding: '4px 4px 4px 8px', flexShrink: 0 }}>
+          <button className="btn btn-dark" onClick={handleSearch} style={{ borderRadius: 'var(--r-lg)', padding: '13px 24px' }}>
+            <Icon n="search" size={18}/>
+            Explorer
+          </button>
+        </div>
       </div>
-      <div className="search-pill-sep"/>
-      <div className="search-pill-field">
-        <div className="search-pill-label">Type de bien</div>
-        <select value={type} onChange={e => setType(e.target.value)} className="search-pill-select">
-          <option value="">Tous types</option>
-          {TYPES_BIEN.map(t => <option key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
-        </select>
-      </div>
-      <div className="search-pill-sep"/>
-      <div className="search-pill-field">
-        <div className="search-pill-label">Budget</div>
-        <select value={budget} onChange={e => setBudget(e.target.value)} className="search-pill-select">
-          {BUDGETS.map(b => <option key={b.val} value={b.val}>{b.label}</option>)}
-        </select>
-      </div>
-      <div className="search-pill-action">
-        <button className="btn btn-dark search-pill-btn" onClick={handleSearch}>
-          <Icon n="search" size={18}/>
-          Explorer
-        </button>
+
+      {/* Suggestions rapides */}
+      <div style={{ display: 'flex', gap: 8, marginTop: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+        <span style={{ fontSize: 12, color: 'var(--muted)' }}>Populaires :</span>
+        {QUICK_SUGGESTIONS.map((s, i) => (
+          <button key={i} onClick={() => {
+            const params = new URLSearchParams()
+            if (s.ville) params.set('ville', s.ville)
+            if (s.type) params.set('type', s.type)
+            window.location.href = `/residences${params.toString() ? '?' + params : ''}`
+          }} style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            padding: '5px 12px', borderRadius: 99,
+            background: 'var(--white)', border: '1px solid var(--border)',
+            fontSize: 12, fontWeight: 500, color: 'var(--ink-2)',
+            cursor: 'pointer', fontFamily: 'var(--font-ui)',
+            transition: 'all .15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.background = 'var(--surface)' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--white)' }}>
+            <Icon n="search" size={12}/>
+            {s.label}
+          </button>
+        ))}
       </div>
     </div>
   )
 }
 
-/* ── Featured card ── */
-function FeaturedCard({ residence, size = 'normal' }) {
-  const imgs = residence.images || []
-  const imgSrc = imgs[0] || null
-  const prix = residence.prix_min ? formatPrix(residence.prix_min) : null
-  return (
-    <Link href={`/residences/${residence.id}`} className={`feat-card feat-card-${size}`}>
-      <div className="feat-card-img">
-        {imgSrc
-          ? <img src={imgSrc} alt={residence.titre} loading="lazy"/>
-          : <div className="feat-card-placeholder"><Icon n="apartment" size={40}/></div>
-        }
-        <div className="feat-card-overlay"/>
-        <div className="feat-card-info">
-          <div className="feat-card-location">{residence.commune || residence.ville}</div>
-          <div className="feat-card-name">{residence.titre}</div>
-          {prix && <div className="feat-card-price">{prix}<span>/mois</span></div>}
-        </div>
-      </div>
-    </Link>
-  )
-}
-
-/* ── How It Works ── */
-const STEPS = [
-  { icon: 'apartment',    num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
-  { icon: 'chat',         num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'intermédiaire.' },
-  { icon: 'check_circle', num: '3', title: 'Confirmez en 2 minutes',    desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
-]
-
-function StepsCarousel() {
+// ── How it works ──────────────────────────────────────────────
+function StepsCarousel({ steps }) {
   const [cur, setCur] = useState(0)
   const trackRef = useRef(null)
   const startX = useRef(null)
+
   useEffect(() => {
     const id = setInterval(() => {
       setCur(c => {
-        const next = (c + 1) % STEPS.length
+        const next = (c + 1) % steps.length
         if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
         return next
       })
-    }, 3200)
+    }, 3000)
     return () => clearInterval(id)
-  }, [])
+  }, [steps.length])
+
   const onTouchStart = (e) => { startX.current = e.touches[0].clientX }
   const onTouchEnd = (e) => {
     const dx = e.changedTouches[0].clientX - startX.current
     if (Math.abs(dx) > 40) {
-      const next = Math.max(0, Math.min(cur + (dx < 0 ? 1 : -1), STEPS.length - 1))
+      const next = Math.max(0, Math.min(cur + (dx < 0 ? 1 : -1), steps.length - 1))
       setCur(next)
       if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
     }
   }
+
   return (
     <div>
       <div style={{ overflow: 'hidden' }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
         <div ref={trackRef} style={{ display: 'flex', transition: 'transform .5s cubic-bezier(.4,0,.2,1)', willChange: 'transform' }}>
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <div key={i} style={{ minWidth: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 8px' }}>
-              <div className="step-icon-wrap">
-                <div className="step-icon"><Icon n={s.icon} size={28}/></div>
-                <div className="step-num">{s.num}</div>
+              <div style={{ position: 'relative', marginBottom: 20 }}>
+                <div style={{
+                  width: 72, height: 72, borderRadius: 'var(--r-xl)',
+                  background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
+                }}>
+                  <Icon n={s.icon} size={32}/>
+                </div>
+                <div style={{
+                  position: 'absolute', top: -8, right: -8,
+                  width: 24, height: 24, borderRadius: '50%',
+                  background: 'var(--ink)', color: 'var(--bg)',
+                  fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{s.num}</div>
               </div>
-              <div className="step-title">{s.title}</div>
-              <p className="step-desc">{s.desc}</p>
+              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, fontWeight: 400, color: 'var(--ink)', marginBottom: 10 }}>{s.title}</div>
+              <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.7, maxWidth: 260 }}>{s.desc}</p>
             </div>
           ))}
         </div>
       </div>
+      {/* Dots only — no arrows */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 28 }}>
-        {STEPS.map((_, i) => (
-          <div key={i} style={{ width: i === cur ? 24 : 8, height: 8, borderRadius: 99, background: i === cur ? 'var(--gold)' : 'var(--border)', transition: 'all .3s' }}/>
+        {steps.map((_, i) => (
+          <div key={i} style={{
+            width: i === cur ? 24 : 8, height: 8, borderRadius: 99,
+            background: i === cur ? 'var(--gold)' : 'var(--border)',
+            transition: 'all .3s',
+          }}/>
         ))}
       </div>
     </div>
@@ -280,62 +398,88 @@ function StepsCarousel() {
 }
 
 function HowItWorks() {
+  const STEPS = [
+    { icon: 'apartment', num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
+    { icon: 'chat',      num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'intermédiaire.' },
+    { icon: 'check_circle', num: '3', title: 'Confirmez en 2 minutes', desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
+  ]
   const [isMobile, setIsMobile] = useState(false)
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
-    check(); window.addEventListener('resize', check)
+    check()
+    window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
   return (
     <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
       <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'clamp(36px,5vw,56px)', flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <div className="section-label">Simple & rapide</div>
-            <h2 className="section-title">Comment<br/><em>ça marche ?</em></h2>
-          </div>
-          <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse" style={{ fontSize: 14 }}>
-            <Icon n="chat" size={18}/>
-            Démarrer sur WhatsApp
-          </a>
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(32px,5vw,48px)' }}>
+          <div className="section-label">Simple & rapide</div>
+          <h2 className="section-title">Comment<br/><em>ça marche ?</em></h2>
         </div>
-        {isMobile ? <StepsCarousel/> : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 0, position: 'relative' }}>
-            <div style={{ position: 'absolute', top: 32, left: '17%', right: '17%', height: 1, background: 'var(--border)', zIndex: 0 }}/>
+
+        {/* Mobile: carousel | Desktop: grid */}
+        {isMobile ? (
+          <StepsCarousel steps={STEPS} />
+        ) : (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 'clamp(16px,3vw,32px)' }}>
             {STEPS.map((s, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative', zIndex: 1, padding: '0 clamp(16px,3vw,40px)' }}>
-                <div className="step-icon-wrap">
-                  <div className="step-icon"><Icon n={s.icon} size={28}/></div>
-                  <div className="step-num">{s.num}</div>
+              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', position: 'relative' }}>
+                <div style={{ position: 'relative', marginBottom: 16 }}>
+                  <div style={{
+                    width: 64, height: 64, borderRadius: 'var(--r-xl)',
+                    background: 'linear-gradient(135deg, var(--gold), var(--gold-light))',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
+                  }}>
+                    <Icon n={s.icon} size={28}/>
+                  </div>
+                  <div style={{
+                    position: 'absolute', top: -8, right: -8,
+                    width: 22, height: 22, borderRadius: '50%',
+                    background: 'var(--ink)', color: 'var(--bg)',
+                    fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{s.num}</div>
                 </div>
-                <div className="step-title">{s.title}</div>
-                <p className="step-desc">{s.desc}</p>
+                <div style={{ fontFamily: 'var(--font-display)', fontSize: 18, fontWeight: 400, color: 'var(--ink)', marginBottom: 8 }}>{s.title}</div>
+                <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.6, maxWidth: 220 }}>{s.desc}</p>
               </div>
             ))}
           </div>
         )}
+
+        <div style={{ textAlign: 'center', marginTop: 'clamp(32px,4vw,48px)' }}>
+          <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse" style={{ fontSize: 15, padding: '14px 32px' }}>
+            <Icon n="chat" size={19}/>
+            <Icon n="local_fire_department" size={16}/> Démarrer ma recherche sur WhatsApp
+          </a>
+        </div>
       </div>
     </div>
   )
 }
 
-/* ── Testimonials ── */
-const REVIEWS = [
-  { name: 'Kofi A.',  zone: 'Cocody',  text: "J'ai trouvé mon appartement en moins d'une heure. Le suivi WhatsApp est très réactif, top service !", avatar: 'K' },
-  { name: 'Marie D.', zone: 'Plateau', text: "Résidence exactement comme sur les photos. Aucune mauvaise surprise à l'arrivée. Je recommande vraiment !", avatar: 'M' },
-  { name: 'Serge B.', zone: 'Marcory', text: "Réponse en 3 minutes sur WhatsApp. Clé en main, meublé, climatisé. Parfait pour un séjour professionnel.", avatar: 'S' },
-]
-
+// ── Testimonials ──────────────────────────────────────────────
 function Testimonials() {
+  const REVIEWS = [
+    { name: 'Kofi A.',  zone: 'Cocody',  text: "J'ai trouvé mon appartement en moins d'une heure. Le suivi WhatsApp est très réactif, top service !", avatar: 'K' },
+    { name: 'Marie D.', zone: 'Plateau', text: "Résidence exactement comme sur les photos. Aucune mauvaise surprise à l'arrivée. Je recommande vraiment !", avatar: 'M' },
+    { name: 'Serge B.', zone: 'Marcory', text: "Réponse en 3 minutes sur WhatsApp. Clé en main, meublé, climatisé. Parfait pour un séjour professionnel.", avatar: 'S' },
+  ]
   const [cur, setCur] = useState(0)
   const [isMobile, setIsMobile] = useState(false)
   const trackRef = useRef(null)
   const startX = useRef(null)
+
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768)
-    check(); window.addEventListener('resize', check)
+    check()
+    window.addEventListener('resize', check)
     return () => window.removeEventListener('resize', check)
   }, [])
+
+  // Auto-slide every 3s on mobile
   useEffect(() => {
     if (!isMobile) return
     const id = setInterval(() => {
@@ -344,9 +488,10 @@ function Testimonials() {
         if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
         return next
       })
-    }, 3200)
+    }, 3000)
     return () => clearInterval(id)
   }, [isMobile])
+
   const onTouchStart = (e) => { startX.current = e.touches[0].clientX }
   const onTouchEnd = (e) => {
     const dx = e.changedTouches[0].clientX - startX.current
@@ -356,240 +501,133 @@ function Testimonials() {
       if (trackRef.current) trackRef.current.style.transform = `translateX(${-next * 100}%)`
     }
   }
+
   const ReviewCard = ({ r }) => (
-    <div className="review-card">
-      <div style={{ display: 'flex', gap: 2, marginBottom: 14 }}>
-        {[0,1,2,3,4].map(j => <span key={j} style={{ color: '#F59E0B', fontSize: 16 }}>★</span>)}
+    <div style={{
+      background: 'var(--white)', border: '1px solid var(--border)',
+      borderRadius: 'var(--r-xl)', padding: 'clamp(20px,3vw,28px)',
+      display: 'flex', flexDirection: 'column', gap: 14,
+    }}>
+      <div style={{ display: 'flex', gap: 2 }}>
+        {'★★★★★'.split('').map((s, j) => <span key={j} style={{ color: '#F59E0B', fontSize: 17 }}>{s}</span>)}
       </div>
-      <p className="review-text">"{r.text}"</p>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'auto', paddingTop: 18, borderTop: '1px solid var(--border)' }}>
-        <div className="review-avatar">{r.avatar}</div>
+      <p style={{ fontSize: 14, color: 'var(--ink-2)', lineHeight: 1.7, flex: 1, fontStyle: 'italic' }}>"{r.text}"</p>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: '50%',
+          background: 'var(--gold-pale)', border: '1px solid rgba(255,122,26,.2)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'var(--font-display)', fontSize: 16, color: 'var(--gold)',
+        }}>{r.avatar}</div>
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
-          <div style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-            {r.zone} · <Icon n="check_circle" size={12} color={'#16A34A'}/> Client vérifié
-          </div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', display:'flex', alignItems:'center', gap:4 }}>{r.zone} · <Icon n="check_circle" size={12} color={'#16A34A'}/><span>Client vérifié</span></div>
         </div>
       </div>
     </div>
   )
+
   return (
     <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap', gap: 16 }}>
-        <div>
-          <div className="section-label">Avis clients vérifiés</div>
-          <h2 className="section-title">Ils nous font<br/><em>confiance</em></h2>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          {[0,1,2,3,4].map(i => <Icon key={i} n="star" size={18} color="#F59E0B"/>)}
-          <span style={{ fontSize: 14, color: 'var(--muted)', marginLeft: 8 }}>4.9 / 5 · 120+ avis</span>
-        </div>
+      <div style={{ textAlign: 'center', marginBottom: 'clamp(32px,5vw,48px)' }}>
+        <div className="section-label">Avis clients vérifiés</div>
+        <h2 className="section-title">Ils nous font<br/><em>confiance</em></h2>
+        <p style={{ fontSize: 14, color: 'var(--muted)', marginTop: 10 }}>
+          <span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:2,marginBottom:4}}>
+            {[0,1,2,3,4].map(i=><Icon key={i} n="star" size={16} color="#F59E0B"/>)}
+            <span style={{fontSize:14,color:'var(--muted)',marginLeft:6}}>4.9/5 sur 120+ réservations ce mois</span>
+          </span>
+        </p>
       </div>
+
       {isMobile ? (
+        /* Mobile: auto-slide carousel, no arrows */
         <div>
-          <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-            <div ref={trackRef} style={{ display: 'flex', transition: 'transform .5s cubic-bezier(.4,0,.2,1)', willChange: 'transform' }}>
-              {REVIEWS.map((r, i) => <div key={i} style={{ minWidth: '100%' }}><ReviewCard r={r}/></div>)}
-            </div>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 18 }}>
-            {REVIEWS.map((_, i) => <div key={i} style={{ width: i === cur ? 22 : 7, height: 7, borderRadius: 99, background: i === cur ? 'var(--gold)' : 'var(--border)', transition: 'all .3s' }}/>)}
-          </div>
-        </div>
-      ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
-          {REVIEWS.map((r, i) => <ReviewCard key={i} r={r}/>)}
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── Mobile 2×2 Carousel ── */
-function MobileCarousel({ items }) {
-  const [page, setPage] = useState(0)
-  const trackRef = useRef(null)
-  const startX = useRef(null)
-  const dragging = useRef(false)
-  const pages = []
-  for (let i = 0; i < items.length; i += 4) pages.push(items.slice(i, i + 4))
-  const total = pages.length
-  const goTo = (p) => {
-    const clamped = Math.max(0, Math.min(p, total - 1))
-    setPage(clamped)
-    if (trackRef.current) trackRef.current.style.transform = `translateX(${-clamped * 100}%)`
-  }
-  return (
-    <div>
-      <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }}
-        onTouchStart={e => { startX.current = e.touches[0].clientX; dragging.current = true }}
-        onTouchEnd={e => { if (!dragging.current) return; const dx = e.changedTouches[0].clientX - startX.current; if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1)); dragging.current = false }}
-        onMouseDown={e => { startX.current = e.clientX; dragging.current = true }}
-        onMouseUp={e => { if (!dragging.current) return; const dx = e.clientX - startX.current; if (Math.abs(dx) > 40) goTo(page + (dx < 0 ? 1 : -1)); dragging.current = false }}>
-        <div ref={trackRef} style={{ display: 'flex', transition: 'transform .38s cubic-bezier(.4,0,.2,1)', willChange: 'transform', userSelect: 'none' }}>
-          {pages.map((group, gi) => (
-            <div key={gi} style={{ minWidth: '100%', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              {group.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
-            </div>
-          ))}
-        </div>
-      </div>
-      {total > 1 && (
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 20 }}>
-          <button onClick={() => goTo(page - 1)} disabled={page === 0} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}><Icon n="chevron_left" size={20}/></button>
-          {pages.map((_, i) => <button key={i} onClick={() => goTo(i)} style={{ width: i === page ? 22 : 7, height: 7, borderRadius: 99, background: i === page ? 'var(--ink)' : 'var(--border)', border: 'none', cursor: 'pointer', padding: 0, transition: 'all .25s', flexShrink: 0 }}/>)}
-          <button onClick={() => goTo(page + 1)} disabled={page === total - 1} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === total - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}><Icon n="chevron_right" size={20}/></button>
-        </div>
-      )}
-    </div>
-  )
-}
-
-/* ── Main Page ── */
-export default function HomePage() {
-  const [residences, setResidences] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [isMobile, setIsMobile] = useState(false)
-
-  useEffect(() => {
-    getResidences().then(data => { setResidences(data); setLoading(false) })
-  }, [])
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check(); window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  const featured = residences.filter(r => r.featured).slice(0, 3)
-  const display3  = featured.length > 0 ? featured : residences.slice(0, 3)
-
-  return (
-    <>
-      <style>{`
-        @keyframes waPulse { 0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.3)} 60%{box-shadow:0 4px 40px rgba(37,211,102,.6),0 0 0 8px rgba(37,211,102,.12)} }
-        .btn-wa-pulse { animation: waPulse 2.4s ease-in-out infinite; }
-        @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
-        @keyframes blinkCursor { 0%,100%{opacity:1} 50%{opacity:0} }
-      `}</style>
-
-      <Hero/>
-
-      {/* Floating search bar */}
-      <div style={{ background: 'var(--bg)', padding: '0 var(--pad)' }}>
-        <div style={{ maxWidth: 980, margin: '0 auto', transform: 'translateY(-40px)' }}>
-          <QuickSearch/>
-        </div>
-      </div>
-
-      {/* Stats ticker */}
-      <div className="ticker-strip">
-        <div className="ticker-track">
-          {[0, 1].map(rep => (
-            <div key={rep} className="ticker-items">
-              {[
-                { icon: 'apartment',  text: 'Résidences actives à Abidjan' },
-                { icon: 'star',       text: '4.9 / 5 · Clients satisfaits' },
-                { icon: 'chat',       text: '< 5 min · Réponse WhatsApp' },
-                { icon: 'verified',   text: '100% Visites vérifiées' },
-                { icon: 'shield',     text: 'Zéro arnaque garantie' },
-                { icon: 'bolt',       text: 'Réservation en 30 secondes' },
-              ].map((item, i) => (
-                <span key={i} className="ticker-item">
-                  <Icon n={item.icon} size={14} color={'var(--gold)'}/>
-                  {item.text}
-                  <span className="ticker-dot">·</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Editorial Split */}
-      <div className="section" style={{ maxWidth: 1280, margin: '0 auto', paddingBottom: 0 }}>
-        <div className="editorial-split">
-          <div>
-            <div className="section-label">01 Notre valeur</div>
-            <h2 className="editorial-headline">
-              Pas votre agence<br/>
-              immobilière <em>ordinaire</em>
-            </h2>
-            <p style={{ fontSize: 15, color: 'var(--muted)', lineHeight: 1.8, maxWidth: 380, margin: '22px 0 32px' }}>
-              Nous sélectionnons des résidences meublées de qualité à Abidjan. Réservation directe sur WhatsApp, sans intermédiaire, sans frais cachés.
-            </p>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 36 }}>
-              <Link href="/residences" className="btn btn-dark" style={{ borderRadius: 'var(--r-lg)', padding: '14px 28px' }}>
-                <Icon n="apartment" size={17}/>
-                Voir les résidences
-              </Link>
-              <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn btn-outline" style={{ borderRadius: 'var(--r-lg)', padding: '14px 22px' }}>
-                <Icon n="chat" size={17}/>
-                WhatsApp
-              </a>
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, paddingTop: 28, borderTop: '1px solid var(--border)' }}>
-              {[
-                { icon: 'verified',      text: 'Visite réelle avant chaque publication' },
-                { icon: 'shield',        text: 'Aucun paiement avant confirmation' },
-                { icon: 'support_agent', text: 'Support disponible 7j/7 sur WhatsApp' },
-              ].map((f, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ width: 36, height: 36, borderRadius: 'var(--r-md)', background: 'var(--surface)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <Icon n={f.icon} size={18} color={'var(--gold)'}/>
-                  </div>
-                  <span style={{ fontSize: 13, color: 'var(--ink-2)', fontWeight: 500 }}>{f.text}</span>
+          <div style={{ overflow: 'hidden', borderRadius: 'var(--r-xl)' }}
+            onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+            <div ref={trackRef} style={{
+              display: 'flex',
+              transition: 'transform .5s cubic-bezier(.4,0,.2,1)',
+              willChange: 'transform',
+            }}>
+              {REVIEWS.map((r, i) => (
+                <div key={i} style={{ minWidth: '100%' }}>
+                  <ReviewCard r={r} />
                 </div>
               ))}
             </div>
           </div>
+          {/* Dots only */}
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 18 }}>
+            {REVIEWS.map((_, i) => (
+              <div key={i} style={{
+                width: i === cur ? 22 : 7, height: 7, borderRadius: 99,
+                background: i === cur ? 'var(--gold)' : 'var(--border)',
+                transition: 'all .3s',
+              }}/>
+            ))}
+          </div>
+        </div>
+      ) : (
+        /* Desktop: grid */
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+          {REVIEWS.map((r, i) => <ReviewCard key={i} r={r} />)}
+        </div>
+      )}
+    </div>
+  )
+}
 
-          {/* Featured cards cluster */}
-          {loading ? (
-            <div className="feat-cards-cluster">
-              <div className="skeleton" style={{ flex: 1, minHeight: 420, borderRadius: 'var(--r-xl)' }}/>
-              <div className="feat-cards-side">
-                <div className="skeleton" style={{ flex: 1, borderRadius: 'var(--r-xl)', minHeight: 195 }}/>
-                <div className="skeleton" style={{ flex: 1, borderRadius: 'var(--r-xl)', minHeight: 195 }}/>
-              </div>
-            </div>
-          ) : display3.length > 0 ? (
-            <div className="feat-cards-cluster">
-              {display3[0] && <FeaturedCard residence={display3[0]} size="large"/>}
-              <div className="feat-cards-side">
-                {display3[1] && <FeaturedCard residence={display3[1]} size="small"/>}
-                {display3[2] && <FeaturedCard residence={display3[2]} size="small"/>}
-              </div>
-            </div>
-          ) : (
-            <div style={{ background: 'var(--surface)', borderRadius: 'var(--r-xl)', minHeight: 420, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Icon n="apartment" size={52} color={'var(--subtle)'}/>
-            </div>
-          )}
+// ── Main Page ─────────────────────────────────────────────────
+export default function HomePage() {
+  const [residences, setResidences] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    getResidences().then(data => { setResidences(data); setLoading(false) })
+  }, [])
+
+  const featured = residences.filter(r => r.featured).slice(0, 3)
+  const display3  = featured.length > 0 ? featured : residences.slice(0, 3)
+  const allRes    = residences
+
+  return (
+    <>
+      <style>{`
+        @keyframes pulseUrgency { 0%,100%{opacity:1} 50%{opacity:.75} }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.2} }
+        @keyframes waPulse { 0%,100%{box-shadow:0 4px 20px rgba(37,211,102,.3)} 60%{box-shadow:0 4px 40px rgba(37,211,102,.6),0 0 0 8px rgba(37,211,102,.12)} }
+        .btn-wa-pulse { animation: waPulse 2.4s ease-in-out infinite; }
+      `}</style>
+
+      {/* ── Hero ── */}
+      <Hero/>
+
+      {/* ── Quick Search ── */}
+      <div style={{ background: 'var(--bg)', padding: '0 var(--pad)' }}>
+        <div style={{ maxWidth: 860, margin: '0 auto', transform: 'translateY(-32px)' }}>
+          <QuickSearch/>
         </div>
       </div>
 
-      {/* Marquee Headline + Stats */}
-      <div className="marquee-section">
-        <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)' }}>
-          <div className="marquee-headline">
-            New Horizon signifie<br/>
-            <span className="marquee-italic">Trouver un chez-soi</span>
-            <span className="marquee-cursor">_</span>
-          </div>
+      {/* ── Stats (crédibles) ── */}
+      <div style={{ background: 'var(--bg)', padding: '0 var(--pad) clamp(56px,9vw,96px)' }}>
+        <div style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{
-            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-            gap: 1, background: 'var(--border)', border: '1px solid var(--border)',
-            borderRadius: 'var(--r-xl)', overflow: 'hidden', marginTop: 52,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: 1, background: 'var(--border)',
+            border: '1px solid var(--border)', borderRadius: 'var(--r-xl)', overflow: 'hidden',
           }}>
             {[
-              { n: residences.length > 0 ? residences.length : 0, suf: '', label: 'Résidences actives', ld: loading },
-              { n: 120, suf: '+', label: 'Réservations ce mois', ld: false },
-              { n: 5,   suf: ' min', label: 'Réponse WhatsApp', ld: false },
-              { n: 50,  suf: '+', label: 'Clients actifs', ld: false },
+              { n: residences.length > 0 ? residences.length : 0, suf: '', label: 'Résidences actives', loading },
+              { n: 120, suf: '+', label: 'Réservations ce mois', loading: false },
+              { n: 5, suf: ' min', label: 'Réponse WhatsApp', loading: false },
+              { n: 50, suf: '+', label: 'Clients actifs', loading: false },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--surface)', padding: 'clamp(24px,4vw,40px) clamp(20px,3vw,32px)' }}>
+              <div key={i} style={{ background: 'var(--white)', padding: 'clamp(24px,4vw,40px) clamp(20px,3vw,36px)' }}>
                 <div className="stat-number">
-                  {s.ld ? <span style={{ color: 'var(--subtle)' }}>—</span> : <Counter target={s.n} suffix={s.suf}/>}
+                  {s.loading ? <span style={{ color: 'var(--subtle)' }}>—</span> : <Counter target={s.n} suffix={s.suf}/>}
                 </div>
                 <div className="stat-label">{s.label}</div>
               </div>
@@ -598,18 +636,22 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* All Residences */}
-      <div style={{ background: 'var(--bg)' }}>
+      {/* ── Featured Residences ── */}
+      <div style={{ background: 'var(--surface)', overflow: 'hidden' }}>
         <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
             <div>
-              <div className="section-label">Catalogue 2025</div>
-              <h2 className="section-title">Choisissez<br/><em>votre résidence</em></h2>
+              <div className="section-label">
+                Catalogue 2025
+              </div>
+              <h2 className="section-title">Toutes nos<br/><em>résidences</em></h2>
             </div>
             <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
-              Voir tout <Icon n="arrow_forward" size={18}/>
+              Voir tout
+              <Icon n="arrow_forward" size={18}/>
             </Link>
           </div>
+
           {loading ? (
             <div className="grid-auto">
               {[1,2,3,4,5,6].map(i => (
@@ -623,22 +665,23 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-          ) : residences.length > 0 ? (
-            isMobile
-              ? <MobileCarousel items={residences}/>
-              : <div className="grid-auto">{residences.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}</div>
+          ) : allRes.length > 0 ? (
+            <div className="grid-auto">
+              {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+            </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
-              <Icon n="apartment" size={48} color={'var(--subtle)'} style={{ display: 'block', margin: '0 auto 12px' }}/>
+              <Icon n="apartment" size={48} color={'var(--subtle)'} style={{display: 'block', marginBottom: 12 }}/>
               <p>Aucune résidence disponible pour le moment.</p>
             </div>
           )}
         </div>
       </div>
 
+      {/* ── How It Works ── */}
       <HowItWorks/>
 
-      {/* Value Props */}
+      {/* ── Value Props ── */}
       <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
         <div className="value-props-grid">
           <div>
@@ -647,13 +690,14 @@ export default function HomePage() {
               Votre accès aux<br/><em>plus belles résidences</em>
             </h2>
             <p className="section-desc" style={{ marginBottom: 36 }}>
-              New Horizon vous donne accès à de belles résidences meublées à Abidjan, directement réservables. Des logements soigneusement sélectionnés — prix clairs, photos fidèles.
+              New Horizon vous donne accès à de belles résidences meublées à Abidjan, directement réservables. Des logements soigneusement sélectionnés par notre équipe — prix clairs, photos fidèles, réservation en quelques clics.
             </p>
             <Link href="/residences" className="btn btn-dark">
               <Icon n="apartment" size={17}/>
               Voir les résidences
             </Link>
           </div>
+
           <div className="feature-strip">
             {[
               { icon: 'verified',      title: 'Visite réelle avant publication', desc: 'Chaque bien est inspecté physiquement. Zéro arnaque possible.' },
@@ -662,7 +706,9 @@ export default function HomePage() {
               { icon: 'support_agent', title: 'Support 24h/7j',                   desc: 'On répond toujours, même le weekend et les jours fériés.' },
             ].map((f, i) => (
               <div key={i} className="feature-item">
-                <div className="feature-icon"><Icon n={f.icon} size={36}/></div>
+                <div className="feature-icon">
+                  <Icon n={f.icon} size={36}/>
+                </div>
                 <div className="feature-title">{f.title}</div>
                 <div className="feature-desc">{f.desc}</div>
               </div>
@@ -671,26 +717,33 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* ── Testimonials ── */}
       <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
         <Testimonials/>
       </div>
 
-      {/* CTA Banner */}
+      {/* ── CTA Banner ── */}
       <div style={{ padding: 'clamp(56px,9vw,100px) var(--pad)' }}>
-        <div className="cta-banner">
-          <div className="cta-glow"/>
+        <div style={{
+          maxWidth: 1280, margin: '0 auto',
+          background: 'var(--cta-bg)', borderRadius: 'var(--r-2xl)',
+          padding: 'clamp(48px,7vw,80px) var(--pad)',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          gap: 32, flexWrap: 'wrap', position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', top: -40, right: 60, width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,211,102,.1) 0%, transparent 70%)', pointerEvents: 'none' }}/>
           <div style={{ position: 'relative', zIndex: 1 }}>
-            <h2 className="cta-banner-title">
-              <span><Icon n="local_fire_department" size={22} color={'#EF4444'}/> Trouvez votre résidence</span>
-              <em>avant ce soir</em>
+            <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff', letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12 }}>
+              <span style={{display:'flex',alignItems:'center',gap:10}}><Icon n="local_fire_department" size={20} color={'#EF4444'} style={{fontSize:'inherit'}}/> Trouvez votre résidence</span><em style={{ color: 'rgba(255,255,255,.45)' }}>avant ce soir</em>
             </h2>
-            <p className="cta-banner-sub">
-              <Icon n="smartphone" size={16}/>
-              Cliquez et discutez directement avec un agent — réponse garantie en 2 min.
+            <p style={{ fontSize: 15, color: 'rgba(255,255,255,.45)', maxWidth: 400 }}>
+              <span style={{display:'flex',alignItems:'center',gap:7}}><Icon n="smartphone" size={16}/> Cliquez et discutez directement avec un agent — réponse garantie en 2 min.</span>
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
-            <Link href="/residences" className="btn btn-white">Explorer les résidences</Link>
+            <Link href="/residences" className="btn btn-white">
+              Explorer les résidences
+            </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
               <Icon n="chat" size={17}/>
               Réserver sur WhatsApp
@@ -699,12 +752,24 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Sticky WhatsApp */}
-      <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener"
+      {/* ── Sticky WhatsApp CTA ── */}
+      <a
+        href={`https://wa.me/${SITE.whatsapp}`}
+        target="_blank" rel="noopener"
         title="Réserver via WhatsApp"
-        className="wa-sticky"
-        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.animationName = 'none' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.animationName = 'waPulse' }}>
+        style={{
+          position: 'fixed', bottom: 24, right: 24, zIndex: 7000,
+          display: 'flex', alignItems: 'center', gap: 10,
+          background: '#25D366', color: '#fff',
+          padding: '13px 22px', borderRadius: 99,
+          fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: 14,
+          textDecoration: 'none',
+          animation: 'waPulse 2.4s ease-in-out infinite',
+          transition: 'transform .18s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.animation = 'none' }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.animation = 'waPulse 2.4s ease-in-out infinite' }}
+      >
         <Icon n="chat" size={20}/>
         Réserver · 2 min
       </a>
