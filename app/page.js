@@ -407,9 +407,9 @@ export default function HomePage() {
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
             <div>
               <div className="section-label">
-                Sélection · <span style={{ color: '#EF4444', display:'inline-flex', alignItems:'center', gap:4 }}><span className="material-icons" style={{fontSize:14}}>warning</span> Dernières disponibilités</span>
+                Catalogue 2025 · Toutes nos résidences
               </div>
-              <h2 className="section-title">Résidences<br/><em>à la une</em></h2>
+              <h2 className="section-title">Résidences<br/><em>disponibles</em></h2>
             </div>
             <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
               Voir tout
