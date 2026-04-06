@@ -131,7 +131,9 @@ export default function ResidenceCard({ residence, index = 0 }) {
   const visible = useScrollReveal(wrapRef)
 
   const photos   = (residence.photos || []).filter(Boolean)
-  const equips   = (residence.equipements || []).slice(0, 3)
+  const allEquips = (residence.equipements || [])
+  const equips   = allEquips.slice(0, 2)
+  const extra    = allEquips.length - 2
   const prix     = residence.prix_nuit || residence.prix_journee || residence.prix_mensuel
   const prixUnit = residence.prix_nuit ? '/nuit' : residence.prix_journee ? '/j' : '/mois'
 
@@ -143,13 +145,14 @@ export default function ResidenceCard({ residence, index = 0 }) {
         transform:  visible ? 'translateY(0) scale(1)' : 'translateY(26px) scale(.97)',
         transition: `opacity .5s ease ${index * 65}ms, transform .5s ease ${index * 65}ms`,
         borderRadius: 'var(--r-xl)',
+        height: '100%',
       }}
     >
       <div
         ref={tiltRef}
-        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s' }}
+        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s', height: '100%' }}
       >
-        <Link href={`/residences/${residence.id}`} style={{ display: 'block', textDecoration: 'none' }}>
+        <Link href={`/residences/${residence.id}`} style={{ display: 'block', textDecoration: 'none', height: '100%' }}>
           <article className="res-card" style={{ transform: 'none' }}>
 
             <Slideshow
@@ -178,8 +181,8 @@ export default function ResidenceCard({ residence, index = 0 }) {
                       </span>
                     )
                   })}
-                  {(residence.equipements || []).length > 3 && (
-                    <span className="res-card-tag">+{(residence.equipements).length - 3}</span>
+                  {extra > 0 && (
+                    <span className="res-card-tag">+{extra}</span>
                   )}
                 </div>
               )}
