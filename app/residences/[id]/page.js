@@ -484,6 +484,7 @@ function SharePanel({ title }) {
           marginTop: 10, padding: 14, borderRadius: 'var(--r-md)',
           background: 'var(--surface)', border: '1px solid var(--border)',
           animation: 'fadeUp .18s var(--ease)',
+          overflow: 'hidden', width: '100%', boxSizing: 'border-box',
         }}>
           <p style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 10 }}>
             Envoyer l'annonce à vos amis
@@ -516,7 +517,7 @@ function SharePanel({ title }) {
           </div>
 
           {/* Copier le lien */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px', overflow: 'hidden', minWidth: 0 }}>
             <span className="material-icons" style={{ fontSize: 15, color: 'var(--muted)', flexShrink: 0 }}>link</span>
             <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {typeof window !== 'undefined' ? window.location.href : '…'}

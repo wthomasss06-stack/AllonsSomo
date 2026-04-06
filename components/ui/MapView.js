@@ -213,7 +213,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 10, isolation: 'isolate' }}>
       <style>{`
         .lf-wrap .leaflet-container { border-radius: 16px !important; font-family: var(--font-ui); }
         ${dark ? '.lf-wrap .leaflet-tile-pane { filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(88%); }' : ''}

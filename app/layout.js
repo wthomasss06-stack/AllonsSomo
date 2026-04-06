@@ -87,35 +87,40 @@ function PageLoader() {
   const pathname = usePathname()
   const [visible, setVisible] = useState(true)
   const [leaving, setLeaving] = useState(false)
+  const [isDark, setIsDark] = useState(false)
   const prev = useRef(null)
   const minTimer = useRef(null)
   const navTimer = useRef(null)
 
-  // Initial page load — show loader, hide after min 1.4s
+  useEffect(() => {
+    const check = () => setIsDark(document.documentElement.classList.contains('dark'))
+    check()
+    const obs = new MutationObserver(check)
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => obs.disconnect()
+  }, [])
+
   useEffect(() => {
     minTimer.current = setTimeout(() => {
       setLeaving(true)
-      setTimeout(() => setVisible(false), 600)
-    }, 1400)
+      setTimeout(() => setVisible(false), 700)
+    }, 1600)
     return () => clearTimeout(minTimer.current)
   }, [])
 
-  // Navigation between pages — show briefly
   useEffect(() => {
     if (prev.current === null) { prev.current = pathname; return }
     if (prev.current === pathname) return
     prev.current = pathname
-    setVisible(true)
-    setLeaving(false)
+    setVisible(true); setLeaving(false)
     clearTimeout(navTimer.current)
     navTimer.current = setTimeout(() => {
       setLeaving(true)
-      setTimeout(() => setVisible(false), 500)
-    }, 900)
+      setTimeout(() => setVisible(false), 600)
+    }, 950)
     return () => clearTimeout(navTimer.current)
   }, [pathname])
 
-  // Trigger on link clicks
   useEffect(() => {
     const fn = (e) => {
       const a = e.target.closest('a[href]')
@@ -130,65 +135,104 @@ function PageLoader() {
 
   if (!visible) return null
 
+  const dark = isDark
+  const bg      = dark ? '#0C0C0A' : '#F5F4F0'
+  const logoN   = dark ? '#FFFFFF' : '#111110'
+  const logoBg  = dark ? '#1C1C19' : '#E8E7E2'
+  const dimText = dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.2)'
+  const ringCol = dark ? 'rgba(255,122,26,0.1)'  : 'rgba(255,122,26,0.15)'
+  const dotCol  = dark ? 'rgba(255,255,255,0.12)': 'rgba(0,0,0,0.1)'
+
+  // 8 dots en cercle
+  const dots = Array.from({ length: 8 }, (_, i) => {
+    const angle = (i / 8) * Math.PI * 2
+    const r = 58
+    return { x: Math.cos(angle) * r, y: Math.sin(angle) * r, delay: i * 0.12 }
+  })
+
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 99999,
-      background: '#0A0A08',
-      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 32,
+      background: bg,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       opacity: leaving ? 0 : 1,
-      transition: leaving ? 'opacity 0.55s cubic-bezier(.4,0,.2,1)' : 'none',
+      transition: leaving ? 'opacity 0.65s cubic-bezier(.4,0,.2,1)' : 'none',
       pointerEvents: leaving ? 'none' : 'all',
     }}>
-      {/* Logo NH animé */}
+      <style>{`
+        @keyframes ldFloat  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+        @keyframes ldHalo   { 0%,100%{opacity:.5;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
+        @keyframes ldRing1  { 0%,100%{transform:scale(1) rotate(0deg);opacity:.4} 50%{transform:scale(1.08) rotate(180deg);opacity:1} }
+        @keyframes ldRing2  { 0%,100%{transform:scale(1) rotate(0deg);opacity:.7} 50%{transform:scale(.93) rotate(-180deg);opacity:.3} }
+        @keyframes ldDot    { 0%,100%{transform:scale(1);opacity:.3} 50%{transform:scale(1.8);opacity:1} }
+        @keyframes ldBar    { 0%{width:0%} 35%{width:50%} 70%{width:78%} 100%{width:100%} }
+        @keyframes ldText   { from{opacity:0;letter-spacing:.35em} to{opacity:1;letter-spacing:.22em} }
+        @keyframes ldSweep  { 0%{transform:translateX(-100%)} 100%{transform:translateX(400%)} }
+      `}</style>
+
+      {/* Anneau externe rotatif */}
       <div style={{
-        animation: 'loaderPulse 1.6s ease-in-out infinite',
-        transformOrigin: 'center',
-      }}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="80" height="80">
-          <rect width="500" height="500" rx="100" fill="#1a1a17"/>
+        position: 'absolute', width: 340, height: 340, borderRadius: '50%',
+        border: `1px solid ${ringCol}`,
+        animation: 'ldRing1 4s ease-in-out infinite',
+        pointerEvents: 'none',
+      }}/>
+      {/* Anneau interne contra-rotatif */}
+      <div style={{
+        position: 'absolute', width: 230, height: 230, borderRadius: '50%',
+        border: `1px dashed ${ringCol}`,
+        animation: 'ldRing2 4s ease-in-out infinite .6s',
+        pointerEvents: 'none',
+      }}/>
+
+      {/* Dots orbitaux */}
+      <div style={{ position: 'absolute', width: 0, height: 0 }}>
+        {dots.map((d, i) => (
+          <div key={i} style={{
+            position: 'absolute',
+            width: 4, height: 4, borderRadius: '50%',
+            background: dotCol,
+            transform: `translate(${d.x - 2}px, ${d.y - 2}px)`,
+            animation: `ldDot 1.6s ease-in-out infinite`,
+            animationDelay: `${d.delay}s`,
+          }}/>
+        ))}
+      </div>
+
+      {/* Logo flottant */}
+      <div style={{ position: 'relative', animation: 'ldFloat 2.2s ease-in-out infinite', marginBottom: 40, zIndex: 1 }}>
+        <div style={{
+          position: 'absolute', inset: -20, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(255,122,26,0.2) 0%, transparent 65%)',
+          animation: 'ldHalo 2.2s ease-in-out infinite',
+        }}/>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="90" height="90" style={{ position: 'relative', zIndex: 1, display: 'block' }}>
+          <rect width="500" height="500" rx="110" fill={logoBg}/>
           <g transform="translate(40,20)">
-            <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill="#FFFFFF"/>
-            <polygon points="70,140 120,140 110,180" fill="#FFFFFF"/>
+            <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill={logoN}/>
+            <polygon points="70,140 120,140 110,180" fill={logoN}/>
             <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill="#FF7A1A"/>
-            <polygon points="230,140 270,140 250,170" fill="rgba(255,255,255,0.25)"/>
-            <polygon points="320,140 370,140 340,170" fill="rgba(255,255,255,0.25)"/>
+            <polygon points="230,140 270,140 250,170" fill="rgba(255,255,255,0.28)"/>
+            <polygon points="320,140 370,140 340,170" fill="rgba(255,255,255,0.28)"/>
           </g>
         </svg>
       </div>
 
-      {/* Barre de progression animée */}
-      <div style={{ width: 120, height: 2, background: 'rgba(255,255,255,0.08)', borderRadius: 99, overflow: 'hidden' }}>
-        <div style={{
-          height: '100%', borderRadius: 99,
-          background: 'linear-gradient(90deg, #FF7A1A, #FFB347)',
-          animation: 'loaderBar 1.4s cubic-bezier(.4,0,.2,1) forwards',
-        }}/>
+      {/* Barre shimmer */}
+      <div style={{ width: 96, height: 1.5, background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)', borderRadius: 99, overflow: 'hidden', marginBottom: 18, position: 'relative' }}>
+        <div style={{ height: '100%', borderRadius: 99, background: 'linear-gradient(90deg,#FF7A1A,#FFB347)', animation: 'ldBar 1.6s cubic-bezier(.4,0,.2,1) forwards' }}/>
+        {/* Sweep */}
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(90deg, transparent, ${dark ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.6)'}, transparent)`, width: '25%', animation: 'ldSweep 1.6s ease-in-out infinite', animationDelay: '0.4s' }}/>
       </div>
 
       {/* Texte */}
       <p style={{
         fontFamily: "'DM Sans', sans-serif",
-        fontSize: 11, letterSpacing: '.18em', textTransform: 'uppercase',
-        color: 'rgba(255,255,255,0.3)', margin: 0,
-        animation: 'loaderFade 0.8s ease forwards',
+        fontSize: 10, color: dimText, margin: 0,
+        animation: 'ldText 1s ease forwards',
+        textTransform: 'uppercase',
       }}>New Horizon</p>
 
-      <style>{`
-        @keyframes loaderPulse {
-          0%,100% { transform: scale(1); opacity: 1; }
-          50% { transform: scale(1.06); opacity: 0.85; }
-        }
-        @keyframes loaderBar {
-          0% { width: 0%; }
-          40% { width: 60%; }
-          70% { width: 82%; }
-          100% { width: 100%; }
-        }
-        @keyframes loaderFade {
-          from { opacity: 0; transform: translateY(6px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </div>
   )
 }
