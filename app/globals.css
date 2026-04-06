@@ -450,6 +450,39 @@ h1, h2, h3, h4, h5 {
 /* PRIORITY BADGE */
 .badge-priority { background: linear-gradient(135deg, var(--gold), var(--gold-light)); color: #fff; }
 
+/* ── Slideshow arrows & dots ── */
+.slide-arrow {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  z-index: 4; width: 32px; height: 32px; border-radius: 50%;
+  background: rgba(15,14,12,.55); border: 1px solid rgba(255,255,255,.15);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: 0; transition: opacity .2s, background .2s;
+  backdrop-filter: blur(6px);
+}
+.slide-arrow:hover { background: rgba(15,14,12,.8); }
+.slide-arrow-prev { left: 10px; }
+.slide-arrow-next { right: 10px; }
+.res-card-img:hover .slide-arrow { opacity: 1; }
+
+.slide-dots {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 5px; z-index: 4;
+}
+.slide-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(255,255,255,.45); cursor: pointer;
+  transition: background .25s, transform .25s;
+}
+.slide-dot.active {
+  background: #fff; transform: scale(1.3);
+}
+
+/* ── Card fade-up entrance animation ── */
+@keyframes cardFadeUp {
+  from { opacity: 0; transform: translateY(32px) scale(.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
 /* FILTER BAR */
 .filter-bar {
   position: sticky; top: 64px; z-index: 100;

@@ -354,7 +354,8 @@ export default function HomePage() {
   }, [])
 
   const featured = residences.filter(r => r.featured).slice(0, 3)
-  const recent   = residences.slice(0, 6)
+  const display3  = featured.length > 0 ? featured : residences.slice(0, 3)
+  const allRes    = residences
 
   return (
     <>
@@ -407,9 +408,9 @@ export default function HomePage() {
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
             <div>
               <div className="section-label">
-                Catalogue 2025 · Toutes nos résidences
+                Catalogue 2025
               </div>
-              <h2 className="section-title">Résidences<br/><em>disponibles</em></h2>
+              <h2 className="section-title">Toutes nos<br/><em>résidences</em></h2>
             </div>
             <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
               Voir tout
@@ -418,8 +419,8 @@ export default function HomePage() {
           </div>
 
           {loading ? (
-            <div className="grid-3">
-              {[1,2,3].map(i => (
+            <div className="grid-auto">
+              {[1,2,3,4,5,6].map(i => (
                 <div key={i} style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', border: '1px solid var(--border)' }}>
                   <div className="skeleton" style={{ paddingBottom: '65%' }}/>
                   <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -430,13 +431,9 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-          ) : featured.length > 0 ? (
-            <div className="grid-3">
-              {featured.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
-            </div>
-          ) : recent.length > 0 ? (
-            <div className="grid-3">
-              {recent.slice(0,3).map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
+          ) : allRes.length > 0 ? (
+            <div className="grid-auto">
+              {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
@@ -490,27 +487,6 @@ export default function HomePage() {
       <div style={{ background: 'var(--surface)', borderTop: '1px solid var(--border)' }}>
         <Testimonials/>
       </div>
-
-      {/* ── All residences preview ── */}
-      {recent.length > 3 && (
-        <div style={{ background: 'var(--bg)' }}>
-          <div className="section" style={{ maxWidth: 1280, margin: '0 auto' }}>
-            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 20, marginBottom: 'clamp(32px,5vw,48px)', flexWrap: 'wrap' }}>
-              <div>
-                <div className="section-label">Catalogue 2025</div>
-                <h2 className="section-title">Toutes nos<br/><em>résidences</em></h2>
-              </div>
-              <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
-                Voir tout · {residences.length}
-                <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
-              </Link>
-            </div>
-            <div className="grid-auto">
-              {recent.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* ── CTA Banner ── */}
       <div style={{ padding: 'clamp(56px,9vw,100px) var(--pad)' }}>

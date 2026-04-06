@@ -143,7 +143,7 @@ function Navbar({ isHero }) {
       <nav className={`nav${isHeroMode ? ' hero-transparent' : ''}${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link href="/" className="nav-brand">
-            {isHeroMode ? <LogoHero size={72}/> : <Logo size={72}/>}
+            {isHeroMode ? <LogoHero size={80}/> : <Logo size={80}/>}
           </Link>
           <ul className="nav-links">
             {NAV_LINKS.map(({ href, label }) => (
@@ -162,7 +162,7 @@ function Navbar({ isHero }) {
         </div>
       </nav>
       <div className={`mobile-nav${menuOpen?' open':''}`}>
-        <Logo size={72}/>
+        <Logo size={80}/>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
           <span className="material-icons" style={{fontSize:20}}>close</span>
         </button>
@@ -232,7 +232,7 @@ function Footer() {
           {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <Logo size={88}/>
+              <Logo size={100}/>
             </div>
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
