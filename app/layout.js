@@ -487,7 +487,7 @@ function CookieBanner() {
       animation:'fadeUp .35s var(--ease) both',flexWrap:'wrap',
     }}>
       <div style={{display:'flex',alignItems:'center',gap:10,flex:'1 1 240px',minWidth:0}}>
-        <Icon n="cookie" size={20} color={'var(--gold)'} style={{,flexShrink:0}}/>
+        <Icon n="cookie" size={20} color={'var(--gold)'} style={{flexShrink:0}}/>
         <p style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.5,margin:0}}>
           Nous utilisons des cookies.{' '}
           <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>

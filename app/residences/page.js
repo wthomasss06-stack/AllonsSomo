@@ -126,7 +126,7 @@ export default function ResidencesPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <Icon n="search_off" size={56} color={'var(--border)'} style={{, display: 'block', marginBottom: 16 }}/>
+            <Icon n="search_off" size={56} color={'var(--border)'} style={{display: 'block', marginBottom: 16 }}/>
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 400, marginBottom: 8 }}>Aucun résultat</h3>
             <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Essayez avec d'autres critères de recherche.</p>
             <button className="btn btn-dark" onClick={clearFilters}>Effacer les filtres</button>

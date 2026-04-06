@@ -26,7 +26,7 @@ function ContactCard({ icon, label, value, href, sub, color = 'var(--gold)' }) {
         background: `${color}14`, border: `1px solid ${color}28`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <Icon n={icon} size={22} style={{, color }}/>
+        <Icon n={icon} size={22} style={{color }}/>
       </div>
       <div>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>{label}</div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
                     padding: '12px 16px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 12,
                   }}>
-                    <Icon n={x.icon} size={18} color={'#FF7A1A'} style={{, flexShrink: 0 }}/>
+                    <Icon n={x.icon} size={18} color={'#FF7A1A'} style={{flexShrink: 0 }}/>
                     <span style={{ fontSize: 14, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}

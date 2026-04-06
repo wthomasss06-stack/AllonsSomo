@@ -237,7 +237,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
             justifyContent: 'center', flexDirection: 'column', gap: 12,
             background: 'var(--surface)', zIndex: 500,
           }}>
-            <Icon n="refresh" size={28} color={'#FF8C42'} style={{, animation: 'mapSpin .9s linear infinite' }}/>
+            <Icon n="refresh" size={28} color={'#FF8C42'} style={{animation: 'mapSpin .9s linear infinite' }}/>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>Chargement de la carte…</p>
           </div>
         )}
@@ -270,7 +270,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
           {distance && (
             <span style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
               <Icon n="straighten" size={13}/>
-              {distance}{duration && <> · <Icon n="directions_car" size={13} style={{, marginLeft: 4 }}/>{duration}</>}
+              {distance}{duration && <> · <Icon n="directions_car" size={13} style={{marginLeft: 4 }}/>{duration}</>}
             </span>
           )}
           {geoError && phase !== 'located' && (

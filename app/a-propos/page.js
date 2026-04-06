@@ -189,7 +189,7 @@ export default function AProposPage() {
                   borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none',
                   borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
                 }}>
-                  {s.icon && <Icon n={s.icon} size={20} color={'var(--gold)'} style={{, display: 'block', marginBottom: 8 }}/>}
+                  {s.icon && <Icon n={s.icon} size={20} color={'var(--gold)'} style={{display: 'block', marginBottom: 8 }}/>}
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 400, letterSpacing: '-.02em', marginBottom: 4, color: 'var(--ink)' }}>{s.n}</div>
                   <div style={{ fontSize: 12, color: 'var(--subtle)', fontWeight: 500 }}>{s.label}</div>
                 </div>
@@ -297,7 +297,7 @@ export default function AProposPage() {
                     padding: '14px 18px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 14,
                   }}>
-                    <Icon n={x.icon} size={18} color={'var(--gold)'} style={{, flexShrink: 0, marginTop: 1 }}/>
+                    <Icon n={x.icon} size={18} color={'var(--gold)'} style={{flexShrink: 0, marginTop: 1 }}/>
                     <span style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}

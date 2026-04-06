@@ -52,7 +52,7 @@ function Stat({ icon, value, label, accent = T.gold }) {
         background:'rgba(255,122,26,.08)', border:'1px solid rgba(255,122,26,.18)',
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
-        <Icon n={icon} size={20} style={{,color:accent}}/>
+        <Icon n={icon} size={20} style={{color:accent}}/>
       </div>
       <div>
         <div style={{fontFamily:"'DM Serif Display',serif",fontSize:28,fontWeight:400,color:T.ink,letterSpacing:'-.03em',lineHeight:1}}>{value}</div>
@@ -68,7 +68,7 @@ function Section({ title, icon, children, style={} }) {
     <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, boxShadow:'0 1px 4px rgba(15,14,12,.04)', ...style}}>
       <div style={{display:'flex',alignItems:'center',gap:10,paddingBottom:16,marginBottom:18,borderBottom:`1px solid ${T.border}`}}>
         <div style={{width:34,height:34,borderRadius:T.r,background:'rgba(255,122,26,.08)',border:'1px solid rgba(255,122,26,.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-          <Icon n={icon} size={16} style={{,color:T.gold}}/>
+          <Icon n={icon} size={16} style={{color:T.gold}}/>
         </div>
         <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>{title}</h3>
       </div>
@@ -146,7 +146,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
       <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'0 24px 80px rgba(15,14,12,.2)'}}>
         <div style={{padding:'18px 24px',borderBottom:`1px solid ${T.border}`,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',display:'flex',alignItems:'center',gap:8}}>
-            <Icon n="edit" size={16} style={{,color:T.gold}}/>
+            <Icon n="edit" size={16} style={{color:T.gold}}/>
             Modifier la résidence
           </div>
           <button onClick={onClose} style={{background:'none',border:'none',color:T.dim,cursor:'pointer',display:'flex',alignItems:'center',padding:4,borderRadius:8}}>
@@ -511,7 +511,7 @@ function AddForm({ adminKey, onSuccess }) {
             style={{...IS,resize:'vertical',minHeight:90}} onFocus={onF} onBlur={onB}/>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:8,padding:'10px 12px',borderRadius:10,background:`${T.gold}08`,border:`1px solid ${T.gold}20`}}>
-          <Icon n="star" size={15} style={{,color:T.gold}}/>
+          <Icon n="star" size={15} style={{color:T.gold}}/>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,color:T.gold}}>Prioritaire automatiquement — toutes les résidences sont mises en avant.</span>
         </div>
       </Section>
@@ -802,7 +802,7 @@ function SettingsTab() {
             </button>
           </div>
           <div style={{padding:'9px 12px',borderRadius:9,background:`${T.gold}08`,border:`1px solid ${T.gold}18`,marginBottom:10,fontSize:12,color:T.muted,display:'flex',gap:7,alignItems:'center'}}>
-            <Icon n="info" size={14} style={{,color:T.gold,flexShrink:0}}/>
+            <Icon n="info" size={14} style={{color:T.gold,flexShrink:0}}/>
             <span>Cliquez n'importe où sur la carte pour déplacer le marqueur, ou utilisez <strong style={{color:T.ink}}>Ma position</strong> si vous êtes sur place.</span>
           </div>
           {/* Carte cliquable — Leaflet via CDN */}
@@ -919,7 +919,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                 }}
                 onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(15,14,12,.04)';e.currentTarget.style.color=T.ink2}}}
                 onMouseLeave={e=>{if(!on){e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.muted}}}>
-                  <Icon n={tab.icon} size={15} style={{,opacity:on?1:.65}}/>
+                  <Icon n={tab.icon} size={15} style={{opacity:on?1:.65}}/>
                   {tab.label}
                 </button>
               )
@@ -980,7 +980,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                   fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600,
                   cursor:'pointer', textAlign:'left', width:'100%',
                 }}>
-                  <Icon n={tab.icon} size={17} style={{,opacity:on?1:.6}}/>
+                  <Icon n={tab.icon} size={17} style={{opacity:on?1:.6}}/>
                   {tab.label}
                 </button>
               )
@@ -1061,7 +1061,7 @@ export default function AdminDashboard() {
       }}>
         <div style={{position:'relative',zIndex:1}}>
           <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:12}}>
-            <Icon n={page.icon} size={13} style={{,color:T.gold}}/>
+            <Icon n={page.icon} size={13} style={{color:T.gold}}/>
             <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:T.gold}}>{page.eyebrow}</span>
           </div>
           <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',flexWrap:'wrap',gap:14,paddingBottom:20}}>

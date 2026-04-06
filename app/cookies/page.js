@@ -1,5 +1,5 @@
-import Icon from '@/components/ui/Icon'
 'use client'
+import Icon from '@/components/ui/Icon'
 
 const SECTIONS = [
   { titre: "1. Qu'est-ce qu'un cookie ?", contenu: "Un cookie est un petit fichier texte déposé sur votre appareil (ordinateur, smartphone, tablette) lors de votre visite sur notre site. Il permet de mémoriser des informations sur votre navigation et d'améliorer votre expérience utilisateur." },

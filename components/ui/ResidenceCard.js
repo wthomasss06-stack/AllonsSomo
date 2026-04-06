@@ -162,7 +162,7 @@ export default function ResidenceCard({ residence, index = 0 }) {
 
             <div className="res-card-body">
               <div className="res-card-location">
-                <Icon n="location_on" size={11} style={{, verticalAlign: 'middle', marginRight: 3 }}/>
+                <Icon n="location_on" size={11} style={{verticalAlign: 'middle', marginRight: 3 }}/>
                 {[residence.quartier, residence.commune, residence.ville].filter(Boolean).join(' · ')}
               </div>
               <h3 className="res-card-title">{residence.titre}</h3>

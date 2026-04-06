@@ -353,7 +353,7 @@ function BookingCard({ residence }) {
 
   if (!firstKey) return (
     <div className="booking-card" style={{ textAlign: 'center', color: 'var(--muted)' }}>
-      <Icon n="payments" size={36} color={'var(--subtle)'} style={{, display: 'block', marginBottom: 10 }}/>
+      <Icon n="payments" size={36} color={'var(--subtle)'} style={{display: 'block', marginBottom: 10 }}/>
       <p style={{ fontSize: 14 }}>Tarifs sur demande WhatsApp</p>
       <a href={`https://wa.me/${wa}?text=${encodeURIComponent('Bonjour ! Je souhaite des informations sur la résidence "'+residence.titre+'"')}`} target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
         <Icon n="chat" size={17}/>
@@ -477,7 +477,7 @@ function SharePanel({ title }) {
       >
         <Icon n="share" size={16}/>
         Partager cette annonce
-        <Icon n="expand_more" size={16} style={{, marginLeft: 'auto', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }}/>
+        <Icon n="expand_more" size={16} style={{marginLeft: 'auto', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }}/>
       </button>
 
       {open && (
@@ -511,7 +511,7 @@ function SharePanel({ title }) {
                 <Icon n={s.icon} size={16}/>
                 {s.label}
                 {(s.id === 'tiktok' || s.id === 'instagram') && (
-                  <Icon n="content_copy" size={12} style={{, marginLeft: 'auto', opacity: .5 }}/>
+                  <Icon n="content_copy" size={12} style={{marginLeft: 'auto', opacity: .5 }}/>
                 )}
               </button>
             ))}
@@ -519,7 +519,7 @@ function SharePanel({ title }) {
 
           {/* Copier le lien */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px', overflow: 'hidden', minWidth: 0 }}>
-            <Icon n="link" size={15} color={'var(--muted)'} style={{, flexShrink: 0 }}/>
+            <Icon n="link" size={15} color={'var(--muted)'} style={{flexShrink: 0 }}/>
             <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {typeof window !== 'undefined' ? window.location.href : '…'}
             </span>
@@ -568,7 +568,7 @@ export default function DetailPage() {
   if (!res) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', paddingTop: 64 }}>
       <div style={{ textAlign: 'center' }}>
-        <Icon n="search_off" size={64} color={'var(--border)'} style={{, display: 'block', marginBottom: 16 }}/>
+        <Icon n="search_off" size={64} color={'var(--border)'} style={{display: 'block', marginBottom: 16 }}/>
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '2rem', marginBottom: 8 }}>Résidence introuvable</h2>
         <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Cette résidence n'existe pas ou a été supprimée.</p>
         <Link href="/residences" className="btn btn-dark">Retour au catalogue</Link>

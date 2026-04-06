@@ -63,8 +63,7 @@ function FaqItem({ item }) {
           border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
           transition: 'all .2s',
         }}>
-          <Icon n="expand_more" size={16} style={{,
-            color: open ? '#FF7A1A' : 'var(--subtle)',
+          <Icon n="expand_more" size={16} style={{color: open ? '#FF7A1A' : 'var(--subtle)',
             transform: open ? 'rotate(180deg)' : 'none',
             transition: 'transform .2s',
           }}/>

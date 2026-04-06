@@ -671,7 +671,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
-              <Icon n="apartment" size={48} color={'var(--subtle)'} style={{, display: 'block', marginBottom: 12 }}/>
+              <Icon n="apartment" size={48} color={'var(--subtle)'} style={{display: 'block', marginBottom: 12 }}/>
               <p>Aucune résidence disponible pour le moment.</p>
             </div>
           )}
