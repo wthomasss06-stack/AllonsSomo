@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { EQUIPEMENTS_ICONS, formatPrix } from '@/lib/config'
+import Icon from '@/components/ui/Icon'
 
 // ── 3D Tilt ───────────────────────────────────────────────────
 function useTilt(ref) {
@@ -69,7 +70,7 @@ function Slideshow({ photos, title, prix, prixUnit, typeBien }) {
       {/* Toutes les images empilées — seule l'active est opaque */}
       {count === 0 ? (
         <div className="res-card-img-placeholder">
-          <span className="material-icons" style={{ fontSize: 48, color: 'var(--border)' }}>apartment</span>
+          <Icon n="apartment" size={48} color={'var(--border)'}/>
         </div>
       ) : photos.map((src, i) => (
         <img
@@ -97,7 +98,7 @@ function Slideshow({ photos, title, prix, prixUnit, typeBien }) {
       <div className="res-card-badges">
         <span className="badge badge-dark" style={{ textTransform: 'capitalize' }}>{typeBien}</span>
         <span className="badge badge-gold badge-priority">
-          <span className="material-icons" style={{ fontSize: 11 }}>star</span>
+          <Icon n="star" size={11}/>
           Prioritaire
         </span>
       </div>
@@ -161,7 +162,7 @@ export default function ResidenceCard({ residence, index = 0 }) {
 
             <div className="res-card-body">
               <div className="res-card-location">
-                <span className="material-icons" style={{ fontSize: 11, verticalAlign: 'middle', marginRight: 3 }}>location_on</span>
+                <Icon n="location_on" size={11} style={{, verticalAlign: 'middle', marginRight: 3 }}/>
                 {[residence.quartier, residence.commune, residence.ville].filter(Boolean).join(' · ')}
               </div>
               <h3 className="res-card-title">{residence.titre}</h3>
@@ -172,7 +173,7 @@ export default function ResidenceCard({ residence, index = 0 }) {
                     if (!eq) return null
                     return (
                       <span key={k} className="res-card-tag">
-                        <span className="material-icons" style={{ fontSize: 12 }}>{eq.icon}</span>
+                        <Icon n={eq.icon} size={12}/>
                         {eq.label}
                       </span>
                     )

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Logo } from '@/app/layout'
 import { API_URL } from '@/lib/config'
+import Icon from '@/components/ui/Icon'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
 
@@ -51,7 +52,7 @@ function Stat({ icon, value, label, accent = T.gold }) {
         background:'rgba(255,122,26,.08)', border:'1px solid rgba(255,122,26,.18)',
         display:'flex', alignItems:'center', justifyContent:'center',
       }}>
-        <span className="material-icons" style={{fontSize:20,color:accent}}>{icon}</span>
+        <Icon n={icon} size={20} style={{,color:accent}}/>
       </div>
       <div>
         <div style={{fontFamily:"'DM Serif Display',serif",fontSize:28,fontWeight:400,color:T.ink,letterSpacing:'-.03em',lineHeight:1}}>{value}</div>
@@ -67,7 +68,7 @@ function Section({ title, icon, children, style={} }) {
     <div style={{background:T.surface, border:`1px solid ${T.border}`, borderRadius:T.r+2, padding:'22px', marginBottom:14, boxShadow:'0 1px 4px rgba(15,14,12,.04)', ...style}}>
       <div style={{display:'flex',alignItems:'center',gap:10,paddingBottom:16,marginBottom:18,borderBottom:`1px solid ${T.border}`}}>
         <div style={{width:34,height:34,borderRadius:T.r,background:'rgba(255,122,26,.08)',border:'1px solid rgba(255,122,26,.2)',display:'flex',alignItems:'center',justifyContent:'center',flexShrink:0}}>
-          <span className="material-icons" style={{fontSize:16,color:T.gold}}>{icon}</span>
+          <Icon n={icon} size={16} style={{,color:T.gold}}/>
         </div>
         <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,margin:0,fontStyle:'italic'}}>{title}</h3>
       </div>
@@ -145,11 +146,11 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
       <div style={{width:'100%',maxWidth:660,maxHeight:'90vh',overflowY:'auto',background:T.surface,border:`1px solid ${T.borderG}`,borderRadius:T.r+6,boxShadow:'0 24px 80px rgba(15,14,12,.2)'}}>
         <div style={{padding:'18px 24px',borderBottom:`1px solid ${T.border}`,display:'flex',alignItems:'center',justifyContent:'space-between'}}>
           <div style={{fontFamily:"'DM Serif Display',serif",fontSize:16,fontWeight:400,color:T.ink,fontStyle:'italic',display:'flex',alignItems:'center',gap:8}}>
-            <span className="material-icons" style={{fontSize:16,color:T.gold}}>edit</span>
+            <Icon n="edit" size={16} style={{,color:T.gold}}/>
             Modifier la résidence
           </div>
           <button onClick={onClose} style={{background:'none',border:'none',color:T.dim,cursor:'pointer',display:'flex',alignItems:'center',padding:4,borderRadius:8}}>
-            <span className="material-icons">close</span>
+            <Icon n="close" size={20}/>
           </button>
         </div>
         <form onSubmit={submit} style={{padding:'22px 24px',display:'flex',flexDirection:'column',gap:14}}>
@@ -214,7 +215,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
           </div>
           <div style={{display:'flex',gap:10,alignItems:'center',flexWrap:'wrap'}}>
             <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 11px',borderRadius:99,background:`${T.gold}10`,border:`1px solid ${T.gold}25`,color:T.gold,fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase'}}>
-              <span className="material-icons" style={{fontSize:12}}>star</span>Prioritaire (auto)
+              <Icon n="star" size={12}/>Prioritaire (auto)
             </div>
             <label style={{display:'flex',alignItems:'center',gap:8,cursor:'pointer',fontSize:13,color:T.muted}}>
               <input type="checkbox" checked={form.disponible} onChange={e=>set('disponible',e.target.checked)} style={{accentColor:T.gold,width:14,height:14}}/>Disponible ✓
@@ -227,7 +228,7 @@ function EditModal({ adminKey, residenceId, onClose, onSaved }) {
           <div style={{display:'flex',gap:8,paddingTop:6}}>
             <button type="button" onClick={onClose} style={{flex:1,padding:'11px',borderRadius:10,border:`1px solid ${T.border}`,background:T.bg,color:T.muted,fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,cursor:'pointer'}}>Annuler</button>
             <button type="submit" disabled={saving} style={{flex:2,padding:'11px',borderRadius:10,border:'none',background:saving?`${T.gold}60`:`linear-gradient(135deg,${T.gold},${T.goldL})`,color:'#fff',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:700,letterSpacing:'.04em',textTransform:'uppercase',cursor:saving?'not-allowed':'pointer',display:'flex',alignItems:'center',justifyContent:'center',gap:7}}>
-              {saving?'Enregistrement…':<><span className="material-icons" style={{fontSize:14}}>save</span>Enregistrer</>}
+              {saving?'Enregistrement…':<><Icon n="save" size={14}/>Enregistrer</>}
             </button>
           </div>
         </form>
@@ -296,7 +297,7 @@ function ResidencesList({ adminKey, onAdd }) {
         }}
         onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
         onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
-          <span className="material-icons" style={{fontSize:15}}>add_home</span>Publier
+          <Icon n="add_home" size={15}/>Publier
         </button>
       </div>
 
@@ -308,7 +309,7 @@ function ResidencesList({ adminKey, onAdd }) {
           </div>
         ):list.length===0?(
           <div style={{padding:'56px 28px',textAlign:'center'}}>
-            <span className="material-icons" style={{fontSize:52,color:`${T.gold}25`,display:'block',marginBottom:12}}>apartment</span>
+            <Icon n="apartment" size={20}/>
             <p style={{fontSize:13,color:T.muted,fontFamily:"'DM Sans',sans-serif"}}>Aucune résidence publiée.</p>
             <button onClick={onAdd} style={{marginTop:18,padding:'9px 22px',borderRadius:10,border:`1px solid ${T.borderG}`,background:`${T.gold}0c`,color:T.gold,fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,cursor:'pointer'}}>
               Publier la première →
@@ -334,14 +335,14 @@ function ResidencesList({ adminKey, onAdd }) {
                         <img src={r.photos[0]} alt={r.titre} style={{width:60,height:46,objectFit:'cover',borderRadius:9,border:`1px solid ${T.borderG}`}}/>
                       ):(
                         <div style={{width:60,height:46,borderRadius:9,background:`${T.gold}0a`,display:'flex',alignItems:'center',justifyContent:'center'}}>
-                          <span className="material-icons" style={{fontSize:20,color:`${T.gold}30`}}>apartment</span>
+                          <Icon n="apartment" size={20}/>
                         </div>
                       )}
                     </td>
                     <td style={{padding:'12px 15px'}}>
                       <div style={{fontFamily:"'DM Serif Display',serif",fontSize:14,fontWeight:400,color:T.ink,marginBottom:2,fontStyle:'italic'}}>{r.titre}</div>
                       <div style={{fontSize:11,color:T.muted,display:'flex',alignItems:'center',gap:3}}>
-                        <span className="material-icons" style={{fontSize:11}}>place</span>
+                        <Icon n="place" size={11}/>
                         {r.commune?`${r.commune}, `:''}{r.ville} · {r.type_bien}
                       </div>
                     </td>
@@ -355,7 +356,7 @@ function ResidencesList({ adminKey, onAdd }) {
                           background:`${T.goldL}18`,border:`1px solid ${T.goldL}40`,
                           color:T.goldL,fontSize:9,fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',
                         }}>
-                          <span className="material-icons" style={{fontSize:10}}>star</span>Prioritaire
+                          <Icon n="star" size={10}/>Prioritaire
                         </div>
                         <button onClick={()=>toggleD(r.id)} disabled={toggling===r.id+'-d'} style={{
                           display:'inline-flex',alignItems:'center',gap:3,padding:'3px 9px',borderRadius:999,
@@ -364,7 +365,7 @@ function ResidencesList({ adminKey, onAdd }) {
                           color:r.disponible?T.green:T.red,
                           fontSize:9,fontFamily:"'DM Sans',sans-serif",fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',cursor:'pointer',transition:'all .18s',
                         }}>
-                          <span className="material-icons" style={{fontSize:10}}>{r.disponible?'check_circle':'cancel'}</span>
+                          <Icon n={r.disponible?'check_circle':'cancel'} size={10}/>
                           {r.disponible?'Disponible':'Indisponible'}
                         </button>
                       </div>
@@ -374,12 +375,12 @@ function ResidencesList({ adminKey, onAdd }) {
                         <a href={`/residences/${r.id}`} target="_blank" rel="noopener" style={{display:'inline-flex',alignItems:'center',gap:3,padding:'5px 9px',borderRadius:8,border:`1px solid ${T.borderG}`,background:`${T.gold}09`,color:T.gold,fontSize:10,fontFamily:"'DM Sans',sans-serif",fontWeight:600,textDecoration:'none',transition:'all .13s'}}
                           onMouseEnter={e=>e.currentTarget.style.background=`${T.gold}18`}
                           onMouseLeave={e=>e.currentTarget.style.background=`${T.gold}09`}>
-                          <span className="material-icons" style={{fontSize:12}}>visibility</span>Voir
+                          <Icon n="visibility" size={12}/>Voir
                         </a>
                         <button onClick={()=>setEditId(r.id)} style={{display:'inline-flex',alignItems:'center',gap:3,padding:'5px 9px',borderRadius:8,border:'1px solid rgba(147,197,253,.2)',background:'rgba(59,130,246,.06)',color:'rgba(147,197,253,.8)',fontSize:10,fontFamily:"'DM Sans',sans-serif",fontWeight:600,cursor:'pointer',transition:'all .13s'}}
                           onMouseEnter={e=>{e.currentTarget.style.background='rgba(59,130,246,.15)';e.currentTarget.style.color='#93C5FD'}}
                           onMouseLeave={e=>{e.currentTarget.style.background='rgba(59,130,246,.06)';e.currentTarget.style.color='rgba(147,197,253,.8)'}}>
-                          <span className="material-icons" style={{fontSize:12}}>edit</span>Modifier
+                          <Icon n="edit" size={12}/>Modifier
                         </button>
                         <button onClick={()=>del(r.id,r.titre)} disabled={deleting===r.id} style={{display:'inline-flex',alignItems:'center',gap:3,padding:'5px 9px',borderRadius:8,border:'1px solid rgba(248,113,113,.2)',background:'rgba(248,113,113,.06)',color:'rgba(248,113,113,.7)',fontSize:10,fontFamily:"'DM Sans',sans-serif",fontWeight:600,cursor:deleting===r.id?'not-allowed':'pointer',transition:'all .13s'}}
                           onMouseEnter={e=>{if(deleting!==r.id){e.currentTarget.style.background='rgba(248,113,113,.14)';e.currentTarget.style.color=T.red}}}
@@ -387,7 +388,7 @@ function ResidencesList({ adminKey, onAdd }) {
                           {deleting===r.id?(
                             <span style={{width:11,height:11,border:'1.5px solid rgba(248,113,113,.3)',borderTopColor:T.red,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>
                           ):(
-                            <span className="material-icons" style={{fontSize:12}}>delete</span>
+                            <Icon n="delete" size={12}/>
                           )}
                           Suppr.
                         </button>
@@ -459,7 +460,7 @@ function AddForm({ adminKey, onSuccess }) {
   if(ok) return (
     <div style={{textAlign:'center',padding:'80px 28px',animation:'fadeUp .35s ease'}}>
       <div style={{width:68,height:68,borderRadius:'50%',background:'rgba(22,163,74,.08)',border:'2px solid rgba(22,163,74,.2)',display:'flex',alignItems:'center',justifyContent:'center',margin:'0 auto 18px'}}>
-        <span className="material-icons" style={{fontSize:36,color:'#16A34A'}}>check_circle</span>
+        <Icon n="check_circle" size={36} color={'#16A34A'}/>
       </div>
       <h3 style={{fontFamily:"'DM Serif Display',serif",fontSize:22,fontWeight:400,color:T.ink,marginBottom:8,fontStyle:'italic'}}>Résidence publiée !</h3>
       <p style={{fontSize:13,color:T.muted,marginBottom:24}}>Elle est maintenant visible sur le site.</p>
@@ -490,7 +491,7 @@ function AddForm({ adminKey, onSuccess }) {
     <form onSubmit={submit}>
       <h2 style={{fontFamily:"'DM Serif Display',serif",fontSize:22,fontWeight:400,color:T.ink,marginBottom:24,fontStyle:'italic'}}>Publier une résidence</h2>
       {err&&<div style={{padding:'10px 14px',borderRadius:10,background:'rgba(248,113,113,.08)',border:'1px solid rgba(248,113,113,.2)',color:T.red,fontSize:13,marginBottom:20,display:'flex',alignItems:'center',gap:7}}>
-        <span className="material-icons" style={{fontSize:15}}>error_outline</span>{err}
+        <Icon n="error_outline" size={15}/>{err}
       </div>}
 
       <Section title="Informations générales" icon="info">
@@ -510,7 +511,7 @@ function AddForm({ adminKey, onSuccess }) {
             style={{...IS,resize:'vertical',minHeight:90}} onFocus={onF} onBlur={onB}/>
         </div>
         <div style={{display:'flex',alignItems:'center',gap:8,padding:'10px 12px',borderRadius:10,background:`${T.gold}08`,border:`1px solid ${T.gold}20`}}>
-          <span className="material-icons" style={{fontSize:15,color:T.gold}}>star</span>
+          <Icon n="star" size={15} style={{,color:T.gold}}/>
           <span style={{fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,color:T.gold}}>Prioritaire automatiquement — toutes les résidences sont mises en avant.</span>
         </div>
       </Section>
@@ -546,7 +547,7 @@ function AddForm({ adminKey, onSuccess }) {
                 color:active?T.gold:T.muted,
                 fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:600,cursor:'pointer',transition:'all .13s',
               }}>
-                <span className="material-icons" style={{fontSize:13}}>{eq.icon}</span>{eq.label}
+                <Icon n={eq.icon} size={13}/>{eq.label}
               </button>
             )
           })}
@@ -559,7 +560,7 @@ function AddForm({ adminKey, onSuccess }) {
           <div style={{border:`2px dashed ${T.borderG}`,borderRadius:12,padding:'26px 18px',textAlign:'center',background:`${T.gold}04`,transition:'all .18s'}}
             onMouseEnter={e=>e.currentTarget.style.borderColor=`${T.gold}50`}
             onMouseLeave={e=>e.currentTarget.style.borderColor=T.borderG}>
-            <span className="material-icons" style={{fontSize:34,color:`${T.gold}40`,display:'block',marginBottom:7}}>cloud_upload</span>
+            <Icon n="cloud_upload" size={20}/>
             <p style={{fontFamily:"'DM Sans',sans-serif",fontSize:13,fontWeight:600,color:T.muted,marginBottom:3}}>Cliquer pour sélectionner</p>
             <p style={{fontSize:11,color:T.dim}}>ou glisser-déposer</p>
           </div>
@@ -588,7 +589,7 @@ function AddForm({ adminKey, onSuccess }) {
         {saving?(
           <><span style={{width:16,height:16,border:'2px solid rgba(255,122,26,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Publication…</>
         ):(
-          <><span className="material-icons" style={{fontSize:17}}>publish</span>Publier la résidence</>
+          <><Icon n="publish" size={17}/>Publier la résidence</>
         )}
       </button>
     </form>
@@ -741,7 +742,7 @@ function SettingsTab() {
           <label style={LBL}>Numéro WhatsApp *</label>
           <div style={{display:'flex',gap:8,alignItems:'center'}}>
             <div style={{position:'relative',flex:1}}>
-              <span className="material-icons" style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',fontSize:16,color:'#25D366',pointerEvents:'none'}}>whatsapp</span>
+              <Icon n="whatsapp" size={16} color={'#25D366'} style={{position:'absolute',left:10,top:'50%',transform:'translateY(-50%)',pointerEvents:'none'}}/>
               <input
                 value={settings.whatsapp}
                 onChange={e=>setS('whatsapp',e.target.value.replace(/\D/g,''))}
@@ -755,7 +756,7 @@ function SettingsTab() {
                 href={`https://wa.me/${settings.whatsapp}`}
                 target="_blank" rel="noopener"
                 style={{display:'inline-flex',alignItems:'center',gap:5,padding:'10px 14px',borderRadius:10,border:'1px solid rgba(37,211,102,.25)',background:'rgba(37,211,102,.06)',color:'#25D366',fontFamily:"'DM Sans',sans-serif",fontSize:11,fontWeight:700,textDecoration:'none',whiteSpace:'nowrap',flexShrink:0}}>
-                <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Tester
+                <Icon n="open_in_new" size={14}/>Tester
               </a>
             )}
           </div>
@@ -795,13 +796,13 @@ function SettingsTab() {
               {locating?(
                 <span style={{width:12,height:12,border:`1.5px solid ${T.borderG}`,borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>
               ):(
-                <span className="material-icons" style={{fontSize:14}}>my_location</span>
+                <Icon n="my_location" size={14}/>
               )}
               {locating?'Localisation…':'Ma position'}
             </button>
           </div>
           <div style={{padding:'9px 12px',borderRadius:9,background:`${T.gold}08`,border:`1px solid ${T.gold}18`,marginBottom:10,fontSize:12,color:T.muted,display:'flex',gap:7,alignItems:'center'}}>
-            <span className="material-icons" style={{fontSize:14,color:T.gold,flexShrink:0}}>info</span>
+            <Icon n="info" size={14} style={{,color:T.gold,flexShrink:0}}/>
             <span>Cliquez n'importe où sur la carte pour déplacer le marqueur, ou utilisez <strong style={{color:T.ink}}>Ma position</strong> si vous êtes sur place.</span>
           </div>
           {/* Carte cliquable — Leaflet via CDN */}
@@ -831,10 +832,10 @@ function SettingsTab() {
 
         {/* Messages */}
         {msg&&<div style={{padding:'10px 14px',borderRadius:9,background:'rgba(74,222,128,.08)',border:'1px solid rgba(74,222,128,.2)',color:T.green,fontSize:13,display:'flex',alignItems:'center',gap:7,marginTop:14}}>
-          <span className="material-icons" style={{fontSize:14}}>check_circle</span>{msg}
+          <Icon n="check_circle" size={14}/>{msg}
         </div>}
         {err&&<div style={{padding:'10px 14px',borderRadius:9,background:'rgba(248,113,113,.08)',border:'1px solid rgba(248,113,113,.2)',color:T.red,fontSize:13,display:'flex',alignItems:'center',gap:7,marginTop:14}}>
-          <span className="material-icons" style={{fontSize:14}}>error_outline</span>{err}
+          <Icon n="error_outline" size={14}/>{err}
         </div>}
 
         <button onClick={save} disabled={saving} style={{
@@ -847,7 +848,7 @@ function SettingsTab() {
           {saving?(
             <><span style={{width:14,height:14,border:'2px solid rgba(255,122,26,.2)',borderTopColor:T.gold,borderRadius:'50%',animation:'spin .7s linear infinite',display:'inline-block'}}/>Enregistrement…</>
           ):(
-            <><span className="material-icons" style={{fontSize:15}}>save</span>Enregistrer</>
+            <><Icon n="save" size={15}/>Enregistrer</>
           )}
         </button>
       </Section>
@@ -891,7 +892,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
             <div style={{lineHeight:1}}>
               <div style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,fontStyle:'italic'}}>New <span style={{color:T.gold}}>Horizon</span></div>
               <div style={{fontSize:9,color:T.muted,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:2,display:'flex',alignItems:'center',gap:3}}>
-                <span className="material-icons" style={{fontSize:9}}>arrow_back</span>Retour au site
+                <Icon n="arrow_back" size={9}/>Retour au site
               </div>
             </div>
           </a>
@@ -918,7 +919,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                 }}
                 onMouseEnter={e=>{if(!on){e.currentTarget.style.background='rgba(15,14,12,.04)';e.currentTarget.style.color=T.ink2}}}
                 onMouseLeave={e=>{if(!on){e.currentTarget.style.background='transparent';e.currentTarget.style.color=T.muted}}}>
-                  <span className="material-icons" style={{fontSize:15,opacity:on?1:.65}}>{tab.icon}</span>
+                  <Icon n={tab.icon} size={15} style={{,opacity:on?1:.65}}/>
                   {tab.label}
                 </button>
               )
@@ -945,7 +946,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
             }}
             onMouseEnter={e=>{e.currentTarget.style.background='rgba(220,38,38,.12)';e.currentTarget.style.color=T.red}}
             onMouseLeave={e=>{e.currentTarget.style.background='rgba(220,38,38,.06)';e.currentTarget.style.color='rgba(220,38,38,.55)'}}>
-              <span className="material-icons" style={{fontSize:14}}>logout</span>
+              <Icon n="logout" size={14}/>
               Déconnexion
             </button>
           </div>
@@ -954,7 +955,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
             background:'rgba(255,122,26,.08)', border:`1px solid rgba(255,122,26,.2)`,
             borderRadius:10, color:T.gold, cursor:'pointer',
           }}>
-            <span className="material-icons">{mobileMenuOpen?'close':'menu'}</span>
+            <Icon n={mobileMenuOpen?'close':'menu'} size={20}/>
           </button>
         </div>
       </header>
@@ -979,7 +980,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
                   fontFamily:"'DM Sans',sans-serif", fontSize:13, fontWeight:600,
                   cursor:'pointer', textAlign:'left', width:'100%',
                 }}>
-                  <span className="material-icons" style={{fontSize:17,opacity:on?1:.6}}>{tab.icon}</span>
+                  <Icon n={tab.icon} size={17} style={{,opacity:on?1:.6}}/>
                   {tab.label}
                 </button>
               )
@@ -996,7 +997,7 @@ function AdminTopBar({ active, setActive, onLogout }) {
               border:'none',cursor:'pointer',background:'rgba(220,38,38,.07)',
               color:'rgba(220,38,38,.7)',fontFamily:"'DM Sans',sans-serif",fontSize:12,fontWeight:600,
             }}>
-              <span className="material-icons" style={{fontSize:15}}>logout</span>
+              <Icon n="logout" size={15}/>
               Déconnexion
             </button>
           </div>
@@ -1060,7 +1061,7 @@ export default function AdminDashboard() {
       }}>
         <div style={{position:'relative',zIndex:1}}>
           <div style={{display:'flex',alignItems:'center',gap:6,marginBottom:12}}>
-            <span className="material-icons" style={{fontSize:13,color:T.gold}}>{page.icon}</span>
+            <Icon n={page.icon} size={13} style={{,color:T.gold}}/>
             <span style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:T.gold}}>{page.eyebrow}</span>
           </div>
           <div style={{display:'flex',alignItems:'flex-end',justifyContent:'space-between',flexWrap:'wrap',gap:14,paddingBottom:20}}>
@@ -1081,7 +1082,7 @@ export default function AdminDashboard() {
                 }}
                 onMouseEnter={e=>e.currentTarget.style.transform='translateY(-1px)'}
                 onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
-                  <span className="material-icons" style={{fontSize:15}}>add_home</span>Publier
+                  <Icon n="add_home" size={15}/>Publier
                 </button>
               )}
               <a href="/" target="_blank" rel="noopener" style={{
@@ -1091,7 +1092,7 @@ export default function AdminDashboard() {
               }}
               onMouseEnter={e=>{e.currentTarget.style.background=T.surface;e.currentTarget.style.color=T.ink}}
               onMouseLeave={e=>{e.currentTarget.style.background=T.bg;e.currentTarget.style.color=T.muted}}>
-                <span className="material-icons" style={{fontSize:14}}>open_in_new</span>Voir le site
+                <Icon n="open_in_new" size={14}/>Voir le site
               </a>
             </div>
           </div>

@@ -1,6 +1,7 @@
 'use client'
 import Link from 'next/link'
 import { SITE } from '@/lib/config'
+import Icon from '@/components/ui/Icon'
 
 // ── Value pillar card ─────────────────────────────────────────
 function Pillar({ icon, title, desc, delay = 0 }) {
@@ -22,7 +23,7 @@ function Pillar({ icon, title, desc, delay = 0 }) {
         border: '1px solid rgba(255,122,26,.18)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <span className="material-icons" style={{ fontSize: 22, color: 'var(--gold)' }}>{icon}</span>
+        <Icon n={icon} size={22} color={'var(--gold)'}/>
       </div>
       <div>
         <h3 style={{
@@ -91,7 +92,7 @@ export default function AProposPage() {
               background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
               marginBottom: 22,
             }}>
-              <span className="material-icons" style={{ fontSize: 13, color: 'var(--gold)' }}>info</span>
+              <Icon n="info" size={13} color={'var(--gold)'}/>
               <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--gold)' }}>
                 À propos
               </span>
@@ -119,11 +120,11 @@ export default function AProposPage() {
 
             <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
               <Link href="/residences" className="btn btn-dark">
-                <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
+                <Icon n="apartment" size={17}/>
                 Voir les résidences
               </Link>
               <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-                <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
+                <Icon n="chat" size={17}/>
                 Nous contacter
               </a>
             </div>
@@ -152,7 +153,7 @@ export default function AProposPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
                 {['Informations floues','Prix qui changent','Photos trompeuses'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span className="material-icons" style={{ fontSize: 16, color: '#DC2626' }}>close</span>
+                    <Icon n="close" size={16} color={'#DC2626'}/>
                     <span style={{ fontSize: 14, color: 'var(--muted)' }}>{x}</span>
                   </div>
                 ))}
@@ -161,7 +162,7 @@ export default function AProposPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {['Des résidences réelles','Des photos fidèles','Des prix transparents','Une réservation directe'].map((x, i) => (
                   <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span className="material-icons" style={{ fontSize: 16, color: '#16A34A' }}>check</span>
+                    <Icon n="check" size={16} color={'#16A34A'}/>
                     <span style={{ fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{x}</span>
                   </div>
                 ))}
@@ -188,7 +189,7 @@ export default function AProposPage() {
                   borderRight: i % 2 === 0 ? '1px solid var(--border)' : 'none',
                   borderBottom: i < 2 ? '1px solid var(--border)' : 'none',
                 }}>
-                  {s.icon && <span className="material-icons" style={{ fontSize: 20, color: 'var(--gold)', display: 'block', marginBottom: 8 }}>{s.icon}</span>}
+                  {s.icon && <Icon n={s.icon} size={20} color={'var(--gold)'} style={{, display: 'block', marginBottom: 8 }}/>}
                   <div style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(1.1rem,2.5vw,1.5rem)', fontWeight: 400, letterSpacing: '-.02em', marginBottom: 4, color: 'var(--ink)' }}>{s.n}</div>
                   <div style={{ fontSize: 12, color: 'var(--subtle)', fontWeight: 500 }}>{s.label}</div>
                 </div>
@@ -217,7 +218,7 @@ export default function AProposPage() {
                 tout est pensé pour être rapide et sans stress.
               </p>
               <Link href="/aide" className="btn btn-outline" style={{ display: 'inline-flex' }}>
-                <span className="material-icons" style={{ fontSize: 17 }}>help_outline</span>
+                <Icon n="help_outline" size={17}/>
                 FAQ complète
               </Link>
             </div>
@@ -296,7 +297,7 @@ export default function AProposPage() {
                     padding: '14px 18px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 14,
                   }}>
-                    <span className="material-icons" style={{ fontSize: 18, color: 'var(--gold)', flexShrink: 0, marginTop: 1 }}>{x.icon}</span>
+                    <Icon n={x.icon} size={18} color={'var(--gold)'} style={{, flexShrink: 0, marginTop: 1 }}/>
                     <span style={{ fontSize: 14, lineHeight: 1.6, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}
@@ -344,11 +345,11 @@ export default function AProposPage() {
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
             <Link href="/residences" className="btn btn-white">
-              <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
+              <Icon n="apartment" size={17}/>
               Parcourez les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
+              <Icon n="chat" size={17}/>
               WhatsApp
             </a>
           </div>

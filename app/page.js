@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { getResidences, SITE, COMMUNES, TYPES_BIEN, formatPrix } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
+import Icon from '@/components/ui/Icon'
 
 // ── Mobile 2×2 Carousel ───────────────────────────────────────
 function MobileCarousel({ items }) {
@@ -65,7 +66,7 @@ function MobileCarousel({ items }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, marginTop: 20 }}>
           <button onClick={() => goTo(page - 1)} disabled={page === 0}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === 0 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
-            <span className="material-icons" style={{ fontSize: 20 }}>chevron_left</span>
+            <Icon n="chevron_left" size={20}/>
           </button>
           {pages.map((_, i) => (
             <button key={i} onClick={() => goTo(i)} style={{
@@ -77,7 +78,7 @@ function MobileCarousel({ items }) {
           ))}
           <button onClick={() => goTo(page + 1)} disabled={page === total - 1}
             style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: page === total - 1 ? .3 : 1, transition: 'opacity .2s', color: 'var(--ink)' }}>
-            <span className="material-icons" style={{ fontSize: 20 }}>chevron_right</span>
+            <Icon n="chevron_right" size={20}/>
           </button>
         </div>
       )}
@@ -188,7 +189,7 @@ function Hero() {
         animation: 'pulseUrgency 2.5s ease-in-out infinite',
       }}>
         <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#fff', display: 'inline-block', animation: 'blink 1.2s ease-in-out infinite' }}/>
-        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.04em', display:'flex', alignItems:'center', gap:5 }}><span className="material-icons" style={{fontSize:14}}>local_fire_department</span> Très demandé cette semaine</span>
+        <span style={{ fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '.04em', display:'flex', alignItems:'center', gap:5 }}><Icon n="local_fire_department" size={14}/> Très demandé cette semaine</span>
       </div>
 
       {/* Content */}
@@ -205,12 +206,12 @@ function Hero() {
           </p>
           <div className="hero-actions" style={{ opacity: fading ? 0 : 1, transition: 'opacity .55s .18s' }}>
             <Link href="/residences" className="btn btn-white">
-              <span className="material-icons" style={{ fontSize: 17 }}>apartment</span>
+              <Icon n="apartment" size={17}/>
               Voir les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
-              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
-              <span className="material-icons" style={{fontSize:14}}>local_fire_department</span> Réserver maintenant (réponse en 2 min)
+              <Icon n="chat" size={17}/>
+              <Icon n="local_fire_department" size={14}/> Réserver maintenant (réponse en 2 min)
             </a>
           </div>
 
@@ -225,7 +226,7 @@ function Hero() {
               { icon: 'lock', text: 'Zéro arnaque garantie' },
             ].map((t, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="material-icons" style={{ fontSize: 14, color: 'rgba(255,255,255,.7)' }}>{t.icon}</span>
+                <Icon n={t.icon} size={14} color={'rgba(255,255,255,.7)'}/>
                 <span style={{ fontSize: 12, color: 'rgba(255,255,255,.65)', fontWeight: 500 }}>{t.text}</span>
               </div>
             ))}
@@ -293,7 +294,7 @@ function QuickSearch() {
 
         <div style={{ padding: '4px 4px 4px 8px', flexShrink: 0 }}>
           <button className="btn btn-dark" onClick={handleSearch} style={{ borderRadius: 'var(--r-lg)', padding: '13px 24px' }}>
-            <span className="material-icons" style={{ fontSize: 18 }}>search</span>
+            <Icon n="search" size={18}/>
             Explorer
           </button>
         </div>
@@ -318,7 +319,7 @@ function QuickSearch() {
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--ink)'; e.currentTarget.style.background = 'var(--surface)' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--white)' }}>
-            <span className="material-icons" style={{ fontSize: 12 }}>search</span>
+            <Icon n="search" size={12}/>
             {s.label}
           </button>
         ))}
@@ -367,7 +368,7 @@ function StepsCarousel({ steps }) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
                 }}>
-                  <span className="material-icons" style={{ fontSize: 32 }}>{s.icon}</span>
+                  <Icon n={s.icon} size={32}/>
                 </div>
                 <div style={{
                   position: 'absolute', top: -8, right: -8,
@@ -432,7 +433,7 @@ function HowItWorks() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     color: '#fff', boxShadow: '0 8px 24px rgba(255,122,26,.3)',
                   }}>
-                    <span className="material-icons" style={{ fontSize: 28 }}>{s.icon}</span>
+                    <Icon n={s.icon} size={28}/>
                   </div>
                   <div style={{
                     position: 'absolute', top: -8, right: -8,
@@ -450,8 +451,8 @@ function HowItWorks() {
 
         <div style={{ textAlign: 'center', marginTop: 'clamp(32px,4vw,48px)' }}>
           <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse" style={{ fontSize: 15, padding: '14px 32px' }}>
-            <span className="material-icons" style={{ fontSize: 19 }}>chat</span>
-            <span className="material-icons" style={{fontSize:16}}>local_fire_department</span> Démarrer ma recherche sur WhatsApp
+            <Icon n="chat" size={19}/>
+            <Icon n="local_fire_department" size={16}/> Démarrer ma recherche sur WhatsApp
           </a>
         </div>
       </div>
@@ -520,7 +521,7 @@ function Testimonials() {
         }}>{r.avatar}</div>
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--ink)' }}>{r.name}</div>
-          <div style={{ fontSize: 11, color: 'var(--muted)', display:'flex', alignItems:'center', gap:4 }}>{r.zone} · <span className="material-icons" style={{fontSize:12,color:'#16A34A'}}>check_circle</span><span>Client vérifié</span></div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', display:'flex', alignItems:'center', gap:4 }}>{r.zone} · <Icon n="check_circle" size={12} color={'#16A34A'}/><span>Client vérifié</span></div>
         </div>
       </div>
     </div>
@@ -533,7 +534,7 @@ function Testimonials() {
         <h2 className="section-title">Ils nous font<br/><em>confiance</em></h2>
         <p style={{ fontSize: 14, color: 'var(--muted)', marginTop: 10 }}>
           <span style={{display:'flex',alignItems:'center',justifyContent:'center',gap:2,marginBottom:4}}>
-            {['star','star','star','star','star'].map((s,i)=><span key={i} className="material-icons" style={{fontSize:16,color:'#F59E0B'}}>{s}</span>)}
+            {[0,1,2,3,4].map(i=><Icon key={i} n="star" size={16} color="#F59E0B"/>)}
             <span style={{fontSize:14,color:'var(--muted)',marginLeft:6}}>4.9/5 sur 120+ réservations ce mois</span>
           </span>
         </p>
@@ -647,7 +648,7 @@ export default function HomePage() {
             </div>
             <Link href="/residences" className="btn btn-outline" style={{ flexShrink: 0 }}>
               Voir tout
-              <span className="material-icons" style={{ fontSize: 18 }}>arrow_forward</span>
+              <Icon n="arrow_forward" size={18}/>
             </Link>
           </div>
 
@@ -670,7 +671,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div style={{ textAlign: 'center', padding: '60px 20px', color: 'var(--muted)' }}>
-              <span className="material-icons" style={{ fontSize: 48, display: 'block', marginBottom: 12, color: 'var(--subtle)' }}>apartment</span>
+              <Icon n="apartment" size={48} color={'var(--subtle)'} style={{, display: 'block', marginBottom: 12 }}/>
               <p>Aucune résidence disponible pour le moment.</p>
             </div>
           )}
@@ -692,7 +693,7 @@ export default function HomePage() {
               New Horizon vous donne accès à de belles résidences meublées à Abidjan, directement réservables. Des logements soigneusement sélectionnés par notre équipe — prix clairs, photos fidèles, réservation en quelques clics.
             </p>
             <Link href="/residences" className="btn btn-dark">
-              <span className="material-icons" style={{fontSize:17}}>apartment</span>
+              <Icon n="apartment" size={17}/>
               Voir les résidences
             </Link>
           </div>
@@ -706,7 +707,7 @@ export default function HomePage() {
             ].map((f, i) => (
               <div key={i} className="feature-item">
                 <div className="feature-icon">
-                  <span className="material-icons">{f.icon}</span>
+                  <Icon n={f.icon} size={20}/>
                 </div>
                 <div className="feature-title">{f.title}</div>
                 <div className="feature-desc">{f.desc}</div>
@@ -733,10 +734,10 @@ export default function HomePage() {
           <div style={{ position: 'absolute', top: -40, right: 60, width: 260, height: 260, borderRadius: '50%', background: 'radial-gradient(circle, rgba(37,211,102,.1) 0%, transparent 70%)', pointerEvents: 'none' }}/>
           <div style={{ position: 'relative', zIndex: 1 }}>
             <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', color: '#fff', letterSpacing: '-.025em', lineHeight: 1.1, marginBottom: 12 }}>
-              <span style={{display:'flex',alignItems:'center',gap:10}}><span className="material-icons" style={{fontSize:'inherit',color:'#EF4444'}}>local_fire_department</span> Trouvez votre résidence</span><em style={{ color: 'rgba(255,255,255,.45)' }}>avant ce soir</em>
+              <span style={{display:'flex',alignItems:'center',gap:10}}><Icon n="local_fire_department" size={20} color={'#EF4444'} style={{fontSize:'inherit'}}/> Trouvez votre résidence</span><em style={{ color: 'rgba(255,255,255,.45)' }}>avant ce soir</em>
             </h2>
             <p style={{ fontSize: 15, color: 'rgba(255,255,255,.45)', maxWidth: 400 }}>
-              <span style={{display:'flex',alignItems:'center',gap:7}}><span className="material-icons" style={{fontSize:16}}>smartphone</span> Cliquez et discutez directement avec un agent — réponse garantie en 2 min.</span>
+              <span style={{display:'flex',alignItems:'center',gap:7}}><Icon n="smartphone" size={16}/> Cliquez et discutez directement avec un agent — réponse garantie en 2 min.</span>
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', position: 'relative', zIndex: 1 }}>
@@ -744,7 +745,7 @@ export default function HomePage() {
               Explorer les résidences
             </Link>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa btn-wa-pulse">
-              <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
+              <Icon n="chat" size={17}/>
               Réserver sur WhatsApp
             </a>
           </div>
@@ -769,7 +770,7 @@ export default function HomePage() {
         onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.05)'; e.currentTarget.style.animation = 'none' }}
         onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.animation = 'waPulse 2.4s ease-in-out infinite' }}
       >
-        <span className="material-icons" style={{ fontSize: 20 }}>chat</span>
+        <Icon n="chat" size={20}/>
         Réserver · 2 min
       </a>
     </>

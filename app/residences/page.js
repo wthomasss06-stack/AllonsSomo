@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { getResidences, COMMUNES, TYPES_BIEN } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
+import Icon from '@/components/ui/Icon'
 
 export default function ResidencesPage() {
   const [all,     setAll]     = useState([])
@@ -54,7 +55,7 @@ export default function ResidencesPage() {
         <div className="filter-bar-inner">
           {/* Search */}
           <div style={{ position: 'relative', flex: '1 1 220px', minWidth: 0 }}>
-            <span className="material-icons" style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 18, color: 'var(--subtle)', pointerEvents: 'none' }}>search</span>
+            <Icon n="search" size={18} color={'var(--subtle)'} style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}/>
             <input
               className="input"
               type="text"
@@ -87,7 +88,7 @@ export default function ResidencesPage() {
           {/* Clear */}
           {hasFilters && (
             <button className="btn btn-outline" onClick={clearFilters} style={{ padding: '8px 16px', fontSize: 13, flexShrink: 0 }}>
-              <span className="material-icons" style={{ fontSize: 15 }}>close</span>
+              <Icon n="close" size={15}/>
               Effacer
             </button>
           )}
@@ -125,7 +126,7 @@ export default function ResidencesPage() {
           </div>
         ) : filtered.length === 0 ? (
           <div style={{ textAlign: 'center', padding: '80px 20px' }}>
-            <span className="material-icons" style={{ fontSize: 56, color: 'var(--border)', display: 'block', marginBottom: 16 }}>search_off</span>
+            <Icon n="search_off" size={56} color={'var(--border)'} style={{, display: 'block', marginBottom: 16 }}/>
             <h3 style={{ fontFamily: 'var(--font-display)', fontSize: '1.6rem', fontWeight: 400, marginBottom: 8 }}>Aucun résultat</h3>
             <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Essayez avec d'autres critères de recherche.</p>
             <button className="btn btn-dark" onClick={clearFilters}>Effacer les filtres</button>

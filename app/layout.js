@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SITE } from '@/lib/config'
+import Icon from '@/components/ui/Icon'
 
 // ── New Horizon Logo (thème-adaptatif) ─────────────────────────
 // inkColor: couleur des éléments noirs (adapte au mode)
@@ -276,10 +277,10 @@ function Navbar({ isHero }) {
           <div className="nav-actions">
             {/* Dark mode toggle — masqué sur mobile via CSS, visible dans le burger */}
             <button className="theme-toggle" onClick={toggle} aria-label="Changer le thème" title={dark ? 'Mode clair' : 'Mode sombre'}>
-              <span className="material-icons" style={{fontSize:18}}>{dark ? 'light_mode' : 'dark_mode'}</span>
+              <Icon n={dark ? 'light_mode' : 'dark_mode'} size={18}/>
             </button>
             <button className="nav-burger" onClick={() => setMenuOpen(o=>!o)} aria-label="Menu">
-              <span className="material-icons" style={{fontSize:20}}>{menuOpen?'close':'menu'}</span>
+              <Icon n={menuOpen?'close':'menu'} size={20}/>
             </button>
           </div>
         </div>
@@ -287,7 +288,7 @@ function Navbar({ isHero }) {
       <div className={`mobile-nav${menuOpen?' open':''}`}>
         <Logo size={80}/>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
-          <span className="material-icons" style={{fontSize:20}}>close</span>
+          <Icon n="close" size={20}/>
         </button>
         <ul className="mobile-nav-links">
           {NAV_LINKS.map(({ href, label }) => (
@@ -300,12 +301,12 @@ function Navbar({ isHero }) {
           <li style={{marginTop:12}}>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener"
               style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'#16A34A',borderRadius:'var(--r-md)'}}>
-              <span className="material-icons" style={{fontSize:20}}>chat</span>Contacter sur WhatsApp
+              <Icon n="chat" size={20}/>Contacter sur WhatsApp
             </a>
           </li>
           <li>
             <button onClick={toggle} style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'var(--muted)',borderRadius:'var(--r-md)',width:'100%',textAlign:'left',background:'none',border:'none',cursor:'pointer'}}>
-              <span className="material-icons" style={{fontSize:20}}>{dark ? 'light_mode' : 'dark_mode'}</span>
+              <Icon n={dark ? 'light_mode' : 'dark_mode'} size={20}/>
               {dark ? 'Mode clair' : 'Mode sombre'}
             </button>
           </li>
@@ -360,7 +361,7 @@ function Footer() {
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
             <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:99,background:'var(--surface)',border:'1px solid var(--footer-border)',marginBottom:24}}>
-              <span className="material-icons" style={{fontSize:14,color:'var(--gold)'}}>place</span>
+              <Icon n="place" size={14} color={'var(--gold)'}/>
               <span style={{fontSize:11,color:'var(--footer-text)',fontWeight:600,letterSpacing:'.04em'}}>Abidjan, Côte d'Ivoire</span>
             </div>
 
@@ -381,7 +382,7 @@ function Footer() {
                   }}
                   onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='var(--sh-sm)'}}
                   onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}>
-                  <span className="material-icons" style={{fontSize:17}}>{s.icon}</span>
+                  <Icon n={s.icon} size={17}/>
                 </a>
               ))}
             </div>
@@ -390,7 +391,7 @@ function Footer() {
               style={{display:'inline-flex',alignItems:'center',gap:8,padding:'10px 18px',borderRadius:99,background:'#25D366',color:'#fff',fontSize:13,fontWeight:600,boxShadow:'0 4px 20px rgba(37,211,102,.25)',transition:'all .18s',textDecoration:'none'}}
               onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 8px 32px rgba(37,211,102,.35)'}}
               onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 4px 20px rgba(37,211,102,.25)'}}>
-              <span className="material-icons" style={{fontSize:16}}>chat</span>
+              <Icon n="chat" size={16}/>
               Réserver via WhatsApp
             </a>
           </div>
@@ -411,7 +412,7 @@ function Footer() {
                   <Link href={href} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:14,color:'rgba(255,122,26,.6)'}}>{icon}</span>
+                    <Icon n={icon} size={14} color={'rgba(255,122,26,.6)'}/>
                     {label}
                   </Link>
                 </li>
@@ -428,7 +429,7 @@ function Footer() {
                   <Link href={`/residences?ville=Abidjan&q=${q}`} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:13,color:'rgba(255,122,26,.5)'}}>place</span>
+                    <Icon n="place" size={13} color={'rgba(255,122,26,.5)'}/>
                     {q}
                   </Link>
                 </li>
@@ -444,7 +445,7 @@ function Footer() {
           <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
             <span style={{fontSize:12,color:'var(--footer-muted)'}}>© {year} New Horizon · Tous droits réservés</span>
             <span style={{width:3,height:3,borderRadius:'50%',background:'var(--footer-border)',display:'inline-block'}}/>
-            <span style={{fontSize:12,color:'var(--footer-muted)',display:'flex',alignItems:'center',gap:5}}><span className="material-icons" style={{fontSize:13}}>place</span>Abidjan, Côte d'Ivoire</span>
+            <span style={{fontSize:12,color:'var(--footer-muted)',display:'flex',alignItems:'center',gap:5}}><Icon n="place" size={13}/>Abidjan, Côte d'Ivoire</span>
           </div>
           <div style={{display:'flex',alignItems:'center',gap:20}}>
             <Link href="/cookies" style={{fontSize:12,color:'var(--footer-muted)',transition:'color .15s'}}
@@ -486,7 +487,7 @@ function CookieBanner() {
       animation:'fadeUp .35s var(--ease) both',flexWrap:'wrap',
     }}>
       <div style={{display:'flex',alignItems:'center',gap:10,flex:'1 1 240px',minWidth:0}}>
-        <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0}}>cookie</span>
+        <Icon n="cookie" size={20} color={'var(--gold)'} style={{,flexShrink:0}}/>
         <p style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.5,margin:0}}>
           Nous utilisons des cookies.{' '}
           <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>
@@ -517,7 +518,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
         <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+
         {/* Prevent flash of wrong theme */}
         <script dangerouslySetInnerHTML={{__html:`
           (function(){

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Logo } from '@/app/layout'
+import Icon from '@/components/ui/Icon'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
 
@@ -164,7 +165,7 @@ export default function AdminLogin() {
                   background:'none', border:'none', cursor:'pointer', color: textMuted, padding:4,
                   display:'flex', alignItems:'center',
                 }}>
-                  <span className="material-icons" style={{fontSize:18}}>{show ? 'visibility_off' : 'visibility'}</span>
+                  <Icon n={show ? 'visibility_off' : 'visibility'} size={18}/>
                 </button>
               </div>
               {error && (
@@ -172,7 +173,7 @@ export default function AdminLogin() {
                   marginTop:8, fontSize:12, color:'#FCA5A5',
                   display:'flex', alignItems:'center', gap:5,
                 }}>
-                  <span className="material-icons" style={{fontSize:13}}>error_outline</span>
+                  <Icon n="error_outline" size={13}/>
                   {error}
                 </p>
               )}
@@ -194,7 +195,7 @@ export default function AdminLogin() {
                 </>
               ) : (
                 <>
-                  <span className="material-icons" style={{fontSize:16}}>lock_open</span>
+                  <Icon n="lock_open" size={16}/>
                   Accéder au tableau de bord
                 </>
               )}

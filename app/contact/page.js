@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { SITE } from '@/lib/config'
 import MapView from '@/components/ui/MapView'
+import Icon from '@/components/ui/Icon'
 
 // Siège / bureau central
 const HQ = { quartier: null, commune: 'Plateau', ville: 'Abidjan' }
@@ -25,7 +26,7 @@ function ContactCard({ icon, label, value, href, sub, color = 'var(--gold)' }) {
         background: `${color}14`, border: `1px solid ${color}28`,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <span className="material-icons" style={{ fontSize: 22, color }}>{icon}</span>
+        <Icon n={icon} size={22} style={{, color }}/>
       </div>
       <div>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>{label}</div>
@@ -55,7 +56,7 @@ function CopyField({ label, value }) {
           background: copied ? '#22C55E' : 'var(--ink)', color: 'var(--bg)', border: 'none',
           transition: 'background .2s', flexShrink: 0,
         }}>
-        <span className="material-icons" style={{ fontSize: 14 }}>{copied ? 'check' : 'content_copy'}</span>
+        <Icon n={copied ? 'check' : 'content_copy'} size={14}/>
         {copied ? 'Copié !' : 'Copier'}
       </button>
     </div>
@@ -83,7 +84,7 @@ export default function ContactPage() {
               background: 'rgba(255,140,66,.07)', border: '1px solid rgba(255,140,66,.2)',
               marginBottom: 22,
             }}>
-              <span className="material-icons" style={{ fontSize: 13, color: '#FF7A1A' }}>contact_support</span>
+              <Icon n="contact_support" size={13} color={'#FF7A1A'}/>
               <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF7A1A' }}>Contact</span>
             </div>
 
@@ -165,7 +166,7 @@ export default function ContactPage() {
                     padding: '12px 16px', background: 'var(--white)',
                     border: '1px solid var(--border)', borderRadius: 12,
                   }}>
-                    <span className="material-icons" style={{ fontSize: 18, color: '#FF7A1A', flexShrink: 0 }}>{x.icon}</span>
+                    <Icon n={x.icon} size={18} color={'#FF7A1A'} style={{, flexShrink: 0 }}/>
                     <span style={{ fontSize: 14, color: 'var(--ink)' }}>{x.text}</span>
                   </div>
                 ))}
@@ -173,7 +174,7 @@ export default function ContactPage() {
 
               {/* FAQ link */}
               <Link href="/aide" className="btn btn-outline" style={{ display: 'inline-flex' }}>
-                <span className="material-icons" style={{ fontSize: 17 }}>help_outline</span>
+                <Icon n="help_outline" size={17}/>
                 Consulter la FAQ
               </Link>
             </div>
@@ -221,7 +222,7 @@ export default function ContactPage() {
           <a href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent('Bonjour ! Je voudrais des informations sur vos résidences.')}`}
             target="_blank" rel="noopener" className="btn-wa"
             style={{ position: 'relative', zIndex: 1, fontSize: 15, padding: '14px 28px' }}>
-            <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
+            <Icon n="chat" size={18}/>
             Écrire sur WhatsApp
           </a>
         </div>

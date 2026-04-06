@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { SITE } from '@/lib/config'
+import Icon from '@/components/ui/Icon'
 
 const FAQ = [
   {
@@ -62,12 +63,11 @@ function FaqItem({ item }) {
           border: `1px solid ${open ? 'rgba(255,122,26,.3)' : 'var(--border)'}`,
           transition: 'all .2s',
         }}>
-          <span className="material-icons" style={{
-            fontSize: 16,
+          <Icon n="expand_more" size={16} style={{,
             color: open ? '#FF7A1A' : 'var(--subtle)',
             transform: open ? 'rotate(180deg)' : 'none',
             transition: 'transform .2s',
-          }}>expand_more</span>
+          }}/>
         </div>
       </button>
       {open && (
@@ -108,7 +108,7 @@ export default function AidePage() {
             background: 'rgba(255,122,26,.07)', border: '1px solid rgba(255,122,26,.2)',
             marginBottom: 18,
           }}>
-            <span className="material-icons" style={{ fontSize: 13, color: '#FF7A1A' }}>help_outline</span>
+            <Icon n="help_outline" size={13} color={'#FF7A1A'}/>
             <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '.12em', textTransform: 'uppercase', color: '#FF7A1A' }}>Centre d'aide</span>
           </div>
 
@@ -128,7 +128,7 @@ export default function AidePage() {
           </p>
 
           <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener" className="btn-wa">
-            <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
+            <Icon n="chat" size={18}/>
             Contactez-nous sur WhatsApp
           </a>
         </div>
@@ -151,7 +151,7 @@ export default function AidePage() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: 'rgba(255,122,26,.08)', border: '1px solid rgba(255,122,26,.2)',
               }}>
-                <span className="material-icons" style={{ fontSize: 16, color: '#FF7A1A' }}>{section.icon}</span>
+                <Icon n={section.icon} size={16} color={'#FF7A1A'}/>
               </div>
               <span style={{ fontFamily: "'DM Sans',sans-serif", fontSize: 13, fontWeight: 700, color: 'var(--ink)', letterSpacing: '.02em' }}>
                 {section.cat}
@@ -182,7 +182,7 @@ export default function AidePage() {
             background: 'rgba(94,232,150,.1)', border: '1px solid rgba(94,232,150,.25)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <span className="material-icons" style={{ fontSize: 26, color: '#16A34A' }}>chat</span>
+            <Icon n="chat" size={26} color={'#16A34A'}/>
           </div>
 
           <h3 style={{
@@ -199,7 +199,7 @@ export default function AidePage() {
             href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Bonjour, j'ai une question concernant vos résidences.")}`}
             target="_blank" rel="noopener" className="btn-wa"
             style={{ fontSize: 14, padding: '13px 30px' }}>
-            <span className="material-icons" style={{ fontSize: 19 }}>chat</span>
+            <Icon n="chat" size={19}/>
             Écrire sur WhatsApp
           </a>
         </div>

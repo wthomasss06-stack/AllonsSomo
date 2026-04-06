@@ -1,5 +1,6 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
+import Icon from '@/components/ui/Icon'
 
 // Coordonnées hardcodées par commune / quartier d'Abidjan (fallback fiable)
 const ABIDJAN_COORDS = {
@@ -236,7 +237,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
             justifyContent: 'center', flexDirection: 'column', gap: 12,
             background: 'var(--surface)', zIndex: 500,
           }}>
-            <span className="material-icons" style={{ fontSize: 28, color: '#FF8C42', animation: 'mapSpin .9s linear infinite' }}>refresh</span>
+            <Icon n="refresh" size={28} color={'#FF8C42'} style={{, animation: 'mapSpin .9s linear infinite' }}/>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>Chargement de la carte…</p>
           </div>
         )}
@@ -247,7 +248,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
             justifyContent: 'center', flexDirection: 'column', gap: 10,
             background: 'var(--surface)',
           }}>
-            <span className="material-icons" style={{ fontSize: 32, color: 'var(--subtle)' }}>map</span>
+            <Icon n="map" size={32} color={'var(--subtle)'}/>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>Carte indisponible</p>
           </div>
         )}
@@ -268,8 +269,8 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
           )}
           {distance && (
             <span style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-              <span className="material-icons" style={{ fontSize: 13 }}>straighten</span>
-              {distance}{duration && <> · <span className="material-icons" style={{ fontSize: 13, marginLeft: 4 }}>directions_car</span>{duration}</>}
+              <Icon n="straighten" size={13}/>
+              {distance}{duration && <> · <Icon n="directions_car" size={13} style={{, marginLeft: 4 }}/>{duration}</>}
             </span>
           )}
           {geoError && phase !== 'located' && (
@@ -290,7 +291,7 @@ export default function MapView({ quartier, commune, ville = 'Abidjan', title, h
           onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(255,140,66,.4)' }}
           onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 3px 12px rgba(255,140,66,.35)' }}
         >
-          <span className="material-icons" style={{ fontSize: 15 }}>directions</span>
+          <Icon n="directions" size={15}/>
           {userPos ? 'Démarrer l\'itinéraire' : 'Voir sur Google Maps'}
         </button>
       </div>

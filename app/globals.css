@@ -529,6 +529,7 @@ h1, h2, h3, h4, h5 {
 
 /* DETAIL PAGE */
 .detail-grid { display: grid; grid-template-columns: 1fr 360px; gap: clamp(24px, 4vw, 48px); align-items: start; }
+.detail-grid > * { min-width: 0; overflow: hidden; }
 .booking-card {
   background: var(--white); border: 1px solid var(--border); border-radius: var(--r-xl);
   padding: 28px; position: sticky; top: 88px; box-shadow: var(--sh-md);

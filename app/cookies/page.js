@@ -1,3 +1,4 @@
+import Icon from '@/components/ui/Icon'
 'use client'
 
 const SECTIONS = [
@@ -90,7 +91,7 @@ export default function CookiesPage() {
             border: '1px solid rgba(201,168,76,.25)', borderTopColor: 'rgba(255,255,255,.1)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 5px 18px rgba(0,0,0,.45)',
           }}>
-            <span className="material-icons" style={{ fontSize: 26, color: 'var(--gold)' }}>cookie</span>
+            <Icon n="cookie" size={26} color={'var(--gold)'}/>
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 16, fontWeight: 700, fontStyle: 'italic', color: 'var(--text)', marginBottom: 5 }}>Gérer vos préférences</div>
@@ -110,7 +111,7 @@ export default function CookiesPage() {
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.5)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.22), rgba(154,120,48,.1))' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.28)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.14), rgba(154,120,48,.06))' }}>
-            <span className="material-icons" style={{ fontSize: 14 }}>restart_alt</span>
+            <Icon n="restart_alt" size={14}/>
             Réinitialiser
           </button>
         </div>

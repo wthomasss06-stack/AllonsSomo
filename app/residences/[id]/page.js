@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { getResidence, getResidences, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
 import MapView from '@/components/ui/MapView'
 import ResidenceCard from '@/components/ui/ResidenceCard'
+import Icon from '@/components/ui/Icon'
 
 // ── Page Loader ───────────────────────────────────────────────
 function PageLoader() {
@@ -152,7 +153,7 @@ function Lightbox({ photos, startIndex, onClose }) {
           onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.24)'}
           onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,.12)'}
         >
-          <span className="material-icons" style={{ fontSize: 26 }}>{b.icon}</span>
+          <Icon n={b.icon} size={26}/>
         </button>
       ))}
 
@@ -168,7 +169,7 @@ function Lightbox({ photos, startIndex, onClose }) {
         onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,.24)'}
         onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,.12)'}
       >
-        <span className="material-icons">close</span>
+        <Icon n="close" size={20}/>
       </button>
 
       {/* Thumbnail strip */}
@@ -211,7 +212,7 @@ function Gallery({ photos, titre }) {
       background: 'var(--surface)', borderRadius: 20,
       display: 'flex', alignItems: 'center', justifyContent: 'center', height: 320,
     }}>
-      <span className="material-icons" style={{ fontSize: 64, color: 'var(--border)' }}>apartment</span>
+      <Icon n="apartment" size={64} color={'var(--border)'}/>
     </div>
   )
 
@@ -259,7 +260,7 @@ function Gallery({ photos, titre }) {
           color: '#fff', fontSize: 11, fontWeight: 600,
           pointerEvents: 'none',
         }}>
-          <span className="material-icons" style={{ fontSize: 14 }}>open_in_full</span>
+          <Icon n="open_in_full" size={14}/>
           Agrandir
         </div>
 
@@ -279,7 +280,7 @@ function Gallery({ photos, titre }) {
             onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'}
             onMouseLeave={e => e.currentTarget.style.transform = 'translateY(-50%)'}
           >
-            <span className="material-icons">{b.icon}</span>
+            <Icon n={b.icon} size={20}/>
           </button>
         ))}
 
@@ -316,7 +317,7 @@ function Gallery({ photos, titre }) {
               background: 'var(--surface)', color: 'var(--muted)', padding: 0,
               fontSize: 11, fontWeight: 600,
             }}>
-              <span className="material-icons" style={{ fontSize: 16 }}>photo_library</span>
+              <Icon n="photo_library" size={16}/>
               +{total - 8}
             </button>
           )}
@@ -352,10 +353,10 @@ function BookingCard({ residence }) {
 
   if (!firstKey) return (
     <div className="booking-card" style={{ textAlign: 'center', color: 'var(--muted)' }}>
-      <span className="material-icons" style={{ fontSize: 36, display: 'block', marginBottom: 10, color: 'var(--subtle)' }}>payments</span>
+      <Icon n="payments" size={36} color={'var(--subtle)'} style={{, display: 'block', marginBottom: 10 }}/>
       <p style={{ fontSize: 14 }}>Tarifs sur demande WhatsApp</p>
       <a href={`https://wa.me/${wa}?text=${encodeURIComponent('Bonjour ! Je souhaite des informations sur la résidence "'+residence.titre+'"')}`} target="_blank" rel="noopener" className="btn-wa" style={{ marginTop: 16, width: '100%', justifyContent: 'center' }}>
-        <span className="material-icons" style={{ fontSize: 17 }}>chat</span>
+        <Icon n="chat" size={17}/>
         Contacter par WhatsApp
       </a>
     </div>
@@ -411,7 +412,7 @@ function BookingCard({ residence }) {
       )}
 
       <a href={buildWA()} target="_blank" rel="noopener" className="btn-wa" style={{ width: '100%', justifyContent: 'center', fontSize: 15 }}>
-        <span className="material-icons" style={{ fontSize: 18 }}>chat</span>
+        <Icon n="chat" size={18}/>
         Réserver par WhatsApp
       </a>
 
@@ -474,9 +475,9 @@ function SharePanel({ title }) {
         onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
         onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
       >
-        <span className="material-icons" style={{ fontSize: 16 }}>share</span>
+        <Icon n="share" size={16}/>
         Partager cette annonce
-        <span className="material-icons" style={{ fontSize: 16, marginLeft: 'auto', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }}>expand_more</span>
+        <Icon n="expand_more" size={16} style={{, marginLeft: 'auto', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }}/>
       </button>
 
       {open && (
@@ -507,10 +508,10 @@ function SharePanel({ title }) {
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'none'}
               >
-                <span className="material-icons" style={{ fontSize: 16 }}>{s.icon}</span>
+                <Icon n={s.icon} size={16}/>
                 {s.label}
                 {(s.id === 'tiktok' || s.id === 'instagram') && (
-                  <span className="material-icons" style={{ fontSize: 12, marginLeft: 'auto', opacity: .5 }}>content_copy</span>
+                  <Icon n="content_copy" size={12} style={{, marginLeft: 'auto', opacity: .5 }}/>
                 )}
               </button>
             ))}
@@ -518,7 +519,7 @@ function SharePanel({ title }) {
 
           {/* Copier le lien */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px', overflow: 'hidden', minWidth: 0 }}>
-            <span className="material-icons" style={{ fontSize: 15, color: 'var(--muted)', flexShrink: 0 }}>link</span>
+            <Icon n="link" size={15} color={'var(--muted)'} style={{, flexShrink: 0 }}/>
             <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {typeof window !== 'undefined' ? window.location.href : '…'}
             </span>
@@ -528,7 +529,7 @@ function SharePanel({ title }) {
               background: copied ? '#22C55E' : 'var(--ink)', color: 'var(--bg)', border: 'none',
               transition: 'background .2s', flexShrink: 0,
             }}>
-              <span className="material-icons" style={{ fontSize: 13 }}>{copied ? 'check' : 'content_copy'}</span>
+              <Icon n={copied ? 'check' : 'content_copy'} size={13}/>
               {copied ? 'Copié !' : 'Copier'}
             </button>
           </div>
@@ -540,7 +541,7 @@ function SharePanel({ title }) {
               padding: '9px', borderRadius: 10, fontSize: 12, fontWeight: 600,
               background: 'var(--white)', border: '1px solid var(--border)', color: 'var(--ink-2)', cursor: 'pointer',
             }}>
-              <span className="material-icons" style={{ fontSize: 15 }}>ios_share</span>
+              <Icon n="ios_share" size={15}/>
               Autres applications…
             </button>
           )}
@@ -567,7 +568,7 @@ export default function DetailPage() {
   if (!res) return (
     <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg)', paddingTop: 64 }}>
       <div style={{ textAlign: 'center' }}>
-        <span className="material-icons" style={{ fontSize: 64, color: 'var(--border)', display: 'block', marginBottom: 16 }}>search_off</span>
+        <Icon n="search_off" size={64} color={'var(--border)'} style={{, display: 'block', marginBottom: 16 }}/>
         <h2 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: '2rem', marginBottom: 8 }}>Résidence introuvable</h2>
         <p style={{ color: 'var(--muted)', marginBottom: 24 }}>Cette résidence n'existe pas ou a été supprimée.</p>
         <Link href="/residences" className="btn btn-dark">Retour au catalogue</Link>
@@ -578,15 +579,15 @@ export default function DetailPage() {
   const equips = Object.entries(EQUIPEMENTS_ICONS).filter(([k]) => (res.equipements || []).includes(k))
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64 }}>
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64, overflowX: 'hidden' }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)', overflowX: 'hidden' }}>
 
         {/* Breadcrumb */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24, fontSize: 13, color: 'var(--muted)', flexWrap: 'wrap' }}>
           <Link href="/" style={{ color: 'var(--muted)' }}>Accueil</Link>
-          <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
+          <Icon n="chevron_right" size={14}/>
           <Link href="/residences" style={{ color: 'var(--muted)' }}>Résidences</Link>
-          <span className="material-icons" style={{ fontSize: 14 }}>chevron_right</span>
+          <Icon n="chevron_right" size={14}/>
           <span style={{ color: 'var(--ink)', fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 200 }}>{res.titre}</span>
         </div>
 
@@ -601,13 +602,13 @@ export default function DetailPage() {
             <div style={{ marginBottom: 28 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
                 <span className="badge badge-muted" style={{ textTransform: 'capitalize' }}>{res.type_bien}</span>
-                {res.featured && <span className="badge badge-gold"><span className="material-icons" style={{ fontSize: 11 }}>star</span>À la une</span>}
+                {res.featured && <span className="badge badge-gold"><Icon n="star" size={11}/>À la une</span>}
               </div>
               <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 400, fontSize: 'clamp(1.8rem,4vw,3rem)', letterSpacing: '-.025em', lineHeight: 1.1, color: 'var(--ink)', marginBottom: 12 }}>
                 {res.titre}
               </h1>
               <span style={{ display: 'flex', alignItems: 'center', gap: 5, color: 'var(--muted)', fontSize: 14 }}>
-                <span className="material-icons" style={{ fontSize: 16 }}>location_on</span>
+                <Icon n="location_on" size={16}/>
                 {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
               </span>
             </div>
@@ -627,7 +628,7 @@ export default function DetailPage() {
                 <div className="equip-grid">
                   {equips.map(([k, eq]) => (
                     <div key={k} className="equip-item">
-                      <span className="material-icons equip-icon">{eq.icon}</span>
+                      <Icon n={eq.icon} size={20}/>
                       {eq.label}
                     </div>
                   ))}
@@ -642,7 +643,7 @@ export default function DetailPage() {
                   Localisation
                 </h2>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span className="material-icons" style={{ fontSize: 15 }}>location_on</span>
+                  <Icon n="location_on" size={15}/>
                   {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
                   <span style={{ marginLeft: 6, fontSize: 11, fontStyle: 'italic' }}>· Autorisez la géolocalisation pour l'itinéraire</span>
                 </p>
@@ -678,7 +679,7 @@ export default function DetailPage() {
           </div>
 
           {/* Right — booking */}
-          <div>
+          <div style={{ minWidth: 0, overflow: 'hidden' }}>
             <BookingCard residence={res}/>
           </div>
         </div>
