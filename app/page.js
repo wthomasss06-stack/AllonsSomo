@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
-import { getResidences, SITE, VILLES, TYPES_BIEN, formatPrix } from '@/lib/config'
+import { getResidences, SITE, COMMUNES, TYPES_BIEN, formatPrix } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
 // ── Animated counter ──────────────────────────────────────────
@@ -189,13 +189,13 @@ function QuickSearch() {
         flexWrap: 'wrap',
       }}>
         <div style={{ flex: '1 1 180px', padding: '10px 20px', borderRight: '1px solid var(--border)', minWidth: 0 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: 4 }}>Ville</div>
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: 4 }}>Commune / Quartier</div>
           <select value={ville} onChange={e => setVille(e.target.value)} style={{
             width: '100%', border: 'none', outline: 'none', background: 'transparent',
             fontFamily: 'var(--font-ui)', fontSize: 14, color: ville ? 'var(--ink)' : 'var(--subtle)', cursor: 'pointer',
           }}>
-            <option value="">Tous quartiers</option>
-            {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
+            <option value="">Toutes communes</option>
+            {COMMUNES.map(v => <option key={v} value={v}>{v}</option>)}
           </select>
         </div>
 
@@ -250,7 +250,7 @@ function QuickSearch() {
 function HowItWorks() {
   const STEPS = [
     { icon: 'apartment', num: '1', title: 'Choisissez une résidence', desc: 'Parcourez nos logements avec photos réelles, prix affichés, équipements détaillés.' },
-    { icon: 'chat',      num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'agence.' },
+    { icon: 'chat',      num: '2', title: 'Cliquez sur WhatsApp',      desc: 'Un bouton → contact direct. Pas de formulaire, pas d\'attente, pas d\'intermédiaire.' },
     { icon: 'check_circle', num: '3', title: 'Confirmez en 2 minutes', desc: 'Notre agent confirme la disponibilité et vous guide pour la caution sécurisée.' },
   ]
   return (
@@ -456,13 +456,14 @@ export default function HomePage() {
           <div>
             <div className="section-label">Pourquoi nous</div>
             <h2 className="section-title" style={{ marginBottom: 20 }}>
-              Pas une agence<br/><em>ordinaire</em>
+              Votre accès aux<br/><em>plus belles résidences</em>
             </h2>
             <p className="section-desc" style={{ marginBottom: 36 }}>
-              Des résidences soigneusement sélectionnées, une réservation directe et sans surprise. On vous accompagne de A à Z.
+              New Horizon vous donne accès à de belles résidences meublées à Abidjan, directement réservables. Des logements soigneusement sélectionnés par notre équipe — prix clairs, photos fidèles, réservation en quelques clics.
             </p>
             <Link href="/residences" className="btn btn-dark">
-              Trouver ma résidence
+              <span className="material-icons" style={{fontSize:17}}>apartment</span>
+              Voir les résidences
             </Link>
           </div>
 

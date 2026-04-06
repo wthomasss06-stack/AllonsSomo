@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { getResidences, VILLES, TYPES_BIEN } from '@/lib/config'
+import { getResidences, COMMUNES, TYPES_BIEN } from '@/lib/config'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
 export default function ResidencesPage() {
@@ -19,7 +19,7 @@ export default function ResidencesPage() {
     .filter(r => {
       const q = search.toLowerCase()
       const mQ = !q || [r.titre, r.quartier, r.commune, r.ville].some(s => s?.toLowerCase().includes(q))
-      const mV = !ville || r.ville === ville
+      const mV = !ville || [r.commune, r.quartier, r.ville].some(s => s === ville)
       const mT = !type  || r.type_bien === type
       return mQ && mV && mT
     })
@@ -67,8 +67,8 @@ export default function ResidencesPage() {
 
           {/* Ville */}
           <select className="select" value={ville} onChange={e => setVille(e.target.value)} style={{ flex: '0 1 160px' }}>
-            <option value="">Toutes villes</option>
-            {VILLES.map(v => <option key={v} value={v}>{v}</option>)}
+            <option value="">Toutes communes</option>
+            {COMMUNES.map(v => <option key={v} value={v}>{v}</option>)}
           </select>
 
           {/* Type */}

@@ -112,7 +112,7 @@ export default function AProposPage() {
               fontSize: 'clamp(15px,2vw,18px)', lineHeight: 1.75,
               color: 'var(--muted)', maxWidth: 500, marginBottom: 36,
             }}>
-              Allons Somo, c'est une solution simple pour louer des résidences meublées
+              New Horizon, c'est une solution simple pour louer des résidences meublées
               à Abidjan, sans complications et sans perte de temps.
               Pas d'intermédiaires, pas de frais cachés.
             </p>

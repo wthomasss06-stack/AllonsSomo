@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import Link from 'next/link'
 import { getResidence, getResidences, formatPrix, EQUIPEMENTS_ICONS, SITE, fetchWhatsApp } from '@/lib/config'
+import MapView from '@/components/ui/MapView'
 import ResidenceCard from '@/components/ui/ResidenceCard'
 
 // ── Page Loader ───────────────────────────────────────────────
@@ -14,7 +15,8 @@ function PageLoader() {
           0% { background-position: -600px 0; }
           100% { background-position: 600px 0; }
         }
-        @keyframes spinAnim { to { transform: rotate(360deg); } }
+        @keyframes logoPulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.7;transform:scale(.95);} }
+        @keyframes loaderBar { 0%{width:0%;margin-left:0} 50%{width:80%;margin-left:0} 100%{width:0%;margin-left:100%} }
         .ld-shimmer {
           background: linear-gradient(90deg, var(--surface) 0%, var(--border) 40%, var(--surface) 100%);
           background-size: 600px 100%;
@@ -23,17 +25,33 @@ function PageLoader() {
         }
       `}</style>
 
-      {/* Spinner centré */}
+      {/* Logo loader pulsant */}
       <div style={{
         position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
         justifyContent: 'center', pointerEvents: 'none', zIndex: 500,
+        flexDirection: 'column', gap: 20,
       }}>
-        <div style={{
-          width: 48, height: 48, borderRadius: '50%',
-          border: '3px solid var(--border)',
-          borderTopColor: 'var(--gold)',
-          animation: 'spinAnim .75s linear infinite',
-        }}/>
+        <div style={{ animation: 'logoPulse 1.4s ease-in-out infinite' }}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="80" height="80" aria-hidden="true">
+            <defs>
+              <linearGradient id="lgs" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#D3D3D3"/><stop offset="100%" stopColor="#808080"/></linearGradient>
+              <linearGradient id="lgb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#A05A2C"/><stop offset="100%" stopColor="#3E1E04"/></linearGradient>
+            </defs>
+            <g transform="translate(40,20)">
+              <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill="var(--ink)"/>
+              <polygon points="70,140 120,140 110,180" fill="var(--ink)"/>
+              <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill="#FF8C42"/>
+              <polygon points="230,140 270,140 250,170" fill="rgba(255,255,255,0.5)"/>
+              <polygon points="320,140 370,140 340,170" fill="rgba(255,255,255,0.5)"/>
+              <path d="M 270 260 C 310 260, 340 230, 360 210 C 330 240, 300 280, 270 280 Z" fill="url(#lgs)"/>
+              <path d="M 280 290 C 330 290, 360 320, 380 350 C 350 320, 310 310, 260 310 Z" fill="url(#lgb)"/>
+              <text x="220" y="380" fontFamily="'DM Sans',Arial,sans-serif" fontWeight="900" fontSize="36" textAnchor="middle" letterSpacing="2"><tspan fill="var(--ink)">NEW </tspan><tspan fill="#FF8C42">HORIZON</tspan></text>
+            </g>
+          </svg>
+        </div>
+        <div style={{ width: 180, height: 2, borderRadius: 99, background: 'var(--border)', overflow: 'hidden' }}>
+          <div style={{ height: '100%', background: '#FF8C42', borderRadius: 99, animation: 'loaderBar 1.4s ease-in-out infinite' }}/>
+        </div>
       </div>
 
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: 'clamp(28px,4vw,48px) var(--pad)' }}>
@@ -400,6 +418,133 @@ function BookingCard({ residence }) {
       <button className="btn btn-outline" onClick={() => window.open(`https://wa.me/${wa}`, '_blank')} style={{ width: '100%', justifyContent: 'center', marginTop: 10 }}>
         Poser une question
       </button>
+
+      {/* ── Partager l'annonce ── */}
+      <SharePanel title={residence.titre}/>
+    </div>
+  )
+}
+
+// ── Share Panel ───────────────────────────────────────────────
+function SharePanel({ title }) {
+  const [open, setOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
+
+  const getUrl = () => typeof window !== 'undefined' ? window.location.href : ''
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(getUrl()).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    })
+  }
+
+  const share = (platform) => {
+    const url = getUrl()
+    const text = `Découvrez cette résidence sur New Horizon : ${title}`
+    const links = {
+      whatsapp: `https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`,
+      facebook:  `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
+      tiktok:    null, // Pas d'URL de partage web direct
+      instagram: null, // Pas d'URL de partage web direct
+    }
+    if (links[platform]) window.open(links[platform], '_blank')
+    else copyLink() // Pour TikTok/Instagram : copier le lien
+  }
+
+  const nativeShare = async () => {
+    const url = getUrl()
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, text: `Découvrez : ${title}`, url })
+        return
+      } catch {}
+    }
+    copyLink()
+  }
+
+  return (
+    <div style={{ marginTop: 14 }}>
+      <button onClick={() => setOpen(o => !o)} style={{
+        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+        padding: '10px 16px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 600,
+        background: 'var(--surface)', border: '1.5px solid var(--border)', color: 'var(--ink-2)',
+        cursor: 'pointer', transition: 'background .15s',
+      }}
+        onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
+      >
+        <span className="material-icons" style={{ fontSize: 16 }}>share</span>
+        Partager cette annonce
+        <span className="material-icons" style={{ fontSize: 16, marginLeft: 'auto', transition: 'transform .2s', transform: open ? 'rotate(180deg)' : 'none' }}>expand_more</span>
+      </button>
+
+      {open && (
+        <div style={{
+          marginTop: 10, padding: 14, borderRadius: 'var(--r-md)',
+          background: 'var(--surface)', border: '1px solid var(--border)',
+          animation: 'fadeUp .18s var(--ease)',
+        }}>
+          <p style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 10 }}>
+            Envoyer l'annonce à vos amis
+          </p>
+
+          {/* Réseau sociaux */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+            {[
+              { id: 'whatsapp', label: 'WhatsApp',  icon: 'chat',     color: '#25D366', bg: 'rgba(37,211,102,.08)', border: 'rgba(37,211,102,.2)' },
+              { id: 'facebook', label: 'Facebook',  icon: 'facebook', color: '#1877F2', bg: 'rgba(24,119,242,.08)', border: 'rgba(24,119,242,.2)' },
+              { id: 'tiktok',   label: 'TikTok',    icon: 'music_video', color: '#000', bg: 'rgba(0,0,0,.06)',     border: 'rgba(0,0,0,.12)' },
+              { id: 'instagram',label: 'Instagram', icon: 'camera_alt',  color: '#E1306C', bg: 'rgba(225,48,108,.06)', border: 'rgba(225,48,108,.15)' },
+            ].map(s => (
+              <button key={s.id} onClick={() => share(s.id)} style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 12px', borderRadius: 10, fontSize: 12, fontWeight: 600,
+                background: s.bg, border: `1px solid ${s.border}`, color: s.color,
+                cursor: 'pointer', transition: 'transform .15s',
+              }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+              >
+                <span className="material-icons" style={{ fontSize: 16 }}>{s.icon}</span>
+                {s.label}
+                {(s.id === 'tiktok' || s.id === 'instagram') && (
+                  <span className="material-icons" style={{ fontSize: 12, marginLeft: 'auto', opacity: .5 }}>content_copy</span>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Copier le lien */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px' }}>
+            <span className="material-icons" style={{ fontSize: 15, color: 'var(--muted)', flexShrink: 0 }}>link</span>
+            <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {typeof window !== 'undefined' ? window.location.href : '…'}
+            </span>
+            <button onClick={copyLink} style={{
+              display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', borderRadius: 7,
+              fontSize: 11, fontWeight: 700, cursor: 'pointer',
+              background: copied ? '#22C55E' : 'var(--ink)', color: 'var(--bg)', border: 'none',
+              transition: 'background .2s', flexShrink: 0,
+            }}>
+              <span className="material-icons" style={{ fontSize: 13 }}>{copied ? 'check' : 'content_copy'}</span>
+              {copied ? 'Copié !' : 'Copier'}
+            </button>
+          </div>
+
+          {/* Partage natif mobile */}
+          {'share' in (typeof navigator !== 'undefined' ? navigator : {}) && (
+            <button onClick={nativeShare} style={{
+              marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+              padding: '9px', borderRadius: 10, fontSize: 12, fontWeight: 600,
+              background: 'var(--white)', border: '1px solid var(--border)', color: 'var(--ink-2)', cursor: 'pointer',
+            }}>
+              <span className="material-icons" style={{ fontSize: 15 }}>ios_share</span>
+              Autres applications…
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -486,6 +631,27 @@ export default function DetailPage() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* Localisation & itinéraire */}
+            {(res.quartier || res.commune) && (
+              <div style={{ marginBottom: 32 }}>
+                <h2 style={{ fontFamily: 'var(--font-display)', fontSize: '1.4rem', fontWeight: 400, letterSpacing: '-.015em', marginBottom: 6 }}>
+                  Localisation
+                </h2>
+                <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span className="material-icons" style={{ fontSize: 15 }}>location_on</span>
+                  {[res.quartier, res.commune, res.ville].filter(Boolean).join(', ')}
+                  <span style={{ marginLeft: 6, fontSize: 11, fontStyle: 'italic' }}>· Autorisez la géolocalisation pour l'itinéraire</span>
+                </p>
+                <MapView
+                  quartier={res.quartier}
+                  commune={res.commune}
+                  ville={res.ville}
+                  title={res.titre}
+                  height={320}
+                />
               </div>
             )}
 

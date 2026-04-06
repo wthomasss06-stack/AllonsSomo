@@ -5,38 +5,61 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SITE } from '@/lib/config'
 
-// ── Logo (adapté thème) ────────────────────────────────────────
-export function Logo({ size = 36, forceLight = false }) {
-  // forceLight = fond clair (logo foncé), sinon auto selon thème
+// ── New Horizon Logo (thème-adaptatif) ─────────────────────────
+// inkColor: couleur des éléments noirs (adapte au mode)
+// force: 'dark' | 'light' | null (auto)
+export function Logo({ size = 44, force = null, hero = false }) {
+  // En mode hero (fond sombre) ou dark → lettre N en blanc
+  // En mode clair → lettre N en noir
+  const ink = hero || force === 'dark' ? '#FFFFFF' : 'var(--ink)'
+  const accent = '#FF8C42'
+  const textNew = hero || force === 'dark' ? '#FFFFFF' : '#000000'
+
   return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="currentColor"/>
-      <path d="M10 28 L16 14 L22 28" stroke="var(--bg)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M12.2 23 L19.8 23" stroke="var(--bg)" strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M26 16 C26 13.8 27.6 12.5 29.5 12.5 C31.4 12.5 33 13.8 33 15.6 C33 17.4 31 18.2 29.5 19 C28 19.8 26 20.8 26 23.2 C26 25.6 27.8 27 30 27 C32.2 27 33.5 25.6 33.5 24" stroke="var(--bg)" strokeWidth="2.2" strokeLinecap="round"/>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 500 500"
+      width={size}
+      height={size}
+      style={{ display: 'block', flexShrink: 0 }}
+      aria-label="New Horizon logo"
+    >
+      <defs>
+        <linearGradient id={`gradS-${force||'auto'}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#D3D3D3"/>
+          <stop offset="100%" stopColor="#808080"/>
+        </linearGradient>
+        <linearGradient id={`gradB-${force||'auto'}`} x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#A05A2C"/>
+          <stop offset="100%" stopColor="#3E1E04"/>
+        </linearGradient>
+      </defs>
+      <g transform="translate(40, 20)">
+        {/* Lettre N */}
+        <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill={ink}/>
+        <polygon points="70,140 120,140 110,180" fill={ink}/>
+        {/* Lettre H */}
+        <path d="M 230 140 L 270 140 L 270 210 L 320 210 L 320 140 L 370 140 L 370 320 L 330 320 L 330 250 L 270 250 L 270 320 L 230 320 Z" fill={accent}/>
+        <polygon points="230,140 270,140 250,170" fill={hero ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.6)'}/>
+        <polygon points="320,140 370,140 340,170" fill={hero ? 'rgba(255,255,255,0.25)' : 'rgba(255,255,255,0.6)'}/>
+        {/* Accents décoratifs */}
+        <path d="M 270 260 C 310 260, 340 230, 360 210 C 330 240, 300 280, 270 280 Z" fill={`url(#gradS-${force||'auto'})`}/>
+        <path d="M 280 290 C 330 290, 360 320, 380 350 C 350 320, 310 310, 260 310 Z" fill={`url(#gradB-${force||'auto'})`}/>
+        {/* Texte */}
+        <text x="220" y="380" fontFamily="'DM Sans','Segoe UI',Arial,sans-serif" fontWeight="900" fontSize="36" textAnchor="middle" letterSpacing="2">
+          <tspan fill={textNew}>NEW </tspan>
+          <tspan fill={accent}>HORIZON</tspan>
+        </text>
+      </g>
     </svg>
   )
 }
 
-export function LogoHero({ size = 36 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="40" height="40" rx="10" fill="rgba(255,255,255,0.15)"/>
-      <path d="M10 28 L16 14 L22 28" stroke="#fff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M12.2 23 L19.8 23" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/>
-      <path d="M26 16 C26 13.8 27.6 12.5 29.5 12.5 C31.4 12.5 33 13.8 33 15.6 C33 17.4 31 18.2 29.5 19 C28 19.8 26 20.8 26 23.2 C26 25.6 27.8 27 30 27 C32.2 27 33.5 25.6 33.5 24" stroke="#fff" strokeWidth="2.2" strokeLinecap="round"/>
-    </svg>
-  )
+// Alias compatibilité
+export function LogoHero({ size = 44 }) {
+  return <Logo size={size} hero={true}/>
 }
-
-export function WordMark({ hero = false }) {
-  return (
-    <span style={{fontFamily:"'DM Serif Display', Georgia, serif",fontSize:20,fontWeight:400,color:hero?'#fff':'var(--ink)',letterSpacing:'-.02em',lineHeight:1,display:'inline-flex',flexDirection:'column',gap:0}}>
-      <span style={{fontSize:10,fontFamily:"'DM Sans', sans-serif",fontWeight:600,letterSpacing:'.14em',textTransform:'uppercase',color:hero?'rgba(255,255,255,.5)':'var(--muted)',lineHeight:1,marginBottom:2}}>Allons</span>
-      <span style={{fontStyle:'italic'}}>Somo</span>
-    </span>
-  )
-}
+export function WordMark() { return null }
 
 // ── Thème hook ─────────────────────────────────────────────────
 function useTheme() {
@@ -96,6 +119,7 @@ const NAV_LINKS = [
   { href: '/',           label: 'Accueil' },
   { href: '/residences', label: 'Résidences' },
   { href: '/a-propos',   label: 'À propos' },
+  { href: '/contact',    label: 'Contact' },
   { href: '/aide',       label: 'Aide' },
 ]
 
@@ -119,8 +143,7 @@ function Navbar({ isHero }) {
       <nav className={`nav${isHeroMode ? ' hero-transparent' : ''}${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link href="/" className="nav-brand">
-            {isHeroMode ? <LogoHero size={34}/> : <Logo size={34}/>}
-            <WordMark hero={isHeroMode}/>
+            {isHeroMode ? <LogoHero size={44}/> : <Logo size={44}/>}
           </Link>
           <ul className="nav-links">
             {NAV_LINKS.map(({ href, label }) => (
@@ -139,7 +162,7 @@ function Navbar({ isHero }) {
         </div>
       </nav>
       <div className={`mobile-nav${menuOpen?' open':''}`}>
-        <div style={{display:'flex',alignItems:'center',gap:10}}><Logo size={34}/><WordMark/></div>
+        <Logo size={44}/>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
           <span className="material-icons" style={{fontSize:20}}>close</span>
         </button>
@@ -169,50 +192,6 @@ function Navbar({ isHero }) {
   )
 }
 
-// ── Footer Map ────────────────────────────────────────────────
-function FooterMap() {
-  const [settings, setSettings] = useState({ lat:5.3364, lon:-4.0267, label:"Abidjan, Côte d'Ivoire", ville:'Abidjan' })
-  const [ready, setReady] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/map-settings')
-      .then(r => r.json())
-      .then(d => { setSettings(d); setReady(true) })
-      .catch(() => setReady(true))
-  }, [])
-
-  const { lat, lon, label } = settings
-  const d = 0.018
-  const mapSrc = `https://www.openstreetmap.org/export/embed.html?bbox=${lon-d},${lat-d*.65},${lon+d},${lat+d*.65}&layer=mapnik&marker=${lat},${lon}`
-  const osmLink = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=15/${lat}/${lon}`
-
-  return (
-    <div style={{marginTop:24}}>
-      <div style={{fontSize:10,fontWeight:700,letterSpacing:'.12em',textTransform:'uppercase',color:'var(--footer-muted)',marginBottom:10,display:'flex',alignItems:'center',gap:6}}>
-        <span className="material-icons" style={{fontSize:12,color:'var(--gold)'}}>location_on</span>Nous trouver
-      </div>
-      <div style={{borderRadius:12,overflow:'hidden',border:'1px solid var(--footer-border)',background:'var(--surface)',opacity:ready?1:.5,transition:'opacity .4s'}}>
-        <a href={osmLink} target="_blank" rel="noopener" style={{display:'block',textDecoration:'none'}}>
-          <iframe
-            src={mapSrc}
-            width="100%" height="176"
-            title="Localisation Allons Somo"
-            loading="lazy"
-            style={{display:'block',border:'none',filter:'grayscale(10%) contrast(1.02)',pointerEvents:'none'}}
-          />
-        </a>
-        <div style={{padding:'8px 12px',background:'var(--footer-bg)',display:'flex',alignItems:'center',gap:6,borderTop:'1px solid var(--footer-border)'}}>
-          <span className="material-icons" style={{fontSize:13,color:'var(--gold)',flexShrink:0}}>place</span>
-          <span style={{fontSize:11,color:'var(--footer-muted)',lineHeight:1.4,flex:1}}>{label}</span>
-          <a href={osmLink} target="_blank" rel="noopener"
-            style={{fontSize:10,fontWeight:700,letterSpacing:'.06em',textTransform:'uppercase',color:'var(--gold)',textDecoration:'none',flexShrink:0}}>
-            Agrandir ↗
-          </a>
-        </div>
-      </div>
-    </div>
-  )
-}
 
 // ── WhatsApp hook (récupère depuis API) ────────────────────────
 function useWhatsApp() {
@@ -253,18 +232,18 @@ function Footer() {
           {/* Brand column */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 18 }}>
-              <Logo size={36}/><WordMark/>
+              <Logo size={48}/>
             </div>
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
             <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:99,background:'var(--surface)',border:'1px solid var(--footer-border)',marginBottom:24}}>
-              <span style={{fontSize:14}}>🇨🇮</span>
+              <span className="material-icons" style={{fontSize:14,color:'var(--gold)'}}>place</span>
               <span style={{fontSize:11,color:'var(--footer-text)',fontWeight:600,letterSpacing:'.04em'}}>Abidjan, Côte d'Ivoire</span>
             </div>
 
             <div style={{display:'flex',gap:8,marginBottom:28}}>
               {[
-                { href: SITE.instagram, icon: 'photo_camera', label: 'Instagram' },
+                { href: SITE.facebook, icon: 'facebook', label: 'Facebook' },
                 { href: `https://wa.me/${wa}`, icon: 'chat', label: 'WhatsApp', green: true },
                 { href: `mailto:${SITE.email}`, icon: 'mail', label: 'Email' },
               ].map((s, i) => (
@@ -302,6 +281,7 @@ function Footer() {
                 { href: '/residences', label: 'Toutes les résidences', icon: 'apartment' },
                 { href: '/a-propos', label: 'À propos', icon: 'info' },
                 { href: '/aide', label: "Centre d'aide (FAQ)", icon: 'help_outline' },
+                { href: '/contact', label: 'Nous contacter', icon: 'contact_support' },
                 { href: '/cookies', label: 'Politique Cookies', icon: 'policy' },
               ].map(({ href, label, icon }) => (
                 <li key={href}>
@@ -352,7 +332,14 @@ function Footer() {
                 <span>{SITE.email}<br/><span style={{fontSize:11,color:'var(--subtle)'}}>Support 24h/7j</span></span>
               </a>
             </div>
-            <FooterMap/>
+            <div style={{marginTop:24}}>
+              <Link href="/contact" style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',borderRadius:12,background:'var(--surface)',border:'1px solid var(--footer-border)',color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
+                onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
+                onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
+                <span className="material-icons" style={{fontSize:16,color:'var(--gold)'}}>map</span>
+                Voir la carte &amp; nous trouver
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -360,9 +347,9 @@ function Footer() {
 
         <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',flexWrap:'wrap',gap:12,paddingBottom:28}}>
           <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
-            <span style={{fontSize:12,color:'var(--footer-muted)'}}>© {year} Allons Somo · Tous droits réservés</span>
+            <span style={{fontSize:12,color:'var(--footer-muted)'}}>© {year} New Horizon · Tous droits réservés</span>
             <span style={{width:3,height:3,borderRadius:'50%',background:'var(--footer-border)',display:'inline-block'}}/>
-            <span style={{fontSize:12,color:'var(--footer-muted)'}}>Résidences premium en Côte d'Ivoire 🇨🇮</span>
+            <span style={{fontSize:12,color:'var(--footer-muted)',display:'flex',alignItems:'center',gap:5}}><span className="material-icons" style={{fontSize:13}}>place</span>Abidjan, Côte d'Ivoire</span>
           </div>
           <div style={{display:'flex',alignItems:'center',gap:20}}>
             <Link href="/cookies" style={{fontSize:12,color:'var(--footer-muted)',transition:'color .15s'}}

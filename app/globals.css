@@ -523,8 +523,10 @@ h1, h2, h3, h4, h5 {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
-/* FOCUS */
-:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 4px; }
+/* NAV BRAND LOGO responsive */
+.nav-brand svg { width: clamp(90px,22vw,160px); height: auto; max-height: 48px; }
+.mobile-nav > svg { width: clamp(110px,30vw,180px); height: auto; }
+
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
