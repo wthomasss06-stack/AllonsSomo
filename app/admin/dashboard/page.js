@@ -8,21 +8,26 @@ import { API_URL } from '@/lib/config'
 const ADMIN_PASSWORD = 'Akaresi@225'
 
 // ─── Design tokens ────────────────────────────────────────────
-const T = {
-  bg:      '#FAFAF8',
-  surface: '#FFFFFF',
-  border:  '#E8E6E3',
-  borderG: 'rgba(201,150,58,.25)',
-  gold:    '#C9963A',
-  goldL:   '#E8B458',
-  ink:     '#0F0E0C',
-  ink2:    '#2A2823',
-  muted:   '#8A8784',
-  dim:     '#C4C2BF',
-  green:   '#16A34A',
-  red:     '#DC2626',
-  r:       14,
+// T is now a function that accepts isDark
+function makeT(dark) {
+  return {
+    bg:      dark ? '#111612' : '#FAFAF8',
+    surface: dark ? '#1A2118' : '#FFFFFF',
+    border:  dark ? '#2E3830' : '#E8E6E3',
+    borderG: dark ? 'rgba(201,150,58,.3)' : 'rgba(201,150,58,.25)',
+    gold:    '#C9963A',
+    goldL:   '#E8B458',
+    ink:     dark ? '#F0EBE0' : '#0F0E0C',
+    ink2:    dark ? '#D8D2C8' : '#2A2823',
+    muted:   dark ? '#8A9088' : '#8A8784',
+    dim:     dark ? '#5A605A' : '#C4C2BF',
+    green:   '#16A34A',
+    red:     '#DC2626',
+    r:       14,
+  }
 }
+// Default (light) — will be overridden in components
+const T = makeT(false)
 
 // ─── Input helpers ────────────────────────────────────────────
 const IS = {
@@ -882,9 +887,9 @@ function AdminTopBar({ active, setActive, onLogout }) {
           }}
           onMouseEnter={e=>e.currentTarget.style.background='rgba(201,150,58,.06)'}
           onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
-            <Logo size={30}/>
+            <Logo size={36}/>
             <div style={{lineHeight:1}}>
-              <div style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,fontStyle:'italic'}}>Allons Somo</div>
+              <div style={{fontFamily:"'DM Serif Display',serif",fontSize:15,fontWeight:400,color:T.ink,fontStyle:'italic'}}>New <span style={{color:T.gold}}>Horizon</span></div>
               <div style={{fontSize:9,color:T.muted,fontFamily:"'DM Sans',sans-serif",letterSpacing:'.1em',textTransform:'uppercase',marginTop:2,display:'flex',alignItems:'center',gap:3}}>
                 <span className="material-icons" style={{fontSize:9}}>arrow_back</span>Retour au site
               </div>
@@ -1007,12 +1012,23 @@ export default function AdminDashboard() {
   const [adminKey, setAdminKey] = useState('')
   const [active, setActive]     = useState('residences')
   const [mounted, setMounted]   = useState(false)
+  const [dark, setDark]         = useState(false)
 
   useEffect(()=>{
     setMounted(true)
     const key=sessionStorage.getItem('as-admin')
     if(!key){router.replace('/admin');return}
     setAdminKey(key)
+    // Read theme
+    const stored = localStorage.getItem('as-theme')
+    const prefer = window.matchMedia('(prefers-color-scheme: dark)').matches
+    setDark(stored ? stored === 'dark' : prefer)
+    // Watch theme changes
+    const observer = new MutationObserver(() => {
+      setDark(document.documentElement.classList.contains('dark'))
+    })
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
+    return () => observer.disconnect()
   },[router])
 
   const logout = () => { sessionStorage.removeItem('as-admin'); router.push('/admin') }
@@ -1026,6 +1042,7 @@ export default function AdminDashboard() {
   if (!mounted||!adminKey) return null
 
   const page = PAGES[active]
+  const D = makeT(dark) // dynamic tokens
 
   return (
     <div style={{

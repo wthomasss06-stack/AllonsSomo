@@ -143,7 +143,7 @@ function Navbar({ isHero }) {
       <nav className={`nav${isHeroMode ? ' hero-transparent' : ''}${scrolled ? ' scrolled' : ''}`}>
         <div className="nav-inner">
           <Link href="/" className="nav-brand">
-            {isHeroMode ? <LogoHero size={44}/> : <Logo size={44}/>}
+            {isHeroMode ? <LogoHero size={60}/> : <Logo size={60}/>}
           </Link>
           <ul className="nav-links">
             {NAV_LINKS.map(({ href, label }) => (
@@ -162,7 +162,7 @@ function Navbar({ isHero }) {
         </div>
       </nav>
       <div className={`mobile-nav${menuOpen?' open':''}`}>
-        <Logo size={44}/>
+        <Logo size={60}/>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
           <span className="material-icons" style={{fontSize:20}}>close</span>
         </button>
@@ -224,7 +224,7 @@ function Footer() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 var(--pad)', position: 'relative' }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'clamp(200px,28%,320px) 1fr 1fr 1fr',
+          gridTemplateColumns: 'clamp(200px,28%,320px) 1fr 1fr',
           gap: 'clamp(32px,5vw,64px)',
           paddingBottom: 'clamp(40px,6vw,72px)',
         }} className="footer-main-grid">
@@ -296,7 +296,7 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Quartiers column */}
+          {/* Quartiers column — fin grid */}
           <div>
             <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Nos quartiers</div>
             <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:4}}>
@@ -313,34 +313,6 @@ function Footer() {
             </ul>
           </div>
 
-          {/* Contact + Carte column */}
-          <div>
-            <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Contact</div>
-            <div style={{display:'flex',flexDirection:'column',gap:12,marginBottom:24}}>
-              <a href={`https://wa.me/${wa}`} target="_blank" rel="noopener"
-                style={{display:'flex',alignItems:'flex-start',gap:10,color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
-                onMouseEnter={e=>e.currentTarget.style.color='#16A34A'}
-                onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                <span className="material-icons" style={{fontSize:15,marginTop:1,color:'#16A34A'}}>chat</span>
-                <span>WhatsApp<br/><span style={{fontSize:11,color:'var(--subtle)'}}>Réponse rapide</span></span>
-              </a>
-              <a href={`mailto:${SITE.email}`}
-                style={{display:'flex',alignItems:'flex-start',gap:10,color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
-                onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
-                onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                <span className="material-icons" style={{fontSize:15,marginTop:1,color:'var(--gold)'}}>mail</span>
-                <span>{SITE.email}<br/><span style={{fontSize:11,color:'var(--subtle)'}}>Support 24h/7j</span></span>
-              </a>
-            </div>
-            <div style={{marginTop:24}}>
-              <Link href="/contact" style={{display:'flex',alignItems:'center',gap:8,padding:'10px 14px',borderRadius:12,background:'var(--surface)',border:'1px solid var(--footer-border)',color:'var(--footer-muted)',fontSize:13,textDecoration:'none',transition:'color .15s'}}
-                onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
-                onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                <span className="material-icons" style={{fontSize:16,color:'var(--gold)'}}>map</span>
-                Voir la carte &amp; nous trouver
-              </Link>
-            </div>
-          </div>
         </div>
 
         <div style={{height:1,background:'var(--footer-border)',margin:'0 0 24px'}}/>
@@ -415,9 +387,9 @@ export default function RootLayout({ children }) {
       <head>
         <meta charSet="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <meta name="description" content="Allons Somo — Résidences meublées premium en Côte d'Ivoire. Réservez facilement."/>
-        <meta property="og:title" content="Allons Somo — Résidences premium CI"/>
-        <title>Allons Somo — Résidences</title>
+        <meta name="description" content="New Horizon — Résidences meublées premium en Côte d'Ivoire. Réservez facilement."/>
+        <meta property="og:title" content="New Horizon — Résidences premium CI"/>
+        <title>New Horizon — Résidences</title>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
         <link rel="preconnect" href="https://fonts.googleapis.com"/>
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
