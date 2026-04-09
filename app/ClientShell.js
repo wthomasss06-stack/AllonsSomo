@@ -1,5 +1,4 @@
 'use client'
-import './globals.css'
 import PWAInstallButton from '@/components/ui/PWAInstallButton'
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'

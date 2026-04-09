@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Logo } from '@/app/layout'
+import { Logo } from '@/app/ClientShell'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
 

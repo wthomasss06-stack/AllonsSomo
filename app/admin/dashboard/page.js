@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Logo } from '@/app/layout'
+import { Logo } from '@/app/ClientShell'
 import { API_URL } from '@/lib/config'
 
 const ADMIN_PASSWORD = 'Akaresi@225'
