@@ -1,5 +1,4 @@
 'use client'
-import Icon from '@/components/ui/Icon'
 
 const SECTIONS = [
   { titre: "1. Qu'est-ce qu'un cookie ?", contenu: "Un cookie est un petit fichier texte déposé sur votre appareil (ordinateur, smartphone, tablette) lors de votre visite sur notre site. Il permet de mémoriser des informations sur votre navigation et d'améliorer votre expérience utilisateur." },
@@ -91,7 +90,7 @@ export default function CookiesPage() {
             border: '1px solid rgba(201,168,76,.25)', borderTopColor: 'rgba(255,255,255,.1)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,.08), 0 5px 18px rgba(0,0,0,.45)',
           }}>
-            <Icon n="cookie" size={26} color={'var(--gold)'}/>
+            <span className="material-icons" style={{ fontSize: 26, color: 'var(--gold)' }}>cookie</span>
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 16, fontWeight: 700, fontStyle: 'italic', color: 'var(--text)', marginBottom: 5 }}>Gérer vos préférences</div>
@@ -111,7 +110,7 @@ export default function CookiesPage() {
           }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.5)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.22), rgba(154,120,48,.1))' }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(201,168,76,.28)'; e.currentTarget.style.background = 'linear-gradient(160deg, rgba(201,168,76,.14), rgba(154,120,48,.06))' }}>
-            <Icon n="restart_alt" size={14}/>
+            <span className="material-icons" style={{ fontSize: 14 }}>restart_alt</span>
             Réinitialiser
           </button>
         </div>

@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { EQUIPEMENTS_ICONS, formatPrix } from '@/lib/config'
-import Icon from '@/components/ui/Icon'
 
 // ── 3D Tilt ───────────────────────────────────────────────────
 function useTilt(ref) {
@@ -70,7 +69,7 @@ function Slideshow({ photos, title, prix, prixUnit, typeBien }) {
       {/* Toutes les images empilées — seule l'active est opaque */}
       {count === 0 ? (
         <div className="res-card-img-placeholder">
-          <Icon n="apartment" size={48} color={'var(--border)'}/>
+          <span className="material-icons" style={{ fontSize: 48, color: 'var(--border)' }}>apartment</span>
         </div>
       ) : photos.map((src, i) => (
         <img
@@ -98,7 +97,7 @@ function Slideshow({ photos, title, prix, prixUnit, typeBien }) {
       <div className="res-card-badges">
         <span className="badge badge-dark" style={{ textTransform: 'capitalize' }}>{typeBien}</span>
         <span className="badge badge-gold badge-priority">
-          <Icon n="star" size={11}/>
+          <span className="material-icons" style={{ fontSize: 11 }}>star</span>
           Prioritaire
         </span>
       </div>
@@ -131,9 +130,7 @@ export default function ResidenceCard({ residence, index = 0 }) {
   const visible = useScrollReveal(wrapRef)
 
   const photos   = (residence.photos || []).filter(Boolean)
-  const allEquips = (residence.equipements || [])
-  const equips   = allEquips.slice(0, 2)
-  const extra    = allEquips.length - 2
+  const equips   = (residence.equipements || []).slice(0, 3)
   const prix     = residence.prix_nuit || residence.prix_journee || residence.prix_mensuel
   const prixUnit = residence.prix_nuit ? '/nuit' : residence.prix_journee ? '/j' : '/mois'
 
@@ -145,14 +142,13 @@ export default function ResidenceCard({ residence, index = 0 }) {
         transform:  visible ? 'translateY(0) scale(1)' : 'translateY(26px) scale(.97)',
         transition: `opacity .5s ease ${index * 65}ms, transform .5s ease ${index * 65}ms`,
         borderRadius: 'var(--r-xl)',
-        height: '100%',
       }}
     >
       <div
         ref={tiltRef}
-        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s', height: '100%' }}
+        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s' }}
       >
-        <Link href={`/residences/${residence.id}`} style={{ display: 'block', textDecoration: 'none', height: '100%' }}>
+        <Link href={`/residences/${residence.id}`} style={{ display: 'block', textDecoration: 'none' }}>
           <article className="res-card" style={{ transform: 'none' }}>
 
             <Slideshow
@@ -165,7 +161,7 @@ export default function ResidenceCard({ residence, index = 0 }) {
 
             <div className="res-card-body">
               <div className="res-card-location">
-                <Icon n="location_on" size={11} style={{verticalAlign: 'middle', marginRight: 3 }}/>
+                <span className="material-icons" style={{ fontSize: 11, verticalAlign: 'middle', marginRight: 3 }}>location_on</span>
                 {[residence.quartier, residence.commune, residence.ville].filter(Boolean).join(' · ')}
               </div>
               <h3 className="res-card-title">{residence.titre}</h3>
@@ -176,13 +172,13 @@ export default function ResidenceCard({ residence, index = 0 }) {
                     if (!eq) return null
                     return (
                       <span key={k} className="res-card-tag">
-                        <Icon n={eq.icon} size={12}/>
+                        <span className="material-icons" style={{ fontSize: 12 }}>{eq.icon}</span>
                         {eq.label}
                       </span>
                     )
                   })}
-                  {extra > 0 && (
-                    <span className="res-card-tag">+{extra}</span>
+                  {(residence.equipements || []).length > 3 && (
+                    <span className="res-card-tag">+{(residence.equipements).length - 3}</span>
                   )}
                 </div>
               )}
