@@ -652,7 +652,7 @@ export default function HomePage() {
           </div>
 
           {loading ? (
-            <div className="grid-auto-sm">
+            <div className="grid-auto">
               {[1,2,3,4,5,6].map(i => (
                 <div key={i} style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', border: '1px solid var(--border)' }}>
                   <div className="skeleton" style={{ paddingBottom: '65%' }}/>
@@ -665,7 +665,7 @@ export default function HomePage() {
               ))}
             </div>
           ) : allRes.length > 0 ? (
-            <div className="grid-auto-sm">
+            <div className="grid-auto">
               {allRes.map((r, i) => <ResidenceCard key={r.id} residence={r} index={i}/>)}
             </div>
           ) : (
