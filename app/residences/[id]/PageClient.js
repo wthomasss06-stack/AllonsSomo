@@ -464,12 +464,12 @@ function SharePanel({ title }) {
   }
 
   return (
-    <div style={{ marginTop: 14, position: 'relative' }}>
+    <div style={{ marginTop: 14 }}>
       <button onClick={() => setOpen(o => !o)} style={{
         width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
         padding: '10px 16px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 600,
         background: 'var(--surface)', border: '1.5px solid var(--border)', color: 'var(--ink-2)',
-        cursor: 'pointer', transition: 'background .15s', boxSizing: 'border-box',
+        cursor: 'pointer', transition: 'background .15s',
       }}
         onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
         onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
@@ -481,55 +481,51 @@ function SharePanel({ title }) {
 
       {open && (
         <div style={{
-          marginTop: 8, padding: 12, borderRadius: 'var(--r-md)',
+          marginTop: 10, padding: 14, borderRadius: 'var(--r-md)',
           background: 'var(--surface)', border: '1px solid var(--border)',
           animation: 'fadeUp .18s var(--ease)',
-          boxSizing: 'border-box', width: '100%',
         }}>
           <p style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 10 }}>
             Envoyer l'annonce à vos amis
           </p>
 
-          {/* WhatsApp + Facebook uniquement — 2 boutons côte à côte */}
-          <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+          {/* Réseau sociaux */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
             {[
-              { id: 'whatsapp', label: 'WhatsApp', icon: 'chat',    color: '#25D366', bg: 'rgba(37,211,102,.08)', border: 'rgba(37,211,102,.2)' },
-              { id: 'facebook', label: 'Facebook', icon: 'facebook', color: '#1877F2', bg: 'rgba(24,119,242,.08)', border: 'rgba(24,119,242,.2)' },
+              { id: 'whatsapp', label: 'WhatsApp',  icon: 'chat',     color: '#25D366', bg: 'rgba(37,211,102,.08)', border: 'rgba(37,211,102,.2)' },
+              { id: 'facebook', label: 'Facebook',  icon: 'facebook', color: '#1877F2', bg: 'rgba(24,119,242,.08)', border: 'rgba(24,119,242,.2)' },
+              { id: 'tiktok',   label: 'TikTok',    icon: 'music_video', color: '#000', bg: 'rgba(0,0,0,.06)',     border: 'rgba(0,0,0,.12)' },
+              { id: 'instagram',label: 'Instagram', icon: 'camera_alt',  color: '#E1306C', bg: 'rgba(225,48,108,.06)', border: 'rgba(225,48,108,.15)' },
             ].map(s => (
-              <button key={s.id} onClick={() => {
-                const url = getUrl()
-                const text = `Découvrez cette résidence sur New Horizon : ${title}`
-                const links = {
-                  whatsapp: `https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`,
-                  facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
-                }
-                window.open(links[s.id], '_blank')
-              }} style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-                padding: '10px 8px', borderRadius: 10, fontSize: 13, fontWeight: 600,
+              <button key={s.id} onClick={() => share(s.id)} style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                padding: '10px 12px', borderRadius: 10, fontSize: 12, fontWeight: 600,
                 background: s.bg, border: `1px solid ${s.border}`, color: s.color,
-                cursor: 'pointer', transition: 'transform .15s', minWidth: 0, boxSizing: 'border-box',
+                cursor: 'pointer', transition: 'transform .15s',
               }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.03)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'none'}
               >
-                <span className="material-icons" style={{ fontSize: 16, flexShrink: 0 }}>{s.icon}</span>
-                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.label}</span>
+                <span className="material-icons" style={{ fontSize: 16 }}>{s.icon}</span>
+                {s.label}
+                {(s.id === 'tiktok' || s.id === 'instagram') && (
+                  <span className="material-icons" style={{ fontSize: 12, marginLeft: 'auto', opacity: .5 }}>content_copy</span>
+                )}
               </button>
             ))}
           </div>
 
           {/* Copier le lien */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 10px', boxSizing: 'border-box', minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '8px 12px' }}>
             <span className="material-icons" style={{ fontSize: 15, color: 'var(--muted)', flexShrink: 0 }}>link</span>
-            <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
+            <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {typeof window !== 'undefined' ? window.location.href : '…'}
             </span>
             <button onClick={copyLink} style={{
               display: 'flex', alignItems: 'center', gap: 4, padding: '5px 10px', borderRadius: 7,
-              fontSize: 11, fontWeight: 700, cursor: 'pointer', flexShrink: 0,
+              fontSize: 11, fontWeight: 700, cursor: 'pointer',
               background: copied ? 'var(--gold)' : 'var(--ink)', color: 'var(--bg)', border: 'none',
-              transition: 'background .2s',
+              transition: 'background .2s', flexShrink: 0,
             }}>
               <span className="material-icons" style={{ fontSize: 13 }}>{copied ? 'check' : 'content_copy'}</span>
               {copied ? 'Copié !' : 'Copier'}
@@ -540,7 +536,7 @@ function SharePanel({ title }) {
           {'share' in (typeof navigator !== 'undefined' ? navigator : {}) && (
             <button onClick={nativeShare} style={{
               marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-              padding: '9px', borderRadius: 10, fontSize: 12, fontWeight: 600, boxSizing: 'border-box',
+              padding: '9px', borderRadius: 10, fontSize: 12, fontWeight: 600,
               background: 'var(--white)', border: '1px solid var(--border)', color: 'var(--ink-2)', cursor: 'pointer',
             }}>
               <span className="material-icons" style={{ fontSize: 15 }}>ios_share</span>
