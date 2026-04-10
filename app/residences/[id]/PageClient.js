@@ -461,7 +461,7 @@ function SharePanel({ title }) {
   }
 
   return (
-    <div style={{ marginTop: 14 }}>
+    <div style={{ marginTop: 14, width: '100%', boxSizing: 'border-box', minWidth: 0 }}>
       <button onClick={() => setOpen(o => !o)} style={{
         width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
         padding: '10px 16px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 600,
@@ -478,9 +478,10 @@ function SharePanel({ title }) {
 
       {open && (
         <div style={{
-          marginTop: 10, padding: 14, borderRadius: 'var(--r-md)',
+          marginTop: 10, padding: 12, borderRadius: 'var(--r-md)',
           background: 'var(--surface)', border: '1px solid var(--border)',
           animation: 'fadeUp .18s var(--ease)',
+          width: '100%', boxSizing: 'border-box', minWidth: 0,
         }}>
           <p style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', marginBottom: 10 }}>
             Envoyer l'annonce à vos amis
