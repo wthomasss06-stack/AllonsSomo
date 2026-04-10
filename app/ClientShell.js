@@ -434,24 +434,24 @@ function CookieBanner() {
   const refuse = () => { localStorage.setItem('as-cookies','refused');  setVisible(false) }
   return (
     <div style={{
-      position:'fixed',bottom:20,left:16,right:16,
-      margin:'0 auto',maxWidth:540,
-      background:'var(--white)',border:'1px solid var(--border)',
-      borderRadius:'var(--r-xl)',padding:'16px 20px',
-      display:'flex',alignItems:'center',gap:12,
-      boxShadow:'var(--sh-xl)',zIndex:8000,
-      animation:'fadeUp .35s var(--ease) both',flexWrap:'wrap',
+      position:'fixed', bottom:16, left:12, right:12,
+      margin:'0 auto', maxWidth:480,
+      background:'var(--white)', border:'1px solid var(--border)',
+      borderRadius:'var(--r-xl)', padding:'14px 16px',
+      boxShadow:'var(--sh-xl)', zIndex:8000,
+      animation:'fadeUp .35s var(--ease) both',
+      display:'flex', flexDirection:'column', gap:12,
     }}>
-      <div style={{display:'flex',alignItems:'center',gap:10,flex:'1 1 240px',minWidth:0}}>
-        <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0}}>cookie</span>
+      <div style={{display:'flex',alignItems:'flex-start',gap:10}}>
+        <span className="material-icons" style={{fontSize:20,color:'var(--gold)',flexShrink:0,marginTop:1}}>cookie</span>
         <p style={{fontSize:13,color:'var(--ink-2)',lineHeight:1.5,margin:0}}>
           Nous utilisons des cookies.{' '}
           <Link href="/cookies" style={{color:'var(--ink)',textDecoration:'underline',textUnderlineOffset:2}}>En savoir plus</Link>
         </p>
       </div>
-      <div style={{display:'flex',gap:8,width:'100%'}}>
-        <button className="btn btn-outline" onClick={refuse} style={{flex:1,padding:'9px 16px',fontSize:13}}>Refuser</button>
-        <button className="btn btn-dark" onClick={accept} style={{flex:1,padding:'9px 16px',fontSize:13}}>Accepter</button>
+      <div style={{display:'flex',gap:8}}>
+        <button className="btn btn-outline" onClick={refuse} style={{flex:1,padding:'9px 12px',fontSize:13}}>Refuser</button>
+        <button className="btn btn-dark" onClick={accept} style={{flex:1,padding:'9px 12px',fontSize:13}}>Accepter</button>
       </div>
     </div>
   )
