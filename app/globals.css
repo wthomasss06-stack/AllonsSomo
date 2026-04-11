@@ -679,3 +679,86 @@ main {
 .res-card-tags {
   margin-top: auto;
 }
+
+/* ── SVG Icons dans nav (v17b icons) ──────────────────────── */
+
+/* Desktop nav links : icône + label alignés */
+.nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Mobile nav links : icône + label */
+.mobile-nav-links a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Icônes dans les nav-links desktop — légèrement atténuées */
+.nav-links a svg {
+  opacity: 0.55;
+  transition: opacity .2s;
+  flex-shrink: 0;
+}
+.nav-links a:hover svg,
+.nav-links a.active svg {
+  opacity: 1;
+}
+
+/* Icônes mobile nav — plus visibles */
+.mobile-nav-links a svg {
+  opacity: 0.65;
+  transition: opacity .2s;
+  flex-shrink: 0;
+}
+.mobile-nav-links a.active svg,
+.mobile-nav-links a:hover svg {
+  opacity: 1;
+}
+
+/* Hero transparent mode — icônes en blanc */
+.nav.hero-transparent .nav-links a svg {
+  stroke: rgba(255,255,255,.75);
+}
+.nav.hero-transparent .nav-links a:hover svg,
+.nav.hero-transparent .nav-links a.active svg {
+  stroke: #ffffff;
+}
+
+/* ── Nav SVG icons — polish final ───────────────────────────── */
+
+/* Desktop : icône légèrement décalée pour respirer */
+.nav-links a {
+  gap: 7px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  transition: background .15s, color .15s;
+}
+
+/* Icône active/hover → couleur accent */
+.nav-links a.active svg { opacity: 1; stroke: var(--gold); }
+.nav-links a:hover svg  { opacity: 0.85; }
+
+/* Mobile nav — grand style */
+.mobile-nav-links a {
+  padding: 13px 16px;
+  border-radius: var(--r-md);
+  font-size: 17px;
+  font-weight: 600;
+  gap: 16px;
+  color: var(--nav-text);
+  transition: background .15s, color .15s;
+}
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+  background: var(--surface);
+  color: var(--ink);
+}
+.mobile-nav-links a.active svg { stroke: var(--gold); opacity: 1; }
+.mobile-nav-links a svg { opacity: 0.6; transition: stroke .15s, opacity .15s; }
+.mobile-nav-links a:hover svg { opacity: 0.9; }
+
+/* Footer nav — icône accent cohérente */
+footer a svg, footer span svg { flex-shrink: 0; display: block; }

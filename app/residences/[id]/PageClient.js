@@ -461,13 +461,14 @@ function SharePanel({ title }) {
   }
 
   return (
-    <div style={{ marginTop: 14 }}>
+    <div style={{ marginTop: 14, width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
       {/* Bouton déclencheur */}
       <button onClick={() => setOpen(o => !o)} style={{
-        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-        padding: '10px 16px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 600,
+        width: '100%', boxSizing: 'border-box',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
+        padding: '10px 14px', borderRadius: 'var(--r-md)', fontSize: 13, fontWeight: 600,
         background: 'var(--surface)', border: '1.5px solid var(--border)', color: 'var(--ink-2)',
-        cursor: 'pointer', transition: 'background .15s',
+        cursor: 'pointer', transition: 'background .15s', overflow: 'hidden',
       }}
         onMouseEnter={e => e.currentTarget.style.background = 'var(--border)'}
         onMouseLeave={e => e.currentTarget.style.background = 'var(--surface)'}
@@ -484,10 +485,11 @@ function SharePanel({ title }) {
           background: 'var(--surface)', border: '1px solid var(--border)',
           animation: 'fadeUp .18s var(--ease)',
           overflow: 'hidden',
+          width: '100%', boxSizing: 'border-box',
         }}>
 
           {/* WhatsApp + Facebook sur une ligne */}
-          <div style={{ display: 'flex', gap: 8, marginBottom: 8 }}>
+          <div style={{ display: 'flex', gap: 8, marginBottom: 8, width: '100%', overflow: 'hidden' }}>
             <button onClick={() => share('whatsapp')} style={{
               flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
               padding: '10px 8px', borderRadius: 10, fontSize: 12, fontWeight: 600, minWidth: 0,
@@ -515,7 +517,7 @@ function SharePanel({ title }) {
           </div>
 
           {/* Copier le lien */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '7px 10px', marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--white)', border: '1px solid var(--border)', borderRadius: 10, padding: '7px 10px', marginBottom: 8, overflow: 'hidden', minWidth: 0, width: '100%', boxSizing: 'border-box' }}>
             <span className="material-icons" style={{ fontSize: 14, color: 'var(--muted)', flexShrink: 0 }}>link</span>
             <span style={{ fontSize: 11, color: 'var(--muted)', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
               {typeof window !== 'undefined' ? window.location.href : '…'}

@@ -5,6 +5,96 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { SITE } from '@/lib/config'
 
+// ── Icônes SVG élégantes (stroke, 1.5px) ───────────────────────
+const IC = {
+  home: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M3 10.5L12 3l9 7.5V21a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V10.5z"/>
+      <path d="M9 22V12h6v10"/>
+    </svg>
+  ),
+  residences: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <rect x="2" y="7" width="13" height="15" rx="1"/>
+      <path d="M15 10h5a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1h-5"/>
+      <path d="M6 11h4M6 15h4M6 19h4M17 14h1M17 18h1"/>
+    </svg>
+  ),
+  apropos: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M12 11v5M12 8v.5"/>
+    </svg>
+  ),
+  contact: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M21 5H3a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1z"/>
+      <path d="M3 6l9 7 9-7"/>
+    </svg>
+  ),
+  aide: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M9.5 9a2.5 2.5 0 0 1 4.9.8c0 1.7-2.4 2.2-2.4 3.7M12 17.5v.5"/>
+    </svg>
+  ),
+  cookies: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M12 3a9 9 0 1 0 9 9"/>
+      <path d="M12 3c0 2 1.5 3.5 3.5 3.5S19 5 19 3"/>
+      <path d="M9 12l2 2 4-4"/>
+    </svg>
+  ),
+  pin: (s=14,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M12 2a7 7 0 0 1 7 7c0 4.5-7 13-7 13S5 13.5 5 9a7 7 0 0 1 7-7z"/>
+      <circle cx="12" cy="9" r="2.5"/>
+    </svg>
+  ),
+  whatsapp: (s=16,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+    </svg>
+  ),
+  theme_dark: (s=18,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+    </svg>
+  ),
+  theme_light: (s=18,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <circle cx="12" cy="12" r="4"/>
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+  ),
+  menu_open: (s=20,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" style={{display:'block',flexShrink:0}}>
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  ),
+  menu_close: (s=20,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" style={{display:'block',flexShrink:0}}>
+      <line x1="5" y1="5" x2="19" y2="19"/>
+      <line x1="19" y1="5" x2="5" y2="19"/>
+    </svg>
+  ),
+}
+
+// Map href → icône
+const NAV_ICON = {
+  '/':           IC.home,
+  '/residences': IC.residences,
+  '/a-propos':   IC.apropos,
+  '/contact':    IC.contact,
+  '/aide':       IC.aide,
+  '/cookies':    IC.cookies,
+}
+
+
+
+
 // ── New Horizon Logo (thème-adaptatif) ─────────────────────────
 // inkColor: couleur des éléments noirs (adapte au mode)
 // force: 'dark' | 'light' | null (auto)
@@ -132,9 +222,11 @@ function PageLoader() {
 
   return (
     <div style={{
-      position: 'fixed', inset: 0, zIndex: 99999,
+      position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, zIndex: 99999,
       background: '#0A0A08',
       display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 32,
+      width: '100%', height: '100%', boxSizing: 'border-box',
+      margin: 0, padding: 0,
       opacity: leaving ? 0 : 1,
       transition: leaving ? 'opacity 0.55s cubic-bezier(.4,0,.2,1)' : 'none',
       pointerEvents: leaving ? 'none' : 'all',
@@ -143,8 +235,11 @@ function PageLoader() {
       <div style={{
         animation: 'loaderPulse 1.6s ease-in-out infinite',
         transformOrigin: 'center',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: 80, height: 80, flexShrink: 0,
       }}>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="80" height="80">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="80" height="80"
+          style={{ display: 'block', flexShrink: 0 }}>
           <rect width="500" height="500" rx="100" fill="#1a1a17"/>
           <g transform="translate(40,20)">
             <path d="M 120 140 L 180 140 L 220 280 L 220 140 L 260 140 L 210 320 L 150 320 L 110 180 L 110 320 L 70 320 Z" fill="#FFFFFF"/>
@@ -195,11 +290,11 @@ function PageLoader() {
 
 // ── Nav ───────────────────────────────────────────────────────
 const NAV_LINKS = [
-  { href: '/',           label: 'Accueil' },
-  { href: '/residences', label: 'Résidences' },
-  { href: '/a-propos',   label: 'À propos' },
-  { href: '/contact',    label: 'Contact' },
-  { href: '/aide',       label: 'Aide' },
+  { href: '/',           label: 'Accueil',    icon: IC.home },
+  { href: '/residences', label: 'Résidences', icon: IC.residences },
+  { href: '/a-propos',   label: 'À propos',   icon: IC.apropos },
+  { href: '/contact',    label: 'Contact',    icon: IC.contact },
+  { href: '/aide',       label: 'Aide',       icon: IC.aide },
 ]
 
 function Navbar({ isHero }) {
@@ -225,17 +320,22 @@ function Navbar({ isHero }) {
             {isHeroMode ? <LogoHero size={80}/> : <Logo size={80}/>}
           </Link>
           <ul className="nav-links">
-            {NAV_LINKS.map(({ href, label }) => (
-              <li key={href}><Link href={href} className={pathname===href?'active':''}>{label}</Link></li>
+            {NAV_LINKS.map(({ href, label, icon }) => (
+              <li key={href}>
+                <Link href={href} className={pathname===href?'active':''}>
+                  {icon(14)}
+                  {label}
+                </Link>
+              </li>
             ))}
           </ul>
           <div className="nav-actions">
             {/* Dark mode toggle — masqué sur mobile via CSS, visible dans le burger */}
             <button className="theme-toggle" onClick={toggle} aria-label="Changer le thème" title={dark ? 'Mode clair' : 'Mode sombre'}>
-              <span className="material-icons" style={{fontSize:18}}>{dark ? 'light_mode' : 'dark_mode'}</span>
+              {dark ? IC.theme_light(18) : IC.theme_dark(18)}
             </button>
             <button className="nav-burger" onClick={() => setMenuOpen(o=>!o)} aria-label="Menu">
-              <span className="material-icons" style={{fontSize:20}}>{menuOpen?'close':'menu'}</span>
+              {menuOpen ? IC.menu_close(20) : IC.menu_open(20)}
             </button>
           </div>
         </div>
@@ -243,12 +343,13 @@ function Navbar({ isHero }) {
       <div className={`mobile-nav${menuOpen?' open':''}`}>
         <Logo size={80}/>
         <button className="mobile-nav-close" onClick={() => setMenuOpen(false)}>
-          <span className="material-icons" style={{fontSize:20}}>close</span>
+          {IC.menu_close(20)}
         </button>
         <ul className="mobile-nav-links">
-          {NAV_LINKS.map(({ href, label }) => (
+          {NAV_LINKS.map(({ href, label, icon }) => (
             <li key={href}>
               <Link href={href} className={pathname===href?'active':''}>
+                {icon(18)}
                 {label}
               </Link>
             </li>
@@ -256,12 +357,12 @@ function Navbar({ isHero }) {
           <li style={{marginTop:12}}>
             <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noopener"
               style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'var(--gold)',borderRadius:'var(--r-md)'}}>
-              <span className="material-icons" style={{fontSize:20}}>chat</span>Contacter sur WhatsApp
+              {IC.whatsapp(20,'var(--gold)')}Contacter sur WhatsApp
             </a>
           </li>
           <li>
             <button onClick={toggle} style={{display:'flex',alignItems:'center',gap:10,padding:'14px 16px',fontSize:17,fontWeight:600,color:'var(--muted)',borderRadius:'var(--r-md)',width:'100%',textAlign:'left',background:'none',border:'none',cursor:'pointer'}}>
-              <span className="material-icons" style={{fontSize:20}}>{dark ? 'light_mode' : 'dark_mode'}</span>
+              {dark ? IC.theme_light(20) : IC.theme_dark(20)}
               {dark ? 'Mode clair' : 'Mode sombre'}
             </button>
           </li>
@@ -316,15 +417,15 @@ function Footer() {
             <p style={{fontSize:14,lineHeight:1.7,color:'var(--footer-muted)',marginBottom:24,maxWidth:260}}>{SITE.tagline}</p>
 
             <div style={{display:'inline-flex',alignItems:'center',gap:6,padding:'6px 12px',borderRadius:99,background:'var(--surface)',border:'1px solid var(--footer-border)',marginBottom:24}}>
-              <span className="material-icons" style={{fontSize:14,color:'var(--gold)'}}>place</span>
+              <span style={{display:'flex',alignItems:'center'}}>{IC.pin(14,'var(--gold)')}</span>
               <span style={{fontSize:11,color:'var(--footer-text)',fontWeight:600,letterSpacing:'.04em'}}>Abidjan, Côte d'Ivoire</span>
             </div>
 
             <div style={{display:'flex',gap:8,marginBottom:28}}>
               {[
-                { href: SITE.facebook, icon: 'facebook', label: 'Facebook' },
-                { href: `https://wa.me/${wa}`, icon: 'chat', label: 'WhatsApp', green: true },
-                { href: `mailto:${SITE.email}`, icon: 'mail', label: 'Email' },
+                { href: SITE.facebook, SvgIco: IcoFacebook, label: 'Facebook' },
+                { href: `https://wa.me/${wa}`, SvgIco: IcoChat, label: 'WhatsApp', green: true },
+                { href: `mailto:${SITE.email}`, SvgIco: IcoMail, label: 'Email' },
               ].map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener" aria-label={s.label}
                   style={{
@@ -337,7 +438,7 @@ function Footer() {
                   }}
                   onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='var(--sh-sm)'}}
                   onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}>
-                  <span className="material-icons" style={{fontSize:17}}>{s.icon}</span>
+                  <s.SvgIco s={17}/>
                 </a>
               ))}
             </div>
@@ -346,7 +447,7 @@ function Footer() {
               style={{display:'inline-flex',alignItems:'center',gap:8,padding:'10px 18px',borderRadius:99,background:'#25D366',color:'#fff',fontSize:13,fontWeight:600,boxShadow:'0 4px 20px rgba(37,211,102,.25)',transition:'all .18s',textDecoration:'none'}}
               onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='0 8px 32px rgba(37,211,102,.35)'}}
               onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 4px 20px rgba(37,211,102,.25)'}}>
-              <span className="material-icons" style={{fontSize:16}}>chat</span>
+              {IC.whatsapp(16,'#fff')}
               Réserver via WhatsApp
             </a>
           </div>
@@ -356,18 +457,18 @@ function Footer() {
             <div style={{fontSize:10,fontWeight:700,letterSpacing:'.14em',textTransform:'uppercase',color:'var(--gold)',marginBottom:20}}>Navigation</div>
             <ul style={{listStyle:'none',display:'flex',flexDirection:'column',gap:4}}>
               {[
-                { href: '/', label: 'Accueil', icon: 'home' },
-                { href: '/residences', label: 'Toutes les résidences', icon: 'apartment' },
-                { href: '/a-propos', label: 'À propos', icon: 'info' },
-                { href: '/aide', label: "Centre d'aide (FAQ)", icon: 'help_outline' },
-                { href: '/contact', label: 'Nous contacter', icon: 'contact_support' },
-                { href: '/cookies', label: 'Politique Cookies', icon: 'policy' },
+                { href: '/',           label: 'Accueil',               icon: IC.home },
+                { href: '/residences', label: 'Toutes les résidences', icon: IC.residences },
+                { href: '/a-propos',   label: 'À propos',              icon: IC.apropos },
+                { href: '/aide',       label: "Centre d'aide (FAQ)",  icon: IC.aide },
+                { href: '/contact',    label: 'Nous contacter',        icon: IC.contact },
+                { href: '/cookies',    label: 'Politique Cookies',     icon: IC.cookies },
               ].map(({ href, label, icon }) => (
                 <li key={href}>
                   <Link href={href} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:14,color:'rgba(255,122,26,.6)'}}>{icon}</span>
+                    <span style={{color:'rgba(255,122,26,.7)',flexShrink:0}}>{icon(14,'rgba(255,122,26,.7)')}</span>
                     {label}
                   </Link>
                 </li>
@@ -384,7 +485,7 @@ function Footer() {
                   <Link href={`/residences?ville=Abidjan&q=${q}`} style={{display:'flex',alignItems:'center',gap:9,padding:'8px 0',color:'var(--footer-muted)',fontSize:14,transition:'color .15s',borderBottom:'1px solid var(--footer-border)'}}
                     onMouseEnter={e=>e.currentTarget.style.color='var(--ink)'}
                     onMouseLeave={e=>e.currentTarget.style.color='var(--footer-muted)'}>
-                    <span className="material-icons" style={{fontSize:13,color:'rgba(255,122,26,.5)'}}>place</span>
+                    <span style={{color:'rgba(255,122,26,.5)',flexShrink:0}}>{IC.pin(13,'rgba(255,122,26,.5)')}</span>
                     {q}
                   </Link>
                 </li>
@@ -400,7 +501,7 @@ function Footer() {
           <div style={{display:'flex',alignItems:'center',gap:16,flexWrap:'wrap'}}>
             <span style={{fontSize:12,color:'var(--footer-muted)'}}>© {year} New Horizon · Tous droits réservés</span>
             <span style={{width:3,height:3,borderRadius:'50%',background:'var(--footer-border)',display:'inline-block'}}/>
-            <span style={{fontSize:12,color:'var(--footer-muted)',display:'flex',alignItems:'center',gap:5}}><span className="material-icons" style={{fontSize:13}}>place</span>Abidjan, Côte d'Ivoire</span>
+            <span style={{fontSize:12,color:'var(--footer-muted)',display:'flex',alignItems:'center',gap:5}}><span style={{display:'flex',alignItems:'center'}}>{IC.pin(13,'var(--footer-muted)')}</span>Abidjan, Côte d'Ivoire</span>
           </div>
           <div style={{display:'flex',alignItems:'center',gap:20,flexWrap:'wrap'}}>
             <PWAInstallButton/>
