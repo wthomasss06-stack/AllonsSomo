@@ -142,14 +142,17 @@ export default function ResidenceCard({ residence, index = 0 }) {
         transform:  visible ? 'translateY(0) scale(1)' : 'translateY(26px) scale(.97)',
         transition: `opacity .5s ease ${index * 65}ms, transform .5s ease ${index * 65}ms`,
         borderRadius: 'var(--r-xl)',
+        height: '100%',        /* propage le stretch du grid */
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
       <div
         ref={tiltRef}
-        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s' }}
+        style={{ borderRadius: 'var(--r-xl)', transition: 'transform .22s, box-shadow .22s', height: '100%', display: 'flex', flexDirection: 'column' }}
       >
-        <Link href={`/residences/${residence.id}`} style={{ display: 'block', textDecoration: 'none' }}>
-          <article className="res-card" style={{ transform: 'none' }}>
+        <Link href={`/residences/${residence.id}`} style={{ display: 'flex', flexDirection: 'column', textDecoration: 'none', height: '100%' }}>
+          <article className="res-card" style={{ transform: 'none', flex: 1 }}>
 
             <Slideshow
               photos={photos}

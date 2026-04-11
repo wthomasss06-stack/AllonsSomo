@@ -34,7 +34,7 @@ export default function ResidencesPage() {
   const clearFilters = () => { setSearch(''); setVille(''); setType('') }
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 64 }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)', paddingTop: 72 }}>
 
       {/* ── Header ── */}
       <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border)', padding: 'clamp(40px,6vw,72px) var(--pad) clamp(32px,5vw,56px)' }}>
