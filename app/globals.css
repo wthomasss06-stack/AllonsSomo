@@ -762,3 +762,68 @@ main {
 
 /* Footer nav — icône accent cohérente */
 footer a svg, footer span svg { flex-shrink: 0; display: block; }
+
+/* ── Booking card + SharePanel — fix overflow mobile ─────────── */
+.booking-card {
+  overflow: hidden;          /* contient tout ce qui est à l'intérieur */
+  max-width: 100%;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Sur mobile : plus de sticky, pleine largeur */
+@media (max-width: 900px) {
+  .booking-card {
+    position: static;
+    padding: 20px 16px;
+  }
+}
+
+/* SharePanel — ne peut jamais dépasser son parent */
+.booking-card > div[style*="marginTop: 14"] {
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+/* ── SharePanel — containment strict ───────────────────────── */
+.share-panel-wrap,
+.share-panel-wrap * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.share-panel-wrap button {
+  min-width: 0;          /* empêche flex enfants de gonfler */
+}
+.share-panel-wrap > button {
+  width: 100%;
+  overflow: hidden;
+}
+/* Row WhatsApp + Facebook */
+.share-panel-wrap .share-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  overflow: hidden;
+}
+.share-panel-wrap .share-row button {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}
+/* Copier lien */
+.share-panel-wrap .share-copy {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  overflow: hidden;
+  min-width: 0;
+}
+.share-panel-wrap .share-copy span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
