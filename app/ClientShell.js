@@ -80,6 +80,12 @@ const IC = {
       <line x1="19" y1="5" x2="5" y2="19"/>
     </svg>
   ),
+  facebook: (s=17,c='currentColor') => (
+    <svg width={s} height={s} viewBox="0 0 24 24" fill="none" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" style={{display:'block',flexShrink:0}}>
+      <circle cx="12" cy="12" r="9"/>
+      <path d="M15 9h-2a1 1 0 0 0-1 1v2h3l-.5 3H12v5"/>
+    </svg>
+  ),
 }
 
 // Map href → icône
@@ -423,9 +429,9 @@ function Footer() {
 
             <div style={{display:'flex',gap:8,marginBottom:28}}>
               {[
-                { href: SITE.facebook, SvgIco: IcoFacebook, label: 'Facebook' },
-                { href: `https://wa.me/${wa}`, SvgIco: IcoChat, label: 'WhatsApp', green: true },
-                { href: `mailto:${SITE.email}`, SvgIco: IcoMail, label: 'Email' },
+                { href: SITE.facebook, ico: IC.facebook, label: 'Facebook' },
+                { href: `https://wa.me/${wa}`, ico: IC.whatsapp, label: 'WhatsApp', green: true },
+                { href: `mailto:${SITE.email}`, ico: IC.contact, label: 'Email' },
               ].map((s, i) => (
                 <a key={i} href={s.href} target="_blank" rel="noopener" aria-label={s.label}
                   style={{
@@ -438,7 +444,7 @@ function Footer() {
                   }}
                   onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-2px)';e.currentTarget.style.boxShadow='var(--sh-sm)'}}
                   onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}>
-                  <s.SvgIco s={17}/>
+                  {s.ico(17)}
                 </a>
               ))}
             </div>
